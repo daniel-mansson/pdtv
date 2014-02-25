@@ -12,6 +12,7 @@ import org.jnetpcap.nio.JBuffer;
 import org.jnetpcap.nio.JMemory;
 import org.jnetpcap.packet.Payload;
 import org.jnetpcap.packet.PcapPacket;
+import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.lan.Ethernet;
 import org.jnetpcap.protocol.network.Ip4;
 
@@ -68,7 +69,7 @@ public class ClassicPcapExample {
 			System.out.printf("#%d: %s [%s]\n", i++, device.getName(), description);
 		}
 
-		PcapIf device = alldevs.get(2); // We know we have atleast 1 device
+		PcapIf device = alldevs.get(4); // We know we have atleast 1 device
 		System.out.printf("\nChoosing '%s' on your behalf:\n", (device.getDescription() != null) ? device.getDescription() : device.getName());
 
 		/***************************************************************************
@@ -101,9 +102,9 @@ public class ClassicPcapExample {
 			public void nextPacket(PcapHeader header, JBuffer buffer, String user) {
 				packet.peerAndScan(Ethernet.ID, header, buffer);
 				if (packet.hasHeader(ip)) {
-					// System.out.printf("src=%s\tdst=%s%n",
-					// FormatUtils.ip(ip.source()),
-					// FormatUtils.ip(ip.destination()));
+					System.out.printf("src=%s\tdst=%s%n",
+					 FormatUtils.ip(ip.source()),
+					 FormatUtils.ip(ip.destination()));
 					//System.out.print(".");
 					ips.add(ip.sourceToInt());
 					ips.add(ip.destinationToInt());

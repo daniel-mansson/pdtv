@@ -25,7 +25,7 @@ public class Test {
 		WebAppContext webappcontext = new WebAppContext();
 		webappcontext.setContextPath("/");
 
-		File warPath = new File("D:/visualization/workspace/pdtv", "webapp");
+		File warPath = new File("/home/new/Documents/KTH/workspace/pdtv", "webapp");
 		webappcontext.setWar(warPath.getAbsolutePath());
 		HandlerList handlers = new HandlerList();
 		webappcontext.addServlet(new ServletHolder(new HelloServlet()), "/hello");
