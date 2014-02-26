@@ -61,6 +61,13 @@ public class WebServer extends Service {
 	
 	@Override
 	public void stop() {
-		
+		if(server != null) {
+			try {
+				server.stop();
+			} catch (Exception e) {
+				
+			}
+			server = null;
+		}
 	}
 }
