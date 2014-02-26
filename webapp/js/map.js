@@ -98,6 +98,8 @@ var heatmapData = [
 					
 ];
 
+
+
 function center_map(map, loc) {
 	var lat = loc.coords.latitude;
 	var lon = loc.coords.longitude;
@@ -143,10 +145,66 @@ function draw_paths(map, data) {
 
 function initialize() {
 
+	var mapStyle = [
+	                {
+	                  "featureType": "water",
+	                  "elementType": "geometry.fill",
+	                  "stylers": [
+	                    { "saturation": -78 },
+	                    { "lightness": -31 },
+	                    { "gamma": 0.54 }
+	                  ]
+	                },{
+	                  "featureType": "landscape",
+	                  "stylers": [
+	                    { "saturation": -78 },
+	                    { "lightness": -31 },
+	                    { "gamma": 0.54 }
+	                  ]
+	                },{
+	                  "elementType": "labels",
+	                  "stylers": [
+	                    { "visibility": "off" }
+	                  ]
+	                },{
+	                  "featureType": "administrative.country",
+	                  "elementType": "labels",
+	                  "stylers": [
+	                    { "visibility": "on" }
+	                  ]
+	                },{
+	                  "featureType": "landscape.man_made",
+	                  "stylers": [
+	                    { "visibility": "off" }
+	                  ]
+	                },{
+	                  "featureType": "transit"  },{
+	                  "featureType": "road.arterial",
+	                  "stylers": [
+	                    { "visibility": "off" }
+	                  ]
+	                },{
+	                  "featureType": "road.local",
+	                  "stylers": [
+	                    { "visibility": "off" }
+	                  ]
+	                },{
+	                  "featureType": "poi",
+	                  "stylers": [
+	                    { "visibility": "off" }
+	                  ]
+	                },{
+	                  "featureType": "administrative.country",
+	                  "elementType": "labels.text.fill"  }
+	               ];
+
+	
 	var mapOptions = {
 		center : new google.maps.LatLng(-34.397, 150.644),
+		styles: mapStyle,
 		zoom : 3
 	};
+	
 
 	var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
