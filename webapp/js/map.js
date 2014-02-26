@@ -49,7 +49,8 @@ var heatmapData = [
 									ip: "94.255.168.1",
 									country: "SV",
 									city: "Stockholm",
-									location: new google.maps.LatLng( 59.3333 , 18.05 )
+									location: new google.maps.LatLng( 59.3333 , 18.05 ),
+									weight:1
 								},
 								{
 									ip: "172.16.208.13",
@@ -67,7 +68,8 @@ var heatmapData = [
 									ip: "82.209.170.73",
 									country: "SV",
 									city: "Lund",
-									location: new google.maps.LatLng( 55.7 , 13.1833 )
+									location: new google.maps.LatLng( 55.7 , 13.1833 ),
+									weight:1
 								},
 								{
 									ip: "cr-se-sto-tc-1-be1.bredband2.net"
@@ -85,21 +87,79 @@ var heatmapData = [
 									ip: "130.237.0.2",
 									country: "SV",
 									city: "Stockholm",
-									location: new google.maps.LatLng( 59.3333 , 18.05 )
+									location: new google.maps.LatLng( 59.3333 , 18.05 ),
+									weight:1
 								},
 								{
 									ip: "130.237.211.117",
 									country: "SV",
 									city: "Stockholm",
-									location: new google.maps.LatLng( 62 , 15 )
+									location: new google.maps.LatLng( 62 , 15 ),
+									weight:1
 								}
 							]
 		            }
 					
 ];
 
+var mapStyle = [
+                {
+                  "featureType": "water",
+                  "elementType": "geometry.fill",
+                  "stylers": [
+                    { "saturation": -78 },
+                    { "lightness": -31 },
+                    { "gamma": 0.54 }
+                  ]
+                },{
+                  "featureType": "landscape",
+                  "stylers": [
+                    { "saturation": -78 },
+                    { "lightness": -31 },
+                    { "gamma": 0.54 }
+                  ]
+                },{
+                  "elementType": "labels",
+                  "stylers": [
+                    { "visibility": "off" }
+                  ]
+                },{
+                  "featureType": "administrative.country",
+                  "elementType": "labels",
+                  "stylers": [
+                    { "visibility": "on" }
+                  ]
+                },{
+                  "featureType": "landscape.man_made",
+                  "stylers": [
+                    { "visibility": "off" }
+                  ]
+                },{
+                  "featureType": "road",
+                  "stylers": [
+                    { "visibility": "off" }
+                  ]
+                },{
+                  "featureType": "poi",
+                  "stylers": [
+                    { "visibility": "off" }
+                  ]
+                },{
+                  "featureType": "administrative.country",
+                  "elementType": "labels.text.fill"  
+                },{
+                    "featureType": "landscape",
+                    "elementType": "geometry",
+                    "stylers": [
+                      { "color": "#403ea2" },
+                      { "saturation": -32 },
+                      { "lightness": -64 }
+                    ]
+                  }
+               ];
 
 
+// FUNKAR INTE
 function center_map(map, loc) {
 	var lat = loc.coords.latitude;
 	var lon = loc.coords.longitude;
@@ -117,7 +177,7 @@ function set_markers(map, data) {
 
 }
 
-function draw_paths(map, data) {
+function draw_paths(map, heatmap, data) {
 	data.forEach(function(dest) {
 		console.log(dest.name);
 		prev_node = dest.path[0];
@@ -126,11 +186,13 @@ function draw_paths(map, data) {
 			var node = dest.path[i];
 			console.log(node.ip);
 			if (node.location) {
+				data.push(node);
 				console.log(node.location.toString());
 				var line = new google.maps.Polyline({
 					map : map,
 					geodesic : true,
-					strokeOpacity : 0.5,
+					strokeOpacity : 0.4,
+					strokeWeight: 1, 
 					strokeColor : strokeColor,
 					path : [ prev_node.location, node.location ]
 				});
@@ -145,60 +207,6 @@ function draw_paths(map, data) {
 
 function initialize() {
 
-	var mapStyle = [
-	                {
-	                  "featureType": "water",
-	                  "elementType": "geometry.fill",
-	                  "stylers": [
-	                    { "saturation": -78 },
-	                    { "lightness": -31 },
-	                    { "gamma": 0.54 }
-	                  ]
-	                },{
-	                  "featureType": "landscape",
-	                  "stylers": [
-	                    { "saturation": -78 },
-	                    { "lightness": -31 },
-	                    { "gamma": 0.54 }
-	                  ]
-	                },{
-	                  "elementType": "labels",
-	                  "stylers": [
-	                    { "visibility": "off" }
-	                  ]
-	                },{
-	                  "featureType": "administrative.country",
-	                  "elementType": "labels",
-	                  "stylers": [
-	                    { "visibility": "on" }
-	                  ]
-	                },{
-	                  "featureType": "landscape.man_made",
-	                  "stylers": [
-	                    { "visibility": "off" }
-	                  ]
-	                },{
-	                  "featureType": "transit"  },{
-	                  "featureType": "road.arterial",
-	                  "stylers": [
-	                    { "visibility": "off" }
-	                  ]
-	                },{
-	                  "featureType": "road.local",
-	                  "stylers": [
-	                    { "visibility": "off" }
-	                  ]
-	                },{
-	                  "featureType": "poi",
-	                  "stylers": [
-	                    { "visibility": "off" }
-	                  ]
-	                },{
-	                  "featureType": "administrative.country",
-	                  "elementType": "labels.text.fill"  }
-	               ];
-
-	
 	var mapOptions = {
 		center : new google.maps.LatLng(-34.397, 150.644),
 		styles: mapStyle,
@@ -208,14 +216,18 @@ function initialize() {
 
 	var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-	navigator.geolocation.getCurrentPosition(center_map);
-
-	set_markers(map, heatmapData);
-	draw_paths(map, heatmapData);
-
+	var heatmapArray = new google.maps.MVCArray(heatmapData);
+	
 	var heatmap = new google.maps.visualization.HeatmapLayer({
-		data : heatmapData,
+		data : heatmapArray,
 		opacity : 0.8,
 		map : map
 	});
+	
+	// FUNKAR INTE
+	navigator.geolocation.getCurrentPosition(center_map);
+
+	set_markers(map, heatmapData);
+	draw_paths(map, heatmap, heatmapArray);
+
 }
