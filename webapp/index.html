@@ -1,208 +1,21 @@
 <!DOCTYPE html>
 <html>
 
- <head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    
-    <style type="text/css">
-      html { height: 100% }
-      body { height: 100%; margin: 0; padding: 0 }
-      #map-canvas { height: 100% }
-    </style>
-    
-    <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL0pWarYqD1A3W5IXtr7xhNwQr4Mohxsk&sensor=true&libraries=visualization">
-    </script>
-    
-    <script type="text/javascript">
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 
-	   
-	    
-	function initialize()
-	{
-		
-		var heatmapData = [
-		            {
-		            	name: "dn.se",
-						ip: "216.206.30.40",
-						country: "US",
-						city: "Dallas",
-						location: new google.maps.LatLng(32.780140,-96.800451),
-						weight:1,
-						path:[]
-		            
-		            },
-		            {
-		            	name: "aftonbladet.se",
-						ip: "144.63.250.5",
-						country: "SV",
-						city: "Stockholm",
-						location: new google.maps.LatLng( 59.3333 , 18.05 ),
-						weight:1,
-						path:[]
-		            },
-		            {
-		            	name: "expressen.se",
-						ip: "66.171.224.114",
-						country: "US",
-						city: "Cambridge",
-						location: new google.maps.LatLng( 42.3626 , -71.0843 ),
-						weight:1,
-						path:[]
-		            },
-		            {
-		            	name: "svd.se",
-						ip: "144.63.252.10",
-						country: "SV",
-						city: "Stockholm",
-						location: new google.maps.LatLng( 59.3333 , 18.05 ),
-						weight:1,
-						path:[]
-		            },
-		            {
-		            	name: "kth.se",
-						ip: "130.237.32.143",
-						country: "SV",
-						city: "Stockholm",
-						location: new google.maps.LatLng(59.3,17.9667),
-						weight:1,
-						path:
-							[
-								{
-									ip: "94.255.168.1",
-									country: "SV",
-									city: "Stockholm",
-									location: new google.maps.LatLng( 59.3333 , 18.05 )
-								},
-								{
-									ip: "172.16.208.13",
-								},
-								{
-									ip: "172.16.208.9",
-								},
-								{
-									ip: "172.16.208.21",
-								},
-								{
-									ip: "host-62-116-228-113.rivermen.se",
-								},
-								{
-									ip: "82.209.170.73",
-									country: "SV",
-									city: "Lund",
-									location: new google.maps.LatLng( 55.7 , 13.1833 )
-								},
-								{
-									ip: "cr-se-sto-tc-1-be1.bredband2.net"
-								},
-								{
-									ip: "netnod-ix-ge-a-sth.sunet.se"
-								},
-								{
-									ip: "m1fre-ae1-v1.sunet.se"	
-								},
-								{
-									ip: "ls-kth-br1.sunet.se"
-								},
-								{
-									ip: "130.237.0.2",
-									country: "SV",
-									city: "Stockholm",
-									location: new google.maps.LatLng( 59.3333 , 18.05 )
-								},
-								{
-									ip: "130.237.211.117",
-									country: "SV",
-									city: "Stockholm",
-									location: new google.maps.LatLng( 62 , 15 )
-								}
-							]
-		            }
-					
-					];
+<link rel="stylesheet" type="text/css" href="css/style.css">
 
-		// Dessa funktioner tycker jag borde ligga utanför initialize men de kommer inte åt objektet map då 
-		function center_map(loc) 
-		{
-			var lat = loc.coords.latitude;
-			var lon = loc.coords.longitude;
-			map.setCenter(new google.maps.LatLng(lat, lon));
-		}
-		
-		
-		function set_markers(data)
-		{
-			data.forEach(function(element){
-				marker = new google.maps.Marker({
-				position: element.location,
-				title: element.name,
-				map: map
-			})})
-				
-			
-		}
-		function draw_paths(data)
-		{
-			data.forEach(function(dest){
-				console.log(dest.name);
-				prev_node = dest.path[0];
-				var strokeColor = "green";
-				for (var i=1;i<dest.path.length;i++)
-				{
-					var node = dest.path[i];
-					console.log(node.ip);
-					if(node.location)
-					{
-						console.log(node.location.toString());
-						var line = new google.maps.Polyline({
-							map: map,
-							geodesic: true,
-							strokeOpacity: 0.5,
-							strokeColor: strokeColor,
-							path: [prev_node.location, node.location]
-						});
-						prev_node = node;
-						strokeColor = "green";
-					} else
-					{
-						strokeColor = "red";
-					}
-				}
-			})
-		}
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL0pWarYqD1A3W5IXtr7xhNwQr4Mohxsk&sensor=true&libraries=visualization"></script>
+<script type="text/javascript" src="js/map.js"></script>
 
-		
-		var mapOptions = 
-		{
-          center: new google.maps.LatLng(-34.397, 150.644),
-          zoom: 3
-        };
-        
-		var map = new google.maps.Map(document.getElementById("map-canvas"),mapOptions);       
-		
-		navigator.geolocation.getCurrentPosition(center_map);
-		
-		set_markers(heatmapData);
-		draw_paths(heatmapData);
-		
-		
-		
-		var heatmap = new google.maps.visualization.HeatmapLayer({
-			  data: heatmapData,
-			  opacity: 0.8,
-			  map: map
-			  });
-	}
-	
+<script type="text/javascript">
 	google.maps.event.addDomListener(window, 'load', initialize);
-      
-      
-      
-    </script>
-  </head>
-  <body>
-    <div id="map-canvas"/>
-  </body>
+</script>
+</head>
 
+<body>
+	<div id="map-canvas"></div>
+</body>
 
 </html>
