@@ -1,11 +1,18 @@
 package pdtv.ui;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import pdtv.database.Database;
+import pdtv.sniffer.Sniffer;
+import pdtv.webserver.WebServer;
 
 public class Window {
 
@@ -13,7 +20,15 @@ public class Window {
 	
 	ArrayList<WindowListener> listeners;
 	
-	public Window() {
+	Database database;
+	Sniffer sniffer;
+	WebServer webServer;
+	
+	public Window(Database database, Sniffer sniffer, WebServer webServer) {
+
+		this.database = database;
+		this.sniffer = sniffer;
+		this.webServer = webServer;
 		
 		listeners = new ArrayList<WindowListener>();
 
@@ -33,9 +48,40 @@ public class Window {
 	}
 	
 	private void createLayout() {
+		frame.setLayout(new BorderLayout());
+		
+		JPanel left = new JPanel();
+		
+		
+		ServiceView snifferView = new ServiceView(sniffer); 
+		left.add(snifferView);
 
-		JLabel label = new JLabel("This will contain some awesome stuff");
-		frame.getContentPane().add(label);
+		ServiceView dbView = new ServiceView(database); 	
+		left.add(dbView);
+
+		ServiceView webView = new ServiceView(webServer); 	
+		left.add(webView);
+		
+		left.setPreferredSize(new Dimension(250, 250));
+
+		frame.add(left, BorderLayout.WEST);
+		
+		
+		JPanel right = new JPanel();
+		
+		right.setLayout(new BorderLayout());
+		
+		right.add(new HistoryGraphView(), BorderLayout.CENTER);
+		
+		JPanel buttonPanel = new JPanel();
+		JButton button = new JButton();
+		button.setPreferredSize(new Dimension(100, 100));
+		buttonPanel.add(button);
+		right.add(buttonPanel, BorderLayout.SOUTH);
+		
+		right.setPreferredSize(new Dimension(250, 250));
+
+		frame.add(right, BorderLayout.CENTER);
 
 		frame.pack();
 		frame.setVisible(true);
