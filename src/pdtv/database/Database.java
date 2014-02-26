@@ -1,13 +1,15 @@
 package pdtv.database;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import org.h2.tools.Server;
+
+import com.jolbox.bonecp.BoneCP;
+import com.jolbox.bonecp.BoneCPConfig;
 
 import pdtv.main.Service;
 import pdtv.main.Status;
@@ -17,7 +19,7 @@ public class Database extends Service{
 	Server server;
 	ArrayBlockingQueue<Packet> queue;
 	ArrayList<Worker> workers;
-	Connection connection;
+	BoneCP connectionPool;
 
 	public Database(Properties properties) {
 		server = null;
@@ -51,10 +53,18 @@ public class Database extends Service{
 			setMessage("Failed to start database server.");
 			return false;
 		}
-		
+
 		try {
-			connection = DriverManager.getConnection("jdbc:h2:data/test", "sa", "");
-		} catch (SQLException e) {
+			BoneCPConfig config = new BoneCPConfig();
+			config.setJdbcUrl("jdbc:h2:data/test"); 
+													
+			config.setUsername("sa");
+			config.setPassword("");
+			config.setMinConnectionsPerPartition(2);
+			config.setMaxConnectionsPerPartition(5);
+			config.setPartitionCount(2);
+			connectionPool = new BoneCP(config);
+		} catch (Exception e) {
 			server.stop();
 			server = null;
 			setError(e.getMessage());
@@ -62,7 +72,7 @@ public class Database extends Service{
 			setMessage("Failed to open connection to database.");
 			return false;
 		}
-
+		
 		setMessage("Database, port: " + server.getPort());
 		setStatus(Status.Running);
 		return true;
@@ -70,10 +80,19 @@ public class Database extends Service{
 
 	@Override
 	public void stop() {
+		if(connectionPool != null) {
+			connectionPool = null;
+		}
+		
 		for(Worker w : workers) {
 			w.shutdown();
 		}
-		server.stop();
+		
+		if(server != null) {
+			server.stop();
+			server = null;
+		}
+		
 		setStatus(Status.Stopped);
 	}
 	

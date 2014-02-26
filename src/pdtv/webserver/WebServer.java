@@ -31,7 +31,9 @@ public class WebServer extends Service {
 		File warPath = new File(webappDir);
 		webappcontext.setWar(warPath.getAbsolutePath());
 		HandlerList handlers = new HandlerList();
+
 		webappcontext.addServlet(new ServletHolder(new HelloServlet()), "/hello");
+		webappcontext.addServlet(new ServletHolder(new DatabaseResponse(null)), "/test");
 
 		handlers.setHandlers(new Handler[] { webappcontext, new DefaultHandler() });
 		server.setHandler(handlers);

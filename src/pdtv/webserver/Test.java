@@ -44,6 +44,8 @@ public class Test {
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 			// logic
+			
+			
 
 			try {
 				request.getRequestDispatcher("/result.jsp").forward(request, response);
