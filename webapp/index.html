@@ -6,11 +6,19 @@
 
 <link rel="stylesheet" type="text/css" href="css/style.css">
 
+<script type="text/javascript" src="js/jquery-2.1.0.min.js"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL0pWarYqD1A3W5IXtr7xhNwQr4Mohxsk&sensor=true&libraries=visualization"></script>
 <script type="text/javascript" src="js/map.js"></script>
+<script type="text/javascript" src="js/request.js"></script>
 
 <script type="text/javascript">
 	google.maps.event.addDomListener(window, 'load', initialize);
+	
+	$(document).ready(function() {
+		getAllData(function(result, data){
+			alert(JSON.stringify(data));
+		});
+	});
 </script>
 </head>
 
