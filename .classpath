@@ -26,5 +26,17 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/pdtv/lib/h2/h2_docs.zip!/docs"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/gson/gson-2.2.4.jar" sourcepath="lib/gson/gson-2.2.4-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/pdtv/lib/gson/gson-2.2.4-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/bonecp/bonecp-0.8.0.RELEASE.jar" sourcepath="lib/bonecp/bonecp-0.8.0.RELEASE-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/pdtv/lib/bonecp/bonecp-0.8.0.RELEASE-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/slf4j/slf4j-api-1.7.6.jar" sourcepath="lib/slf4j/slf4j-api-1.7.6-sources.jar"/>
+	<classpathentry kind="lib" path="lib/guava/guava-10.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
