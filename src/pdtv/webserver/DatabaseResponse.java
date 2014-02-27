@@ -9,11 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import pdtv.database.Database;
-import pdtv.sniffer.Packet;
 
 public class DatabaseResponse extends HttpServlet {
 
