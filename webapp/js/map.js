@@ -5,9 +5,89 @@ var heatmapData = [
 						country: "US",
 						city: "Dallas",
 						location: new google.maps.LatLng(32.780140,-96.800451),
+						timestamp: 1000,
 						weight:1,
 						path:[]
 		            
+		            },
+		            {
+		            	name:"imgur.com",
+		            	ip: "23.23.110.58",
+		            	country: "US",
+		            	city: "Ashburn",
+		            	location: new google.maps.LatLng(39.0436,-77.4878),
+		            	timestamp: 1800,
+		            	weight:1,
+		            	path:[
+		            	      {
+		            	    	  ip:"130.229.136.246",
+		            	    	  country: "SV",
+		            	    	  city:"Stockholm",
+		            	    	  location: new google.maps.LatLng(	59.3333,18.05),
+		            	    	  weight:1
+		            	      },
+		            	      {
+		            	    	  ip:"130.229.128.3",
+		            	    	  country:"SV",
+		            	    	  city:"Stockholm",
+		            	    	  location: new google.maps.LatLng(59.3667,17.9667),
+		            	    	  weight:1
+		            	      },
+		            	      {
+		            	    	  ip:"130.237.211.102",
+		            	    	  country:"SV",
+		            	    	  city:"Stockholm",
+		            	    	  location: new google.maps.LatLng(	59.33,18.05),
+		            	    	  weight:1
+		            	      },
+		            	      {
+		            	    	  ip:"130.237.211.118",
+		            	    	  country:"SV",
+		            	    	  city:"Stockholm",
+		            	    	  location: new google.maps.LatLng(59.33,18.05),
+		            	    	  weight:1
+		            	      },
+		            	      {
+		            	    	  ip:"130.242.84.71",
+		            	    	  country:"SV",
+		            	    	  city:"Göteborg",
+		            	    	  location: new google.maps.LatLng(62.0,15.0),
+		            	    	  weight:1
+		            	      },
+		            	      {
+		            	    	  ip:"109.105.96.2",
+		            	    	  country:"SV",
+		            	    	  city:"Stockholm",
+		            	    	  location: new google.maps.LatLng(59.33,18.05),
+		            	    	  weight:1
+		            	      },
+		            	      {
+		            	    	  ip:"72.21.221.60",
+		            	    	  country:"US",
+		            	    	  city:"Seattle",
+		            	    	  location: new google.maps.LatLng(47.6103,-122.3341),
+		            	    	  weight:1
+		            	      },
+		            	      {
+		            	    	  ip:"205.251.245.11",
+		            	    	  country:"US",
+		            	    	  city:"Seattle",
+		            	    	  location: new google.maps.LatLng(47.6103,-122.3341),
+		            	    	  weight:1
+		            	      }
+		            	      
+		            	      
+		            	      ]
+		            },
+		            {
+		            	name: "outlook.com",
+		            	ip: "157.56.253.86",
+		            	country:"US",
+		            	city:"Redmond",
+		            	location: new google.maps.LatLng(47.6742,-122.1206),
+		            	timestamp: 1900,
+		            	weight:1,
+		            	path:[]
 		            },
 		            {
 		            	name: "aftonbladet.se",
@@ -15,6 +95,7 @@ var heatmapData = [
 						country: "SV",
 						city: "Stockholm",
 						location: new google.maps.LatLng( 59.3333 , 18.05 ),
+						timestamp: 2000,
 						weight:1,
 						path:[]
 		            },
@@ -24,6 +105,7 @@ var heatmapData = [
 						country: "US",
 						city: "Cambridge",
 						location: new google.maps.LatLng( 42.3626 , -71.0843 ),
+						timestamp: 5000,
 						weight:1,
 						path:[]
 		            },
@@ -33,6 +115,7 @@ var heatmapData = [
 						country: "SV",
 						city: "Stockholm",
 						location: new google.maps.LatLng( 59.3333 , 18.05 ),
+						timestamp: 5500,
 						weight:1,
 						path:[]
 		            },
@@ -42,6 +125,7 @@ var heatmapData = [
 						country: "SV",
 						city: "Stockholm",
 						location: new google.maps.LatLng(59.3,17.9667),
+						timestamp: 7000,
 						weight:1,
 						path:
 							[
@@ -140,6 +224,11 @@ var mapStyle = [
                     { "visibility": "off" }
                   ]
                 },{
+                	"featureType": "transit",
+                	"stylers": [
+                	{ "visibility": "off"}
+                  ]
+                },{
                   "featureType": "poi",
                   "stylers": [
                     { "visibility": "off" }
@@ -177,57 +266,81 @@ function set_markers(map, data) {
 
 }
 
-function draw_paths(map, heatmap, data) {
-	data.forEach(function(dest) {
-		console.log(dest.name);
-		prev_node = dest.path[0];
-		var strokeColor = "green";
-		for (var i = 1; i < dest.path.length; i++) {
-			var node = dest.path[i];
-			console.log(node.ip);
-			if (node.location) {
-				data.push(node);
-				console.log(node.location.toString());
-				var line = new google.maps.Polyline({
-					map : map,
-					geodesic : true,
-					strokeOpacity : 0.4,
-					strokeWeight: 1, 
-					strokeColor : strokeColor,
-					path : [ prev_node.location, node.location ]
-				});
-				prev_node = node;
-				strokeColor = "green";
-			} else {
-				strokeColor = "red";
-			}
-		}
-	})
+function draw_paths(map,dest, heatmapArray) {
+				var prev_node = dest.path[0];
+				var strokeColor = "green";
+				for (var i = 1; i < dest.path.length; i++) {
+					var node = dest.path[i];
+					if (node.location) {
+						heatmapArray.push(node);
+						// random_coord används för att förskjuta linjerna lite slumpmässigt för att få till "tjockare linjer"
+						var random_coord = Math.random()*0.01-0.005;
+						var line = new google.maps.Polyline({
+							map : map,
+							geodesic : true,
+							strokeOpacity : 0.4,
+							strokeWeight: 1, 
+							strokeColor : strokeColor,
+							path : [ new google.maps.LatLng(prev_node.location.lat()+random_coord,prev_node.location.lng()+random_coord),node.location ]
+						});
+						prev_node = node;
+						strokeColor = "green";
+					} else {
+						strokeColor = "red";
+					}	
+				}
 }
 
-function initialize() {
-
-	var mapOptions = {
-		center : new google.maps.LatLng(-34.397, 150.644),
-		styles: mapStyle,
-		zoom : 3
-	};
-	
-
-	var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-
-	var heatmapArray = new google.maps.MVCArray(heatmapData);
-	
+function draw(map,data)
+{
+	var heatmapArray = new google.maps.MVCArray();
 	var heatmap = new google.maps.visualization.HeatmapLayer({
 		data : heatmapArray,
 		opacity : 0.8,
 		map : map
 	});
 	
-	// FUNKAR INTE
-	navigator.geolocation.getCurrentPosition(center_map);
-
-	set_markers(map, heatmapData);
-	draw_paths(map, heatmap, heatmapArray);
-
+	var i = 0;
+	var timer=0;
+	function setChangingTimeout()
+	{
+		if(i!=0) 
+		{
+			timer=data[i].timestamp-data[i-1].timestamp;
+		} 
+		setTimeout(function(){
+			heatmapArray.push(data[i]);
+			draw_paths(map,data[i],heatmapArray);
+			i++;
+			if(i<data.length)
+			{
+				setChangingTimeout();
+			}
+		},timer);
+	}
+	setChangingTimeout();
+	
 }
+
+function initialize() {
+
+	var mapOptions = {
+		center : new google.maps.LatLng(59.325803,18.071507),
+		styles: mapStyle,
+		zoom : 2,
+		disableDefaultUI: true,
+		minZoom: 2,
+		maxZoom:10
+	};
+	
+
+	var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+	draw(map,heatmapData);
+
+	
+	// FUNKAR INTE
+	//navigator.geolocation.getCurrentPosition(center_map);
+
+	//set_markers(map, heatmapData);
+	//draw_paths(map, heatmapArray);
+};
