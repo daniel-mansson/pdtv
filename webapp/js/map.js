@@ -324,6 +324,7 @@ function draw(map,data,playbackSpeedFactor)
 		map : map
 	});
 	
+	
 	var i = 0;
 	var timediff=0;
 	function setChangingTimeout()
