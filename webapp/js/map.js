@@ -262,7 +262,8 @@ function set_markers(map, data) {
 			title : element.name,
 			map : map
 		})
-	})
+	});
+	
 
 }
 

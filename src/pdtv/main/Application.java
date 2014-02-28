@@ -19,7 +19,7 @@ public class Application implements WindowListener{
 	public Application(Properties properties) {	
 		database = new Database(properties);
 		sniffer = new Sniffer(properties);
-		webServer = new WebServer(properties);
+		webServer = new WebServer(properties, database);
 
 		window = new Window(database, sniffer, webServer);
 		window.addListener(this);

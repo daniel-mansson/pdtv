@@ -2,6 +2,7 @@ package pdtv.database;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -73,6 +74,29 @@ public class Database extends Service{
 			return false;
 		}
 		
+		try {
+			Connection c = connectionPool.getConnection();
+			Statement s = c.createStatement();
+
+			s.addBatch("CREATE TABLE IF NOT EXISTS Packets(PacketId INT NOT NULL AUTO_INCREMENT, ConnectionID INT, Time TIMESTAMP, TimePeriod TIME, HitCount INT, ProtocolID INT, TypeID INT)");
+			s.addBatch("CREATE TABLE IF NOT EXISTS Addresses(AddrId INT NOT NULL AUTO_INCREMENT, Addr VARCHAR(48), LocationID INT)");
+			s.addBatch("CREATE TABLE IF NOT EXISTS Locations(LocationId INT NOT NULL AUTO_INCREMENT, Country VARCHAR(32), City VARCHAR(32), Latitude DOUBLE, Longitude DOUBLE)");
+			s.addBatch("CREATE TABLE IF NOT EXISTS Connections(ConnectionId INT NOT NULL AUTO_INCREMENT, FromAddr INT, ToAddr INT, RouteId INT)");
+			s.addBatch("CREATE TABLE IF NOT EXISTS Protocols(ProtocolId INT NOT NULL PRIMARY KEY, Name VARCHAR(32))");
+			s.addBatch("CREATE TABLE IF NOT EXISTS Types(TypeId INT NOT NULL PRIMARY KEY, Name VARCHAR(32))");
+			
+			s.executeBatch();
+			c.close();
+		} catch (SQLException e) {
+			server.stop();
+			server = null;
+			connectionPool = null;
+			setError(e.getMessage());
+			setStatus(Status.Stopped);
+			setMessage("Failed to configure default tables.");
+			return false;
+		}
+		
 		setMessage("Database, port: " + server.getPort());
 		setStatus(Status.Running);
 		return true;
@@ -100,5 +124,7 @@ public class Database extends Service{
 		queue.add(packet);
 	}
 	
-	
+	public BoneCP getConnectionPool() {
+		return connectionPool;
+	}
 }
