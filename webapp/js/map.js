@@ -214,6 +214,29 @@ var mapStyle = [
                     { "visibility": "on" }
                   ]
                 },{
+                	"featureType":"administrative.country",
+                	"elementType":"geometry",
+                	"stylers":[
+                	{
+                		"weight":0.5,
+                		"color":"#000000"
+                	}]
+                },{
+                	"featureType":"administrative",
+                	"elementType":"labels.text.stroke",
+                	"stylers": [
+                	  {"visibility":"off"}
+                	 ]
+                },{
+                	"featureType":"administrative",
+                	"elementType":"labels.text.fill",
+                	"stylers":[
+                	  {
+                		  "color":"#FFFFFF",
+                		  "weight":0.1
+                	  }
+                	 ]
+                },{
                   "featureType": "landscape.man_made",
                   "stylers": [
                     { "visibility": "off" }
@@ -358,7 +381,7 @@ function initialize() {
 	};
 	
 	
-	var playbackSpeedFactor = 0.2; // 0 -> visar allt direkt, ger dock error
+	var playbackSpeedFactor = 0.1; // 0 -> visar allt direkt, ger dock error
 	var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 	
 	var mintime = heatmapData[0].timestamp;
@@ -376,15 +399,15 @@ function initialize() {
 		at:"center bottom-50",
 		of: window
 	});
-	range.slider({
+	/*range.slider({
 		change:function(event,ui) {
 			var data = filter(heatmapData,ui.values); // funkar inte riktigt
 			console.log(data.length);
 			draw(map,data,playbackSpeedFactor)
 		}
-	})
+	})*/
 	
-	draw(map,heatmapData,mintime,maxtime,playbackSpeedFactor);
+	draw(map,heatmapData,playbackSpeedFactor);
 
 	
 	// FUNKAR INTE
