@@ -104,7 +104,7 @@ public class DatabaseResponse extends HttpServlet {
 			root.addProperty("successful_query", true);
 			root.add("data", array);
 			
-			out.print(gson.toJson(root));
+			connection.close();
 		} catch (SQLException e) {
 			root.addProperty("error", e.getMessage());
 			root.addProperty("successful_query", false);
@@ -112,6 +112,7 @@ public class DatabaseResponse extends HttpServlet {
 
 		String jsonOut = gson.toJson(root); 
 		out.print(jsonOut);
+
 		out.flush();	
 	}
 }
