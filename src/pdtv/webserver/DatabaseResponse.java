@@ -40,8 +40,6 @@ public class DatabaseResponse extends HttpServlet {
 		o.addProperty("Test5", "femfemfem");
 
 		out.print(gson.toJson(o));
-		
-		out.flush();
-		
+		out.flush();	
 	}
 }

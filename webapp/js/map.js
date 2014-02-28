@@ -248,7 +248,7 @@ var mapStyle = [
                ];
 
 
-// FUNKAR INTE
+// FUNKAR INTE 
 function center_map(map, loc) {
 	var lat = loc.coords.latitude;
 	var lon = loc.coords.longitude;
@@ -272,16 +272,18 @@ function draw_paths(map,dest, heatmapArray) {
 				for (var i = 1; i < dest.path.length; i++) {
 					var node = dest.path[i];
 					if (node.location) {
-						heatmapArray.push(node);
-						// random_coord används för att förskjuta linjerna lite slumpmässigt för att få till "tjockare linjer"
+						heatmapArray.push(node); // Kan kommenteras bort om man inte vill ha noder i heatmapen 
+						// random_coord används för att förskjuta linjerna lite slumpmässigt för att få till "tjockare linjer" :)
 						var random_coord = Math.random()*0.01-0.005;
+						var prev_loc = new google.maps.LatLng(prev_node.location.lat()+random_coord,prev_node.location.lng()+random_coord);
+						var loc = new google.maps.LatLng(node.location.lat()+random_coord,node.location.lng()+random_coord);
 						var line = new google.maps.Polyline({
 							map : map,
 							geodesic : true,
 							strokeOpacity : 0.4,
 							strokeWeight: 1, 
 							strokeColor : strokeColor,
-							path : [ new google.maps.LatLng(prev_node.location.lat()+random_coord,prev_node.location.lng()+random_coord),node.location ]
+							path : [ prev_loc,loc ]
 						});
 						prev_node = node;
 						strokeColor = "green";
@@ -291,7 +293,28 @@ function draw_paths(map,dest, heatmapArray) {
 				}
 }
 
-function draw(map,data)
+// Funkar inte riktigt.
+function filter(data,timerange)
+{
+	console.log("length: "+data.length);
+	console.log("timerange: " +timerange);
+	var i=0;
+	for (i;i<data.length;i++)
+	{	
+		console.log("i:" + i);
+		if (data[i].timestamp>=timerange[0]) break;
+	}
+	var j=data.length-1;
+	for (j;j==0;j--)
+	{
+		console.log("j:" + j);
+		if (data[j].timestamp<=timerange[1]) break;
+	}
+	console.log(i,j);
+	return data.splice(i,j);
+}
+
+function draw(map,data,playbackSpeedFactor)
 {
 	var heatmapArray = new google.maps.MVCArray();
 	var heatmap = new google.maps.visualization.HeatmapLayer({
@@ -301,12 +324,12 @@ function draw(map,data)
 	});
 	
 	var i = 0;
-	var timer=0;
+	var timediff=0;
 	function setChangingTimeout()
 	{
 		if(i!=0) 
 		{
-			timer=data[i].timestamp-data[i-1].timestamp;
+			timediff=data[i].timestamp-data[i-1].timestamp;
 		} 
 		setTimeout(function(){
 			heatmapArray.push(data[i]);
@@ -316,7 +339,7 @@ function draw(map,data)
 			{
 				setChangingTimeout();
 			}
-		},timer);
+		},timediff/playbackSpeedFactor);
 	}
 	setChangingTimeout();
 	
@@ -333,9 +356,34 @@ function initialize() {
 		maxZoom:10
 	};
 	
-
+	
+	var playbackSpeedFactor = 0.2; // 0 -> visar allt direkt, ger dock error
 	var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-	draw(map,heatmapData);
+	
+	var mintime = heatmapData[0].timestamp;
+	var maxtime = heatmapData[heatmapData.length-1].timestamp; 
+	var timerange = [mintime,maxtime];
+	
+	var range = $("#slider").slider({
+		range:true,
+		min: mintime, 
+		max: maxtime,
+		values:timerange,
+	});
+	range.width($(window).width()*0.8).position({
+		my:"center center",
+		at:"center bottom-50",
+		of: window
+	});
+	range.slider({
+		change:function(event,ui) {
+			var data = filter(heatmapData,ui.values); // funkar inte riktigt
+			console.log(data.length);
+			draw(map,data,playbackSpeedFactor)
+		}
+	})
+	
+	draw(map,heatmapData,mintime,maxtime,playbackSpeedFactor);
 
 	
 	// FUNKAR INTE
