@@ -36,6 +36,4 @@ INNER JOIN Addresses AS ToAddr
 	ON Connections.ToAddr = ToAddr.AddrId
 
 INNER JOIN Locations AS ToLoc
-       ON ToLoc.LocationId = ToAddr.AddrId
-
-ORDER BY Time;
+       ON ToLoc.LocationId = ToAddr.AddrId;

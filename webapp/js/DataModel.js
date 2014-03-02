@@ -47,3 +47,24 @@ DataModel.prototype.requestAllFromDB = function() {
 	    }
 	});
 }
+
+DataModel.prototype.requestRangeFromDB = function(min,max) {
+	var model = this;
+	
+	$.ajax({
+	    type: "GET",
+	    url: "test",
+	    contentType: "application/json; charset=utf-8",
+	    dataType: "json",
+	    data: {
+                min: min,
+                max: max,
+        },    
+	    success: function(data) {
+	    	model.requestCallback(true, data);
+	    },
+	    failure: function(errMsg) {
+	    	model.requestCallback(false, errMsg);
+	    }
+	});
+}
