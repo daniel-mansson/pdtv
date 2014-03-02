@@ -52,7 +52,16 @@ function init_map() {
 		} ]
 	}, {
 		"featureType" : "administrative.country",
-		"elementType" : "labels.text.fill"
+		"elementType" : "labels.text.stroke",
+		"stylers":	[ {
+			"visibility" : "off"
+		} ]
+	}, {
+		"featureType" : "administrative.country",
+		"elementType" : "labels.text.fill",
+		"stylers":	[ {
+			"color" : "#FFFFFF"
+		} ]
 	}, {
 		"featureType" : "landscape",
 		"elementType" : "geometry",

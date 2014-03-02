@@ -5,7 +5,7 @@ function DataModel() {
 			data:[
 			]
 	};
-}
+};
 
 //Internal
 DataModel.prototype.notify = function() {
@@ -13,23 +13,23 @@ DataModel.prototype.notify = function() {
 	this.listeners.forEach(function(l) {
 		l.update(model);
 	});
-}
+};
 
 //Internal
 DataModel.prototype.requestCallback = function(result, data) {
 	if(result == true) {
 		this.setData(data);
 	}
-}
+};
 
 DataModel.prototype.setData = function(data) {
 	this.data = data;
 	this.notify();
-}
+};
 
 DataModel.prototype.addListener = function(l) {
 	this.listeners.push(l);
-}
+};
 
 DataModel.prototype.requestAllFromDB = function() {
 	var model = this;
@@ -46,4 +46,4 @@ DataModel.prototype.requestAllFromDB = function() {
 	    	model.requestCallback(false, errMsg);
 	    }
 	});
-}
+};

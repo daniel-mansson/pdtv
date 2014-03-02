@@ -270,15 +270,15 @@ var mapStyle = [
                   }
                ];
 
-
+/*
 // FUNKAR INTE 
 function center_map(map, loc) {
 	var lat = loc.coords.latitude;
 	var lon = loc.coords.longitude;
 	map.setCenter(new google.maps.LatLng(lat, lon));
 }
-
-function set_markers(map, data) {
+*/
+/*function set_markers(map, data) {
 	data.forEach(function(element) {
 		marker = new google.maps.Marker({
 			position : element.location,
@@ -286,10 +286,10 @@ function set_markers(map, data) {
 			map : map
 		})
 	});
-	
+
 
 }
-
+*/
 function draw_paths(map,dest, heatmapArray) {
 				var prev_node = dest.path[0];
 				var strokeColor = "green";
@@ -340,6 +340,7 @@ function filter(data,timerange)
 
 function draw(map,data,playbackSpeedFactor)
 {
+	alert("hej");
 	var heatmapArray = new google.maps.MVCArray();
 	var heatmap = new google.maps.visualization.HeatmapLayer({
 		data : heatmapArray,
