@@ -43,6 +43,17 @@ public class DatabaseResponse extends HttpServlet {
 
 		PrintWriter out = resp.getWriter();
 		
+		String min = req.getParameter("min");
+		String max = req.getParameter("max");
+		
+		String query;
+		if(min != null && max != null){
+			query = queryStr.replaceAll(";", "") + " WHERE '" + min + "'<=Time AND Time<='" + max +"' ORDER BY Time;";
+		}
+		else{
+			query = queryStr.replaceAll(";", "") + " ORDER BY Time;";
+		}
+		
 		Gson gson = new Gson();
 		JsonObject root = new JsonObject();
 		
@@ -50,7 +61,7 @@ public class DatabaseResponse extends HttpServlet {
 			Connection connection = database.getConnectionPool().getConnection();
 			Statement s = connection.createStatement();
 			
-			ResultSet rs = s.executeQuery(queryStr);
+			ResultSet rs = s.executeQuery(query);
 
 			JsonArray array = new JsonArray();
 			
