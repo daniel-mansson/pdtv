@@ -23,6 +23,7 @@ DataModel.prototype.requestCallback = function(result, data) {
 };
 
 DataModel.prototype.setData = function(data) {
+	console.log("DataModel.prototype.setData");
 	this.data = data;
 	this.notify();
 };
@@ -32,8 +33,8 @@ DataModel.prototype.addListener = function(l) {
 };
 
 DataModel.prototype.requestAllFromDB = function() {
+	console.log("DataModel.prototype.requestAllFromDB");
 	var model = this;
-	
 	$.ajax({
 	    type: "GET",
 	    url: "test",
@@ -50,6 +51,7 @@ DataModel.prototype.requestAllFromDB = function() {
 };
 
 DataModel.prototype.requestRangeFromDB = function(min,max) {
+	console.log("DataModel.prototype.requestRangeFromDB");
 	var model = this;
 	
 	$.ajax({

@@ -2,38 +2,38 @@ function Slider(model) {
 	this.model = model;
 	this.model.addListener(this);
 
-	this.update(this.model);
-}
-
-Slider.prototype.update = function(model) {
-	if(model.data.data.length == 0)
-		return;
+	//this.update(this.model);
 	
-	//TODO: make sure this actually works. Everything might not need to be updated when the model changes.
-	console.log(model.data.data[0].Time); // Date String 
-	var mintime = Date.parse(model.data.data[0].Time); // Time String
-	var maxtime = Date.parse(model.data.data[model.data.data.length - 1].Time); 
-	var timerange = [mintime,maxtime];
-	console.log(mintime);
-	
-	this.range = $("#slider").slider({
+	this.minTime = Date.parse("2014-01-01");
+	this.maxTime = new Date().getTime();
+	this.rangeSlider = $("#slider").slider({
 		range:true,
-		min: mintime, 
-		max: maxtime,
-		values:timerange,
+		min: this.minTime,
+		max: this.maxTime,
+		values: [this.minTime,this.maxTime]
 	});
-	this.range.width($(window).width()*0.8).position({
+	this.rangeSlider.width($(window).width()*0.8).position({
 		my:"center center",
 		at:"center bottom-50",
 		of: window
 	});
+}
+
+Slider.prototype.update = function(model) {
+	console.log("Slider.prototype.update");
+	if(model.data.data.length == 0)
+		return;
 	
+	//TODO: make sure this actually works. Everything might not need to be updated when the model changes.
+	 
 	var model = this.model;
-	this.range.slider({
-		change:function(event,ui) {
-			d_to=new Date(ui.values[0]);
-			d_from = new Date(ui.values[1]);
-			model.requestRangeFromDB(d_from.getTime(),d_to.getTime());
+	this.rangeSlider.slider({
+		change:function(event,input) {
+			console.log("Slider change");
+			var d_min=new Date(input.values[0]).toISOString().substring(0, 21).replace('T', ' ');
+			var d_max=new Date(input.values[1]).toISOString().substring(0, 21).replace('T', ' ');
+			console.log("Min: "+d_min+" Max: "+d_max);
+			model.requestRangeFromDB(d_min,d_max);
 		}
 	});	 
 };
