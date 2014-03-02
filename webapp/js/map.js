@@ -370,7 +370,7 @@ function draw(map,data,playbackSpeedFactor)
 	
 }
 
-function initialize() {
+function initialize2() {
 
 	var mapOptions = {
 		center : new google.maps.LatLng(59.325803,18.071507),
