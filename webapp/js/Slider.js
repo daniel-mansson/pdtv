@@ -21,12 +21,12 @@ function Slider(model) {
 
 Slider.prototype.update = function(model) {
 	console.log("Slider.prototype.update");
+	console.log("Rows: "+model.data.data.length);
 	if(model.data.data.length == 0)
 		return;
 	
 	//TODO: make sure this actually works. Everything might not need to be updated when the model changes.
-	 
-	var model = this.model;
+	//var model = this.model;
 	this.rangeSlider.slider({
 		change:function(event,input) {
 			console.log("Slider change");
