@@ -46,10 +46,8 @@ DataModel.prototype.requestAllFromDB = function() {
 	    	model.requestCallback(false, errMsg);
 	    }
 	});
-<<<<<<< HEAD
+
 };
-=======
-}
 
 DataModel.prototype.requestRangeFromDB = function(min,max) {
 	var model = this;
@@ -70,5 +68,4 @@ DataModel.prototype.requestRangeFromDB = function(min,max) {
 	    	model.requestCallback(false, errMsg);
 	    }
 	});
-}
->>>>>>> 815ff0d698a81da54f86c16e0ffaa9105c3b0b0b
+};

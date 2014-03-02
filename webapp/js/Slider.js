@@ -10,10 +10,11 @@ Slider.prototype.update = function(model) {
 		return;
 	
 	//TODO: make sure this actually works. Everything might not need to be updated when the model changes.
-	
-	var mintime = model.data.data[0].time;
-	var maxtime = model.data.data[model.data.data.length - 1].time; 
+	console.log(model.data.data[0].Time); // Date String 
+	var mintime = Date.parse(model.data.data[0].Time); // Time String
+	var maxtime = Date.parse(model.data.data[model.data.data.length - 1].Time); 
 	var timerange = [mintime,maxtime];
+	console.log(mintime);
 	
 	this.range = $("#slider").slider({
 		range:true,
@@ -30,8 +31,9 @@ Slider.prototype.update = function(model) {
 	var model = this.model;
 	this.range.slider({
 		change:function(event,ui) {
-			//TODO: Change to requestRangeFromDB(from, to), when it exists.
-			model.requestAllFromDB();
+			d_to=new Date(ui.values[0]);
+			d_from = new Date(ui.values[1]);
+			model.requestRangeFromDB(d_from.getTime(),d_to.getTime());
 		}
-	});	
-}
+	});	 
+};
