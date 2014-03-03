@@ -16,6 +16,7 @@ import org.jnetpcap.nio.JBuffer;
 import org.jnetpcap.nio.JMemory;
 import org.jnetpcap.packet.Payload;
 import org.jnetpcap.packet.PcapPacket;
+import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.lan.Ethernet;
 import org.jnetpcap.protocol.network.Ip4;
 import org.jnetpcap.protocol.network.Ip6;
@@ -102,12 +103,9 @@ public class Sniffer extends Service{
 					handlePacket(ipv4.source(), ipv4.destination());
 				}
 				if (packet.hasHeader(ipv6)) {
-					handlePacket(ipv6.source(), ipv6.destination());
+					if(isGlobalUnicast(ipv6.destination()) && isGlobalUnicast(ipv6.source()))
+						handlePacket(ipv6.source(), ipv6.destination());
 				}
-				if(packet.hasHeader(payload)) {
-					
-				}
-				
 
 				long cur = System.currentTimeMillis();
 				if(cur - timer > timePeriod) {
@@ -128,6 +126,10 @@ public class Sniffer extends Service{
 					
 					timer = System.currentTimeMillis() + timePeriod;
 				}
+			}
+			
+			private boolean isGlobalUnicast(byte[] addr) {
+				return (addr[0] & 0xe0) == 0x20;
 			}
 			
 			private void handlePacket(byte[] src, byte[] dst) {
