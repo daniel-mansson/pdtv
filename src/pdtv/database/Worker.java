@@ -50,7 +50,7 @@ public class Worker implements Runnable{
 					
 					
 					//insert i databas				
-					try {
+					/*try {
 						Connection connection = database.getConnectionPool().getConnection();
 						//Statement s = connection.createStatement();
 						//insert into packets
@@ -65,7 +65,7 @@ public class Worker implements Runnable{
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
+					}*/
 				}
 			}
 		}
