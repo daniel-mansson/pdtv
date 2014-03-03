@@ -3,7 +3,10 @@ package pdtv.sniffer;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.jnetpcap.JBufferHandler;
 import org.jnetpcap.Pcap;
@@ -15,6 +18,7 @@ import org.jnetpcap.packet.Payload;
 import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.protocol.lan.Ethernet;
 import org.jnetpcap.protocol.network.Ip4;
+import org.jnetpcap.protocol.network.Ip6;
 
 import pdtv.database.Database;
 import pdtv.main.Service;
@@ -26,12 +30,16 @@ public class Sniffer extends Service{
 	int deviceId;
 	volatile boolean done;
 	Database database;
+	TreeMap<PacketKey, Packet> packets;
+	long timePeriod;
 	
 	public Sniffer(Properties properties, Database database) {
 		pcap = null;
 		deviceId = Integer.parseInt(properties.getProperty("sniffer_device", "0").trim());
+		timePeriod = Long.parseLong(properties.getProperty("sniffer_timeperiod", "1000").trim());
 		done = true;
 		this.database = database;
+		packets = new TreeMap<>();
 	}
 	
 	@Override
@@ -79,31 +87,76 @@ public class Sniffer extends Service{
 		final JBufferHandler<String> handler = new JBufferHandler<String>() {
 			final PcapPacket packet = new PcapPacket(JMemory.POINTER);
 			final Ip4 ipv4 = new Ip4();
+			final Ip6 ipv6 = new Ip6();
 			final Payload payload = new Payload();
 			int count = 0;
-
+			int rawCount = 0;
+			long timer = 0;
+			
 			@Override
 			public void nextPacket(PcapHeader header, JBuffer buffer, String user) {
+				++rawCount;
+				
 				packet.peerAndScan(Ethernet.ID, header, buffer);
 				if (packet.hasHeader(ipv4)) {
-					Packet packet = new Packet();
-					packet.source = ipv4.source().clone();
-					packet.destination = ipv4.destination().clone();
+					handlePacket(ipv4.source(), ipv4.destination());
+				}
+				if (packet.hasHeader(ipv6)) {
+					handlePacket(ipv6.source(), ipv6.destination());
+				}
+				if(packet.hasHeader(payload)) {
+					
+				}
+				
+
+				long cur = System.currentTimeMillis();
+				if(cur - timer > timePeriod) {
+					ArrayList<PacketKey> removeKeys = new ArrayList<>();
+					
+					for(Entry<PacketKey, Packet> e : packets.entrySet()) {
+						Packet p = e.getValue();
+						if(cur - p.time.getTime() > p.timePeriod) {
+							database.insert(p);
+
+							removeKeys.add(e.getKey());
+						}
+					}
+					
+					for(PacketKey k : removeKeys) {
+						packets.remove(k);
+					}
+					
+					timer = System.currentTimeMillis() + timePeriod;
+				}
+			}
+			
+			private void handlePacket(byte[] src, byte[] dst) {
+				PacketKey key = new PacketKey(src, dst);
+				
+				Packet packet = packets.get(key);
+				if(packet != null) {
+					packet.hits += 1;
+					long cur = System.currentTimeMillis();
+					if(cur - packet.time.getTime() > packet.timePeriod) {
+						database.insert(packet);
+						packets.remove(key);
+					}
+				}
+				else {
+					packet = new Packet();
+					packet.source = src.clone();
+					packet.destination = dst.clone();
 					packet.hits = 1;
 					packet.timePeriod = 100;
 					packet.type = "Unknown";
 					packet.protocol = "Unknown";
 					packet.time = new Time(System.currentTimeMillis());
-					
-					database.insert(packet);
-					++count;
-
-					if(count%50 == 0){
-						//TODO: fixa räknare
-					}
+					packets.put(key, packet);
 				}
-				if(packet.hasHeader(payload)) {
-					
+				
+				++count;
+				if(count%10 == 0){
+					setMessage("Sniffer: " + count + " (" + rawCount + ")");
 				}
 			}
 		};

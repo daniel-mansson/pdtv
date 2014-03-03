@@ -2,7 +2,7 @@ package pdtv.sniffer;
 
 import java.sql.Time;
 
-public class Packet {
+public class Packet{
 	public byte[] source;
 	public byte[] destination;
 	public Time time;
@@ -10,4 +10,5 @@ public class Packet {
 	public String protocol;
 	public int hits;
 	public long timePeriod;//milliseconds
+
 }
