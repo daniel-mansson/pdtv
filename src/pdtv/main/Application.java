@@ -18,7 +18,7 @@ public class Application implements WindowListener{
  
 	public Application(Properties properties) {	
 		database = new Database(properties);
-		sniffer = new Sniffer(properties);
+		sniffer = new Sniffer(properties, database);
 		webServer = new WebServer(properties, database);
 
 		window = new Window(database, sniffer, webServer);
