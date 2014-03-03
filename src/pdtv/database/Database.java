@@ -32,7 +32,7 @@ public class Database extends Service{
 		
 		workers = new ArrayList<Worker>();
 		for(int i = 0; i < num_workers; ++i) {
-			Worker w = new Worker(queue);
+			Worker w = new Worker(queue, this);
 			new Thread(w).start();
 			workers.add(w);
 		}
