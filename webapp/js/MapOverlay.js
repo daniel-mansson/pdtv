@@ -4,10 +4,8 @@ function MapOverlay(map, model) {
 	
 	this.map = map;
 	
-	this.heatmapData = [];
-	
 	this.heatmap = new google.maps.visualization.HeatmapLayer({
-		data : this.heatmapData,
+		data : [],
 		opacity : 0.8,
 		map : map
 	});
@@ -17,8 +15,7 @@ function MapOverlay(map, model) {
 
 MapOverlay.prototype.update = function(model) {
 	
-
-	var array = this.heatmapData;
+	var array = [];
 
 	model.data.data.forEach(function(entry) {
 		var location_from =	{	location: new google.maps.LatLng(entry.from.Latitude,entry.from.Longitude),
@@ -30,5 +27,6 @@ MapOverlay.prototype.update = function(model) {
 		array.push(location_to);
 	});
 
-	this.heatmap.map_changed();
+	this.heatmap.setData(array);
+	//this.heatmap.map_changed();
 };
