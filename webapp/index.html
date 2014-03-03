@@ -4,9 +4,10 @@
 <head>
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 
-<link rel="stylesheet" type="text/css" href="css/style.css">
+
 <script type="text/javascript" src="js/jquery-2.1.0.min.js"></script>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" type=text/css" href="css/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL0pWarYqD1A3W5IXtr7xhNwQr4Mohxsk&sensor=true&libraries=visualization"></script>
 <script type="text/javascript" src="js/map.js"></script>
@@ -30,7 +31,11 @@
 
 <body>
 	<div id="map-canvas"></div>
-	<div id="slider"></div>
+	<div id="sliderContainer">
+		<div id="slider"></div>
+		<div id="min"></div>
+		<div id="max"></div>
+	</div>
 </body>
 
 </html>
