@@ -50,10 +50,9 @@ DataModel.prototype.requestAllFromDB = function() {
 
 };
 
-DataModel.prototype.requestRangeFromDB = function(min,max) {
+DataModel.prototype.requestRangeFromDB = function(min,max,test) {
 	console.log("DataModel.prototype.requestRangeFromDB");
 	var model = this;
-	
 	$.ajax({
 	    type: "GET",
 	    url: "test",
@@ -62,6 +61,7 @@ DataModel.prototype.requestRangeFromDB = function(min,max) {
 	    data: {
                 min: min,
                 max: max,
+                proto: test
         },    
 	    success: function(data) {
 	    	model.requestCallback(true, data);

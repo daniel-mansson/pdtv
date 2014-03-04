@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -43,16 +44,21 @@ public class DatabaseResponse extends HttpServlet {
 
 		PrintWriter out = resp.getWriter();
 		
+		String protocols[] = req.getParameterValues("proto[]");
 		String min = req.getParameter("min");
 		String max = req.getParameter("max");
+		 
+		if(protocols!=null) System.out.println(String.valueOf(protocols[0]));
 		
 		String query;
 		if(min != null && max != null){
-			query = queryStr.replaceAll(";", "") + " WHERE '" + min + "'<=Time AND Time<='" + max +"' ORDER BY Time;";
+			query = queryStr.replaceAll(";", "") + " WHERE '" + min + "'<=TIME AND TIME<='" + max +"' AND PACKETS.PROTOCOLID = '1' ORDER BY Time;";
 		}
 		else{
 			query = queryStr.replaceAll(";", "") + " ORDER BY Time;";
 		}
+		System.out.println(query);
+		
 		
 		Gson gson = new Gson();
 		JsonObject root = new JsonObject();
@@ -62,7 +68,6 @@ public class DatabaseResponse extends HttpServlet {
 			Statement s = connection.createStatement();
 			
 			ResultSet rs = s.executeQuery(query);
-
 			JsonArray array = new JsonArray();
 			
 			while (rs.next()) {
@@ -111,7 +116,7 @@ public class DatabaseResponse extends HttpServlet {
 				array.add(entry);
 			}
 
-			root.addProperty("info", "det kommer mer vettig info här");
+			root.addProperty("info", "det kommer mer vettig info hï¿½r");
 			root.addProperty("successful_query", true);
 			root.add("data", array);
 			

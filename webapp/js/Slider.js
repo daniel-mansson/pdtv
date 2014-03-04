@@ -1,16 +1,20 @@
 function Slider(model) {
 	this.model = model;
-	this.model.addListener(this);
-
-	//this.update(this.model);
+	console.log(this.model.data.data);
+	if (this.model.data.data[0]) { // Funkar ej
+		this.minTime = Date.parse(model.data.data[0].Time.substring(0,10));
+	} else
+	{
+		this.minTime = Date.parse("2014-01-20");
+	}
+	this.maxTime = Date.parse(new Date().toISOString().substring(0, 10))+86399999;	
 	
-	this.minTime = Date.parse("2014-01-20");
-	this.maxTime = new Date().getTime();
 	this.rangeSlider = $("#slider").slider({
 		range:true,
 		min: this.minTime,
 		max: this.maxTime,
-		values: [this.minTime,this.maxTime]
+		values: [this.minTime,this.maxTime],
+		step: 86400000
 	});
 	$("#sliderContainer").width($(window).width()*0.85).height(60).position({
 		my:"center bottom",
@@ -35,15 +39,7 @@ function Slider(model) {
 	    of: $('#slider a:eq(1)'),
 	    offset: "0, 10"
 	});
-}
 
-Slider.prototype.update = function(model) {
-	console.log("Slider.prototype.update");
-	console.log("Rows: "+model.data.data.length);
-	if(model.data.data.length == 0)
-		return;
-	
-	
 	this.rangeSlider.slider({
 		slide:function(event,ui) {
 	        var delay = function() {
@@ -67,12 +63,11 @@ Slider.prototype.update = function(model) {
 	//TODO: make sure this actually works. Everything might not need to be updated when the model changes.
 	var model = this.model;
 	this.rangeSlider.slider({
-		change:function(event,input) {
-			console.log("Slider change");
+		change:function(event,input) {	
 			var d_min=new Date(input.values[0]).toISOString().substring(0, 21).replace('T', ' ');
 			var d_max=new Date(input.values[1]).toISOString().substring(0, 21).replace('T', ' ');
 			console.log("Min: "+d_min+" Max: "+d_max);
-			model.requestRangeFromDB(d_min,d_max);
+			model.requestRangeFromDB(d_min,d_max,["hej","hå"]);
 		}
 	});	 
-};
+}

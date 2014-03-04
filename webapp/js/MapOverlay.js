@@ -14,7 +14,7 @@ function MapOverlay(map, model) {
 }
 
 MapOverlay.prototype.update = function(model) {
-	
+	console.log("MapOverlay.prototype.update()");
 	var array = [];
 
 	model.data.data.forEach(function(entry) {
@@ -26,7 +26,7 @@ MapOverlay.prototype.update = function(model) {
 		array.push(location_from);
 		array.push(location_to);
 	});
-
+	console.log("Packets: "+array.length);
 	this.heatmap.setData(array);
 	//this.heatmap.map_changed();
 };
