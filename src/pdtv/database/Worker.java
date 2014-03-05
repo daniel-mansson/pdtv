@@ -1,6 +1,7 @@
 package pdtv.database;
 
 import java.sql.Time;
+import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -69,10 +70,19 @@ public class Worker implements Runnable{
 			//TODO: get HITCOUNT, metod to get country and city, addr
 					
 			//TODO: real latitudes and longitudes
-					fromlat = "59.3333";
+				/*	fromlat = "59.3333";
 					fromlong = "18.05";
 					tolat = "32.78014";
-					tolong = "-96.800451";
+					tolong = "-96.800451";*/
+					
+				//random values	
+					Random r = new Random();
+					//double rlong = ((double) r.nextInt(36001) - 18000)/100;
+					//double rlat = ((double) r.nextInt(17001) - 8500)/100 ;
+					fromlat = Double.toString(((double) r.nextInt(17001) - 8500)/100);
+					fromlong = Double.toString(((double) r.nextInt(36001) - 18000)/100);
+					tolat = Double.toString(((double) r.nextInt(17001) - 8500)/100);
+					tolong = Double.toString(((double) r.nextInt(36001) - 18000)/100);
 					
 					
 					//insert into database				
