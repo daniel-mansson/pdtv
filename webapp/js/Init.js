@@ -6,7 +6,6 @@ function initialize() {
 	model.requestAllFromDB();
 	
 	var overlay = new MapOverlay(map, model);
-	var slider = new Slider(model);
 	var filter = new Filter(model);
 };
 
