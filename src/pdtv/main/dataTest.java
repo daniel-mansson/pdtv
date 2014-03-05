@@ -102,18 +102,10 @@ public class dataTest {
 			//Create New connections values if connectid is not find
 			else{
 				//find fromaddr id
-				int fromaddrmax = 0;
-				resultconnectid = s.executeQuery("SELECT ADDRID FROM Addresses AS FromAddr INNER JOIN Locations AS FromLoc ON FromLoc.LocationId = FromAddr.LocationId WHERE FromLoc.LATITUDE = '"+ fromlat +"' AND FromLoc.LONGITUDE = '" + fromlong +"';");
-				if(resultconnectid.next()){
-					fromaddrmax = resultconnectid.getInt("ADDRID");
-				}
+				int fromaddrmax = getAddId(s, fromlat, fromlong);
 			
 				//find toaddr id
-				int toaddrmax = 0;
-				resultconnectid = s.executeQuery("SELECT ADDRID FROM Addresses AS ToAddr INNER JOIN Locations AS ToLoc ON ToLoc.LocationId = ToAddr.LocationId WHERE ToLoc.LATITUDE = '"+ tolat +"' AND ToLoc.LONGITUDE = '" + tolong +"';");
-				if(resultconnectid.next()){
-					toaddrmax = resultconnectid.getInt("ADDRID");
-				}
+				int toaddrmax = getAddId(s, tolat, tolong);
 			
 				resultconnectid = s.executeQuery("SELECT MAX(CONNECTIONID) AS MAX FROM Connections;");
 				resultconnectid.next();
@@ -126,6 +118,53 @@ public class dataTest {
 		}
 		return conectid;
 	}
+	
+	
+	//Find corresponding addrid
+	private synchronized int getAddId(Statement s, String lat, String longitude){
+		int addrmax = 0;
+		try {	
+			ResultSet resultaddtid = s.executeQuery("SELECT ADDRID FROM Addresses AS Addr INNER JOIN Locations AS Loc ON Loc.LocationId = Addr.LocationId WHERE Loc.LATITUDE = '"+ lat +"' AND Loc.LONGITUDE = '" + longitude +"';");
+			if(resultaddtid.next()){
+				addrmax = resultaddtid.getInt("ADDRID");
+			}
+			else {
+				int locid = createLoc(s, lat, longitude);
+				resultaddtid = s.executeQuery("SELECT MAX(ADDRID) AS MAX FROM Addresses;");
+				resultaddtid.next();
+				addrmax = resultaddtid.getInt("MAX")+1;
+
+				//create addr
+//todo: get addr!!!
+				s.execute("INSERT INTO ADDRESSES (ADDRID, ADDR, LOCATIONID) VALUES ("+ addrmax +",'23.34.213.82', " + locid +")");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return addrmax;
+	}
+	
+	//Create location
+//todo: get country/city!!!
+	private synchronized int createLoc(Statement s, String lat, String longitude){
+		int locmax = 0;
+		try {	
+			ResultSet resultloctid = s.executeQuery("SELECT MAX(LOCATIONID) AS MAX FROM Locations;");
+			resultloctid.next();
+			locmax = resultloctid.getInt("MAX")+1;
+
+//todo: get country/city!!!
+			//create location
+			s.execute("INSERT INTO LOCATIONS (LOCATIONID, COUNTRY, CITY, LATITUDE, LONGITUDE) VALUES ("+ locmax + ",'SV', 'Stockholm','"+ lat +"', '" + longitude +"');");
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return locmax;
+	}
+	
 	
 	//Find corresponding protocolid
 	private synchronized int getProtocolId(Statement s){
@@ -154,6 +193,7 @@ public class dataTest {
 		return protocolid;
 	}
 	
+	
 	//Find corresponding typeid
 	private synchronized int getTypeId(Statement s){
 		int typeid = 0;
@@ -181,6 +221,7 @@ public class dataTest {
 		return typeid;
 	}
 	
+	//Get current max packetid
 	private synchronized int getMaxPackId(Statement s){
 		int packid = 0;
 		try {	
