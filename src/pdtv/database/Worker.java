@@ -14,7 +14,7 @@ public class Worker implements Runnable{
 	
 	private static int test_id = 0;
 	private int id;
-	private boolean working = false;
+	private boolean working = true;
 	
 	private ArrayBlockingQueue<Packet> queue;
 	private volatile boolean isAlive;
@@ -61,7 +61,7 @@ public class Worker implements Runnable{
 					protocol = packet.protocol;
 					hits = packet.hits;
 					
-			//TODO: ej rätt format på timeP, blir timmar
+			//TODO: ej rï¿½tt format pï¿½ timeP, blir timmar
 					long timePeriod = packet.timePeriod / 10000;
 					timeP = new SimpleDateFormat("HH:mm:ss").format(timePeriod);
 					System.out.println("Processing packet! (Worker id: " + id + ")");
