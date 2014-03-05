@@ -1,5 +1,6 @@
 package pdtv.database;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -21,12 +22,15 @@ public class Database extends Service{
 	ArrayBlockingQueue<Packet> queue;
 	ArrayList<Worker> workers;
 	BoneCP connectionPool;
+	private Geolocator geolocator;
+	private String geoLocQueryFile;
 
 	public Database(Properties properties) {
 		server = null;
 
 		int queue_length = Integer.parseInt(properties.getProperty("queue_length", "10000").trim());
 		int num_workers = Integer.parseInt(properties.getProperty("num_workers", "2").trim());
+		geoLocQueryFile = properties.getProperty("geoloc_query", "config/create_geoloc.sql").trim();
 		
 		queue = new ArrayBlockingQueue<Packet>(queue_length);
 		
@@ -44,6 +48,7 @@ public class Database extends Service{
 	public boolean start() {
 		setStatus(Status.Starting);
 		try {
+			setMessage("Starting server.");
 			server = Server.createWebServer();
 			server.start();
 			
@@ -56,6 +61,7 @@ public class Database extends Service{
 		}
 
 		try {
+			setMessage("Creating connection pool.");
 			BoneCPConfig config = new BoneCPConfig();
 			config.setJdbcUrl("jdbc:h2:data/test"); 
 													
@@ -75,6 +81,7 @@ public class Database extends Service{
 		}
 		
 		try {
+			setMessage("Creating tables.");
 			Connection c = connectionPool.getConnection();
 			Statement s = c.createStatement();
 
@@ -94,6 +101,19 @@ public class Database extends Service{
 			setError(e.getMessage());
 			setStatus(Status.Stopped);
 			setMessage("Failed to configure default tables.");
+			return false;
+		}
+		
+		try {
+			setMessage("Creating geolocation database.");
+			geolocator = new Geolocator(connectionPool, geoLocQueryFile);
+		} catch (IOException | SQLException e) {
+			server.stop();
+			server = null;
+			connectionPool = null;
+			setError(e.getMessage());
+			setStatus(Status.Stopped);
+			setMessage("Failed to create geolocation database.");
 			return false;
 		}
 		
@@ -126,5 +146,9 @@ public class Database extends Service{
 	
 	public BoneCP getConnectionPool() {
 		return connectionPool;
+	}
+	
+	public Geolocator getGeoLocator() {
+		return geolocator;
 	}
 }

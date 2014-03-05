@@ -74,15 +74,23 @@ public class Worker implements Runnable{
 					fromlong = "18.05";
 					tolat = "32.78014";
 					tolong = "-96.800451";*/
-					
-				//random values	
-					Random r = new Random();
+
+					GeoData destGeo = database.getGeoLocator().getData(dest);
+					GeoData srcGeo = database.getGeoLocator().getData(sor);
+
+					fromlat = Double.toString(srcGeo.getLatitude());
+					fromlong = Double.toString(srcGeo.getLatitude());
+					tolat = Double.toString(destGeo.getLatitude());
+					tolong = Double.toString(destGeo.getLatitude());
+
+					// random values	
+					/*Random r = new Random();
 					//double rlong = ((double) r.nextInt(36001) - 18000)/100;
 					//double rlat = ((double) r.nextInt(17001) - 8500)/100 ;
 					fromlat = Double.toString(((double) r.nextInt(17001) - 8500)/100);
 					fromlong = Double.toString(((double) r.nextInt(36001) - 18000)/100);
 					tolat = Double.toString(((double) r.nextInt(17001) - 8500)/100);
-					tolong = Double.toString(((double) r.nextInt(36001) - 18000)/100);
+					tolong = Double.toString(((double) r.nextInt(36001) - 18000)/100);*/
 					
 					
 					//insert into database				
