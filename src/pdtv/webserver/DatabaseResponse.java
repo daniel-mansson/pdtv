@@ -47,17 +47,18 @@ public class DatabaseResponse extends HttpServlet {
 		String protocols[] = req.getParameterValues("proto[]");
 		String min = req.getParameter("min");
 		String max = req.getParameter("max");
-		 
-		if(protocols!=null) System.out.println(String.valueOf(protocols[0]));
 		
 		String query;
-		if(min != null && max != null){
-			query = queryStr.replaceAll(";", "") + " WHERE '" + min + "'<=TIME AND TIME<='" + max +"' AND PACKETS.PROTOCOLID = '1' ORDER BY Time;";
+		if(min != null && max != null && protocols!=null){
+			String protocolArrStr = Arrays.toString(protocols);
+			String protocolArrSubStr = protocolArrStr.substring(1,protocolArrStr.length()-1);
+			System.out.println("min: "+min+" max: "+max+" protocolArrSubStr: "+protocolArrSubStr);
+			query = queryStr.replaceAll(";", "") + " WHERE '" + min + "'<=TIME AND TIME<='" + max +"' AND PACKETS.PROTOCOLID IN ("+protocolArrSubStr+") ORDER BY Time;";
 		}
 		else{
 			query = queryStr.replaceAll(";", "") + " ORDER BY Time;";
 		}
-		System.out.println(query);
+		//System.out.println(query);
 		
 		
 		Gson gson = new Gson();

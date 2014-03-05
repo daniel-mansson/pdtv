@@ -5,6 +5,9 @@ function DataModel() {
 			data:[
 			]
 	};
+	this.minDate="2014-01-01 00:00:00.0";
+	this.maxDate=new Date().toISOString().substring(0, 10);
+	this.protocols = [1,2,3,4];
 };
 
 //Internal
@@ -50,18 +53,20 @@ DataModel.prototype.requestAllFromDB = function() {
 
 };
 
-DataModel.prototype.requestRangeFromDB = function(min,max,test) {
+DataModel.prototype.requestRangeFromDB = function() {
 	console.log("DataModel.prototype.requestRangeFromDB");
 	var model = this;
+	console.log("minDate: "+model.minDate+" maxDate: "+model.maxDate+" procotols: "+model.protocols);
+
 	$.ajax({
 	    type: "GET",
 	    url: "test",
 	    contentType: "application/json; charset=utf-8",
 	    dataType: "json",
 	    data: {
-                min: min,
-                max: max,
-                proto: test
+                min: model.minDate,
+                max: model.maxDate,
+                proto: model.protocols
         },    
 	    success: function(data) {
 	    	model.requestCallback(true, data);

@@ -16,7 +16,6 @@ function MapOverlay(map, model) {
 MapOverlay.prototype.update = function(model) {
 	console.log("MapOverlay.prototype.update()");
 	var array = [];
-
 	model.data.data.forEach(function(entry) {
 		var location_from =	{	location: new google.maps.LatLng(entry.from.Latitude,entry.from.Longitude),
 		                    	weight: entry.HitCount/100};
@@ -26,7 +25,7 @@ MapOverlay.prototype.update = function(model) {
 		array.push(location_from);
 		array.push(location_to);
 	});
-	console.log("Packets: "+array.length);
+	console.log("Packets: "+array.length/2);
 	this.heatmap.setData(array);
 	//this.heatmap.map_changed();
 };
