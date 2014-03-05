@@ -52,7 +52,7 @@ public class DatabaseResponse extends HttpServlet {
 		if(min != null && max != null && protocols!=null){
 			String protocolArrStr = Arrays.toString(protocols);
 			String protocolArrSubStr = protocolArrStr.substring(1,protocolArrStr.length()-1);
-			System.out.println("min: "+min+" max: "+max+" protocolArrSubStr: "+protocolArrSubStr);
+			System.out.println("min: "+min+" max: "+max+" protocols: "+protocolArrSubStr);
 			query = queryStr.replaceAll(";", "") + " WHERE '" + min + "'<=TIME AND TIME<='" + max +"' AND PACKETS.PROTOCOLID IN ("+protocolArrSubStr+") ORDER BY Time;";
 		}
 		else{
