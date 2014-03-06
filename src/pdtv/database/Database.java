@@ -97,8 +97,8 @@ public class Database extends Service{
 			s.addBatch("CREATE TABLE IF NOT EXISTS Addresses(AddrId INT NOT NULL AUTO_INCREMENT, Addr VARCHAR(48), LocationID INT)");
 			s.addBatch("CREATE TABLE IF NOT EXISTS Locations(LocationId INT NOT NULL AUTO_INCREMENT, Country VARCHAR(32), City VARCHAR(32), Latitude DOUBLE, Longitude DOUBLE)");
 			s.addBatch("CREATE TABLE IF NOT EXISTS Connections(ConnectionId INT NOT NULL AUTO_INCREMENT, FromAddr INT, ToAddr INT, RouteId INT)");
-			s.addBatch("CREATE TABLE IF NOT EXISTS Protocols(ProtocolId INT NOT NULL PRIMARY KEY, Name VARCHAR(32))");
-			s.addBatch("CREATE TABLE IF NOT EXISTS Types(TypeId INT NOT NULL PRIMARY KEY, Name VARCHAR(32))");
+			s.addBatch("CREATE TABLE IF NOT EXISTS Protocols(ProtocolId INT NOT NULL PRIMARY KEY AUTO_INCREMENT, Name VARCHAR(32))");
+			s.addBatch("CREATE TABLE IF NOT EXISTS Types(TypeId INT NOT NULL PRIMARY KEY AUTO_INCREMENT, Name VARCHAR(32))");
 			
 			s.executeBatch();
 			c.close();
