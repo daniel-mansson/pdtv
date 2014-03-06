@@ -65,7 +65,7 @@ public class Worker implements Runnable{
 			//TODO: ej r�tt format p� timeP, blir timmar
 					long timePeriod = packet.timePeriod / 10000;
 					timeP = new SimpleDateFormat("HH:mm:ss").format(timePeriod);
-					System.out.println("Processing packet! (Worker id: " + id + ")");
+					//System.out.println("Processing packet! (Worker id: " + id + ")");
 					
 			//TODO: get HITCOUNT, metod to get country and city, addr
 					
@@ -78,10 +78,14 @@ public class Worker implements Runnable{
 					GeoData destGeo = database.getGeoLocator().getData(dest);
 					GeoData srcGeo = database.getGeoLocator().getData(sor);
 
+					if(destGeo == null || srcGeo == null)
+						continue;
+					
 					fromlat = Double.toString(srcGeo.getLatitude());
-					fromlong = Double.toString(srcGeo.getLatitude());
+					fromlong = Double.toString(srcGeo.getLongitude());
 					tolat = Double.toString(destGeo.getLatitude());
-					tolong = Double.toString(destGeo.getLatitude());
+					tolong = Double.toString(destGeo.getLongitude());
+					
 
 					// random values	
 					/*Random r = new Random();

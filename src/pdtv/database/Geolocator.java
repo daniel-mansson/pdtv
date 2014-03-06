@@ -71,11 +71,12 @@ public class Geolocator {
 					if(data[1] != null)
 						city = (String)data[1];
 					if(data[2] != null)
-						lat = (double)data[2];
+						lon = (double)data[2];
 					if(data[3] != null)
-						lon = (double)data[3];
+						lat = (double)data[3];
 					
 					//System.out.println(country + "  " + city + "  " + lat + "  " + lon);
+					c.close();
 					return new GeoData(country, city, lat, lon);
 				}
 			}
@@ -86,7 +87,7 @@ public class Geolocator {
 		} finally {
 		}
 
-		return new GeoData("Unknown", "__", 45.1418106, -34.4594981);
+		return null;
 	}
 
 }
