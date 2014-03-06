@@ -25,8 +25,13 @@ var Map = function() {
 		}*/
 	});
 	this.period = 8000;
-			
-	
+		
+	var m = this;
+	setInterval(function() {
+		m.update({
+			data:{data:[]}
+		});
+	}, 700);
 
 	/*setInterval(function() {
 		map.map.updateChoropleth({
@@ -56,12 +61,15 @@ Map.prototype.update = function(model) {
 	for(c in this.countries) {
 		var country = this.countries[c];
 		country.update(1,this.period);
+		
 		if(country.data.length > 0) {
-			var cv = country.getValue(this.period) * 255;
-			params[c] = d3.rgb(cv, cv, 0).toString();
+			var cv = country.getValue(this.period)
+			country.color = d3.interpolateRgb("#1C1C34", "#00ffff")(cv)
 		}
 		else
-			params[c] = "#1C1C34";
+			country.color = "#1C1C34";
+			
+		params[c] = country.color;
 	}
 	
 	this.map.updateChoropleth(params);
