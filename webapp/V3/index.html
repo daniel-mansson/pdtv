@@ -9,12 +9,17 @@
 	<link rel="stylesheet" type=text/css" href="css/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 
+	<script type="text/javascript" src="js/Country.js"></script>
+	<script type="text/javascript" src="js/App.js"></script>
 	<script type="text/javascript" src="js/DataModel.js"></script>
 	<script type="text/javascript" src="js/Init.js"></script>
 	<!--<script type="text/javascript" src="js/Filter.js"></script>-->
 
 	<script>
 		$(document).ready(function() {
+			
+			initialize();
+		
 			var map = new Datamap({
 				element: document.getElementById('container'),fills: {
     defaultFill: "#ABDDA4",

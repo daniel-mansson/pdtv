@@ -1,11 +1,6 @@
 
 function initialize() {
-	var map = init_map();
-	var model = new DataModel();
+	var app = new App();
 	
-	model.requestAllFromDB();
-	
-	var overlay = new MapOverlay(map, model);
-	var filter = new Filter(model);
 };
 

@@ -116,6 +116,8 @@ public class DatabaseResponse extends HttpServlet {
 				
 				array.add(entry);
 			}
+			
+			System.out.println("Res:" + array.size());
 
 			root.addProperty("info", "det kommer mer vettig info h�r");
 			root.addProperty("successful_query", true);
