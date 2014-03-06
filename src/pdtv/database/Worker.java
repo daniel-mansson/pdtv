@@ -69,9 +69,9 @@ public class Worker implements Runnable{
 			//TODO: ej r�tt format p� timeP, blir timmar
 					long timePeriod = packet.timePeriod / 10000;
 					timeP = new SimpleDateFormat("HH:mm:ss").format(timePeriod);
-					//System.out.println("Processing packet! (Worker id: " + id + ")");
+					System.out.println("Processing packet! (Worker id: " + id + ")");
 					
-			//TODO: get HITCOUNT, metod to get country and city, addr
+			//TODO: get HITCOUNT, addr
 					
 			//TODO: real latitudes and longitudes
 				/*	fromlat = "59.3333";
@@ -136,10 +136,10 @@ public class Worker implements Runnable{
 		int typeid = getTypeId(s);
 		
 		//Find next packetid 
-		int packid = getMaxPackId(s)+1;
+		//int packid = getMaxPackId(s)+1;
 		
 		//Insert to database
-		s.execute("INSERT INTO PACKETS (PACKETID, CONNECTIONID, TIME, TIMEPERIOD, HITCOUNT, PROTOCOLID, TYPEID) VALUES ("+ packid +", " + conectid + ", '"+ time +"' , '"+ timeP+ "'," + hits +"," + protocolid + ","+ typeid+");");			
+		s.execute("INSERT INTO PACKETS (CONNECTIONID, TIME, TIMEPERIOD, HITCOUNT, PROTOCOLID, TYPEID) VALUES (" + conectid + ", '"+ time +"' , '"+ timeP+ "'," + hits +"," + protocolid + ","+ typeid+");");			
 		
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -164,10 +164,13 @@ public class Worker implements Runnable{
 				//find toaddr id
 				int toaddrmax = getAddId(s, tolat, tolong, toCountry, toCity);
 			
-				resultconnectid = s.executeQuery("SELECT MAX(CONNECTIONID) AS MAX FROM Connections;");
+				/*resultconnectid = s.executeQuery("SELECT MAX(CONNECTIONID) AS MAX FROM Connections;");
 				resultconnectid.next();
-				conectid = resultconnectid.getInt("MAX")+1;
+				conectid = resultconnectid.getInt("MAX")+1;*/
 				s.execute("INSERT INTO CONNECTIONS (FROMADDR, TOADDR, ROUTEID) VALUES ("+fromaddrmax+", "+toaddrmax+", 0);");	
+				resultconnectid = s.executeQuery("SELECT CONNECTIONID FROM Connections INNER JOIN Addresses AS FromAddr ON Connections.FromAddr = FromAddr.AddrId INNER JOIN Locations AS FromLoc ON FromLoc.LocationId = FromAddr.LocationId INNER JOIN Addresses AS ToAddr ON Connections.ToAddr = ToAddr.AddrId INNER JOIN Locations AS ToLoc ON ToLoc.LocationId = ToAddr.LocationId WHERE FromLoc.LATITUDE = '"+ fromlat +"' AND FromLoc.LONGITUDE = '" + fromlong +"' AND ToLoc.LATITUDE = '" + tolat + "' AND ToLoc.LONGITUDE = '" + tolong +"';"); 
+				resultconnectid.next();
+				conectid  = resultconnectid.getInt("CONNECTIONID");		
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -187,13 +190,16 @@ public class Worker implements Runnable{
 			}
 			else {
 				int locid = createLoc(s, lat, longitude,country, city);
-				resultaddtid = s.executeQuery("SELECT MAX(ADDRID) AS MAX FROM Addresses;");
+				/*resultaddtid = s.executeQuery("SELECT MAX(ADDRID) AS MAX FROM Addresses;");
 				resultaddtid.next();
-				addrmax = resultaddtid.getInt("MAX")+1;
+				addrmax = resultaddtid.getInt("MAX")+1;*/
 
 				//create address
 //TODO: get addr!!!
-				s.execute("INSERT INTO ADDRESSES (ADDRID, ADDR, LOCATIONID) VALUES ("+ addrmax +",'23.34.213.82', " + locid +")");
+				s.execute("INSERT INTO ADDRESSES (ADDR, LOCATIONID) VALUES ('23.34.213.82', " + locid +")");
+				resultaddtid = s.executeQuery("SELECT ADDRID FROM Addresses AS Addr INNER JOIN Locations AS Loc ON Loc.LocationId = Addr.LocationId WHERE Loc.LATITUDE = '"+ lat +"' AND Loc.LONGITUDE = '" + longitude +"';");
+				resultaddtid.next();
+				addrmax = resultaddtid.getInt("ADDRID");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -207,13 +213,15 @@ public class Worker implements Runnable{
 	private synchronized int createLoc(Statement s, String lat, String longitude,String country, String city){
 		int locmax = 0;
 		try {	
-			ResultSet resultloctid = s.executeQuery("SELECT MAX(LOCATIONID) AS MAX FROM Locations;");
+			/*ResultSet resultloctid = s.executeQuery("SELECT MAX(LOCATIONID) AS MAX FROM Locations;");
 			resultloctid.next();
-			locmax = resultloctid.getInt("MAX")+1;
+			locmax = resultloctid.getInt("MAX")+1;*/
 
-//TODO: get country/city!!!
 			//create location
-			s.execute("INSERT INTO LOCATIONS (LOCATIONID, COUNTRY, CITY, LATITUDE, LONGITUDE) VALUES ("+ locmax + ",'"+country+"', '"+city+"','"+ lat +"', '" + longitude +"');");
+			s.execute("INSERT INTO LOCATIONS (COUNTRY, CITY, LATITUDE, LONGITUDE) VALUES ('"+country+"', '"+city+"','"+ lat +"', '" + longitude +"');");
+			ResultSet resultloctid = s.executeQuery("SELECT LOCATIONID FROM Locations WHERE LATITUDE = '"+ lat +"' AND LONGITUDE = '" + longitude +"';");
+			resultloctid.next();
+			locmax = resultloctid.getInt("LOCATIONID");	
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -232,11 +240,11 @@ public class Worker implements Runnable{
 			}
 			//Create New protocol values if type is not find
 			else{
-				resultprotocoltid = s.executeQuery("SELECT MAX(PROTOCOLID) AS MAX FROM PROTOCOLS;");
+				/*resultprotocoltid = s.executeQuery("SELECT MAX(PROTOCOLID) AS MAX FROM PROTOCOLS;");
 				resultprotocoltid.next();
-				int promax = resultprotocoltid.getInt("MAX")+1;
+				int promax = resultprotocoltid.getInt("MAX")+1;*/
 				
-				s.execute("INSERT INTO PROTOCOLS (PROTOCOLID,NAME) VALUES (" + promax + ", '"+ protocol +"');");
+				s.execute("INSERT INTO PROTOCOLS (NAME) VALUES ('"+ protocol +"');");
 				resultprotocoltid = s.executeQuery("SELECT PROTOCOLID FROM PROTOCOLS WHERE NAME = '"+ protocol + "';");
 				resultprotocoltid.next();
 				protocolid  = resultprotocoltid.getInt("PROTOCOLID");
@@ -260,11 +268,11 @@ public class Worker implements Runnable{
 			}
 			//Create New type values if type is not find
 			else{
-				resulttypetid = s.executeQuery("SELECT MAX(TYPEID) AS MAX FROM TYPES;");
+				/*resulttypetid = s.executeQuery("SELECT MAX(TYPEID) AS MAX FROM TYPES;");
 				resulttypetid.next();
-				int tymax = resulttypetid.getInt("MAX")+1;
+				int tymax = resulttypetid.getInt("MAX")+1;*/
 				
-				s.execute("INSERT INTO TYPES (TYPEID,NAME) VALUES (" + tymax +", '"+ type +"');");
+				s.execute("INSERT INTO TYPES (NAME) VALUES ('"+ type +"');");
 				resulttypetid = s.executeQuery("SELECT TYPEID FROM TYPES WHERE NAME = '"+ type + "';");
 				resulttypetid.next();
 				typeid  = resulttypetid.getInt("TYPEID");
@@ -278,7 +286,7 @@ public class Worker implements Runnable{
 	}
 	
 	//Get current max packetid
-	private synchronized int getMaxPackId(Statement s){
+	/*private synchronized int getMaxPackId(Statement s){
 		int packid = 0;
 		try {	
 		ResultSet resultpacktid = s.executeQuery("SELECT MAX(PACKETID) AS MAX FROM PACKETS;");
@@ -289,7 +297,7 @@ public class Worker implements Runnable{
 			e.printStackTrace();
 		}
 		return packid;
-	}
+	}*/
 
 
 	public void shutdown() {

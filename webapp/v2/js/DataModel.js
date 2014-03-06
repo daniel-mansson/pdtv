@@ -5,8 +5,8 @@ function DataModel() {
 			data:[
 			]
 	};
-	this.minDate="2014-03-01 00:00:00.0";
-	this.maxDate=new Date().toISOString().substring(0, 10)+86400000;
+	this.minDate=new Date().toISOString().substring(0, 10);
+	this.maxDate=new Date().toISOString().substring(0, 10);
 	this.protocols = [1,2,3,4];
 	
 	var model = this;
@@ -50,6 +50,7 @@ DataModel.prototype.requestAllFromDB = function() {
 	    dataType: "json",
 	    success: function(data) {
 	    	model.requestCallback(true, data);
+		model.minDate = model.maxDate;
 	    },
 	    failure: function(errMsg) {
 	    	model.requestCallback(false, errMsg);
@@ -61,8 +62,9 @@ DataModel.prototype.requestAllFromDB = function() {
 DataModel.prototype.requestRangeFromDB = function() {
 	console.log("DataModel.prototype.requestRangeFromDB");
 	var model = this;
+	this.maxDate = new Date().toISOString().substring(0, 10);
 	console.log("minDate: "+model.minDate+" maxDate: "+model.maxDate+" procotols: "+model.protocols);
-
+	
 	$.ajax({
 	    type: "GET",
 	    url: "test",
