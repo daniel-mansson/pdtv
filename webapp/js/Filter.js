@@ -41,8 +41,8 @@ function Filter(model) {
 		range:true,
 		min: this.minTime,
 		max: this.maxTime,
-		values: [this.minTime,this.maxTime],
-		step: 86400000
+		values: [this.minTime,this.maxTime]/*,
+		step: 86400000*/
 	});
 	this.rangeSlider.width($(window).width()*0.5).position({
 		my:"center center",
