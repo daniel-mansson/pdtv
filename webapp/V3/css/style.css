@@ -9,6 +9,13 @@ body {
 	background-color: #4a5b74;
 }
 
+h1, h2 {
+	margin-left: auto;
+	margin-left: auto;
+	text-align: center;
+	color:#F0F0F0;
+}
+
 #map-canvas {
 	height: 100%
 }
