@@ -13,7 +13,7 @@ function DataModel() {
 	var model = this;
 	setInterval(function(){
 		model.requestRangeFromDB();
-	}, 3000);
+	}, 2000);
 	/*
 	setInterval(function(){
 		var data = {data:[
@@ -58,7 +58,7 @@ DataModel.prototype.addListener = function(l) {
 
 DataModel.prototype.requestRangeFromDB = function() {
 	//console.log("DataModel.prototype.requestRangeFromDB");
-	this.maxDate = new Date(new Date() - 10000+3600000).toISOString().substring(0, 21).replace('T', ' ');
+	this.maxDate = new Date(new Date() - 2000+3600000).toISOString().substring(0, 21).replace('T', ' ');
 	var model = this;
 	//console.log("minDate: "+model.minDate+" maxDate: "+model.maxDate+" procotols: "+model.protocols);
 	
