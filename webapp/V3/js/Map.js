@@ -1,0 +1,78 @@
+var Map = function() {
+
+	this.countries = {};
+	this.map = new Datamap({
+		element: document.getElementById('container'),
+		fills: {
+			defaultFill: "#ABDDA4",
+			authorHasTraveledTo: "#fa0fa0",
+		},	
+		data: {
+			USA: { fillKey: "authorHasTraveledTo" },
+			JPN: { fillKey: "authorHasTraveledTo" },
+			ITA: { fillKey: "authorHasTraveledTo" },
+			CRI: { fillKey: "authorHasTraveledTo" },
+			KOR: { fillKey: "authorHasTraveledTo" },
+			DEU: { fillKey: "authorHasTraveledTo" },
+		}
+	});
+			
+	var colors = d3.scale.category10();
+	var map = this;
+	
+		map.map.updateChoropleth({
+	
+		USA: colors(Math.random() * 10),
+		RUS: colors(Math.random() * 100),
+		AUS: { fillKey: 'authorHasTraveledTo' },
+		BRA: colors(Math.random() * 50),
+		CAN: colors(Math.random() * 50),
+		ZAF: colors(Math.random() * 50),
+		IND: colors(Math.random() * 50),
+	});
+		
+	setInterval(function() {
+		map.map.updateChoropleth({
+	
+		USA: colors(Math.random() * 10),
+		RUS: colors(Math.random() * 100),
+		AUS: { fillKey: 'authorHasTraveledTo' },
+		BRA: colors(Math.random() * 50),
+	});
+	}, 2000);
+	
+
+	this.colors = d3.scale.category10();
+}
+
+Map.prototype.update = function(model) {
+	var app = this;
+	console.log("Packets: " + model.data.data.length);
+	model.data.data.forEach(function(packet){
+		if(packet.from.country != "__")
+			app.onDataPoint(packet.from);
+		if(packet.to.country != "__")
+			app.onDataPoint(packet.to);
+	});
+	
+	var params = {};
+	for(c in this.countries) {
+		var country = this.countries[c];
+		country.update(1,8000);
+		
+		params[c] = this.colors(Math.random() * 50);
+	}
+	
+	this.map.updateChoropleth(params);
+};
+
+Map.prototype.onDataPoint = function(location) {
+	var c = this.countries[location.country];
+	if(c === undefined) {
+		c = new CountryData();
+		c.isocode = location.country;
+		this.countries[location.country] = c; 
+	}
+	
+	c.handleDataPoint(location);
+}

@@ -11,8 +11,22 @@ function DataModel() {
 	this.protocols = [1,2,3,4];
 	
 	var model = this;
-	setInterval(function(){
+	/*setInterval(function(){
 		model.requestRangeFromDB();
+	}, 20000);*/
+	
+	setInterval(function(){
+		var data = {data:[
+			{
+				from:{
+					country: "SWE"
+				},
+				to:{
+					country: "NOR"
+				}
+			}		
+		]};
+		model.requestCallback(true, data);
 	}, 2000);
 };
 
