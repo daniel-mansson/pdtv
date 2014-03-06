@@ -11,10 +11,10 @@ function DataModel() {
 	this.protocols = [1,2,3,4];
 	
 	var model = this;
-	/*setInterval(function(){
+	setInterval(function(){
 		model.requestRangeFromDB();
-	}, 20000);*/
-	
+	}, 3000);
+	/*
 	setInterval(function(){
 		var data = {data:[
 			{
@@ -27,7 +27,7 @@ function DataModel() {
 			}		
 		]};
 		model.requestCallback(true, data);
-	}, 5000);
+	}, 5000);*/
 };
 
 //Internal

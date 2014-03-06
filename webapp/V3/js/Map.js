@@ -4,9 +4,17 @@ var Map = function() {
 	this.map = new Datamap({
 		element: document.getElementById('container'),
 		fills: {
-			defaultFill: "#ABDDA4",
-			authorHasTraveledTo: "#fa0fa0",
-		},	
+			defaultFill: "#1C1C34"
+		},
+		geographyConfig: {
+			borderColor: "#000000",
+			highlightOnHover: true,
+			highlightFillColor: function() {
+				return "#ff0000";
+			},
+			highlightBorderColor: "#ffffff"
+			
+		}/*,	
 		data: {
 			USA: { fillKey: "authorHasTraveledTo" },
 			JPN: { fillKey: "authorHasTraveledTo" },
@@ -14,24 +22,12 @@ var Map = function() {
 			CRI: { fillKey: "authorHasTraveledTo" },
 			KOR: { fillKey: "authorHasTraveledTo" },
 			DEU: { fillKey: "authorHasTraveledTo" },
-		}
+		}*/
 	});
 			
-	var colors = d3.scale.category10();
-	var map = this;
 	
-		map.map.updateChoropleth({
-	
-		USA: colors(Math.random() * 10),
-		RUS: colors(Math.random() * 100),
-		AUS: { fillKey: 'authorHasTraveledTo' },
-		BRA: colors(Math.random() * 50),
-		CAN: colors(Math.random() * 50),
-		ZAF: colors(Math.random() * 50),
-		IND: colors(Math.random() * 50),
-	});
-		
-	setInterval(function() {
+
+	/*setInterval(function() {
 		map.map.updateChoropleth({
 	
 		USA: colors(Math.random() * 10),
@@ -39,7 +35,7 @@ var Map = function() {
 		AUS: { fillKey: 'authorHasTraveledTo' },
 		BRA: colors(Math.random() * 50),
 	});
-	}, 2000);
+	}, 2000);*/
 	
 
 	this.colors = d3.scale.category10();
@@ -49,29 +45,31 @@ Map.prototype.update = function(model) {
 	var app = this;
 	console.log("Packets: " + model.data.data.length);
 	model.data.data.forEach(function(packet){
-		if(packet.from.country != "__")
+		if(packet.from.Country != "__")
 			app.onDataPoint(packet.from);
-		if(packet.to.country != "__")
+		if(packet.to.Country != "__")
 			app.onDataPoint(packet.to);
 	});
 	
 	var params = {};
 	for(c in this.countries) {
 		var country = this.countries[c];
-		country.update(1,8000);
-		
-		params[c] = this.colors(Math.random() * 50);
+		country.update(1,5000);
+		if(country.data.length > 0)
+			params[c] = this.colors(Math.random() * 50);
+		else
+			params[c] = "#ABDDA4";
 	}
 	
 	this.map.updateChoropleth(params);
 };
 
 Map.prototype.onDataPoint = function(location) {
-	var c = this.countries[location.country];
+	var c = this.countries[location.Country];
 	if(c === undefined) {
 		c = new CountryData();
-		c.isocode = location.country;
-		this.countries[location.country] = c; 
+		c.isocode = location.Country;
+		this.countries[location.Country] = c; 
 	}
 	
 	c.handleDataPoint(location);
