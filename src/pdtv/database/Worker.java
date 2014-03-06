@@ -69,7 +69,7 @@ public class Worker implements Runnable{
 			//TODO: ej r�tt format p� timeP, blir timmar
 					long timePeriod = packet.timePeriod / 10000;
 					timeP = new SimpleDateFormat("HH:mm:ss").format(timePeriod);
-					System.out.println("Processing packet! (Worker id: " + id + ")");
+					//System.out.println("Processing packet! (Worker id: " + id + ")");
 					
 			//TODO: get HITCOUNT, addr
 					
