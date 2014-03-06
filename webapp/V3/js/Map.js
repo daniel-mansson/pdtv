@@ -24,10 +24,7 @@ var Map = function() {
 		}
 	});
 			
-	
-
-
-	
+		
 
 	this.colors = d3.scale.category10();
 }
@@ -47,7 +44,8 @@ Map.prototype.update = function(model) {
 		var country = this.countries[c];
 		country.update(1,5000);
 		if(country.data.length > 0)
-			params[c] = this.colors(Math.random() * 50);
+			params[c] = d3.hsl(0, 1, 1).toString();
+			//params[c] = this.colors(country.totalHits);
 		else
 			params[c] = "#ABDDA4";
 	}
