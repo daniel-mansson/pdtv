@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import org.jnetpcap.JBufferHandler;
 import org.jnetpcap.Pcap;
@@ -14,9 +13,7 @@ import org.jnetpcap.PcapHeader;
 import org.jnetpcap.PcapIf;
 import org.jnetpcap.nio.JBuffer;
 import org.jnetpcap.nio.JMemory;
-import org.jnetpcap.packet.Payload;
 import org.jnetpcap.packet.PcapPacket;
-import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.lan.Ethernet;
 import org.jnetpcap.protocol.network.Ip4;
 import org.jnetpcap.protocol.network.Ip6;
@@ -89,7 +86,7 @@ public class Sniffer extends Service{
 			final PcapPacket packet = new PcapPacket(JMemory.POINTER);
 			final Ip4 ipv4 = new Ip4();
 			final Ip6 ipv6 = new Ip6();
-			final Payload payload = new Payload();
+			//final Payload payload = new Payload();
 			int count = 0;
 			int rawCount = 0;
 			long timer = 0;

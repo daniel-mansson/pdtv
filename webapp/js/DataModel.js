@@ -8,6 +8,11 @@ function DataModel() {
 	this.minDate="2014-03-01 00:00:00.0";
 	this.maxDate=new Date().toISOString().substring(0, 10)+86400000;
 	this.protocols = [1,2,3,4];
+	
+	var model = this;
+	setInterval(function(){
+		model.requestRangeFromDB();
+	}, 2000);
 };
 
 //Internal
