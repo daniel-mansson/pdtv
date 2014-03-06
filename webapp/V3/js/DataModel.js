@@ -7,7 +7,7 @@ function DataModel() {
 	};
 	
 	this.minDate=new Date().toISOString().substring(0, 21).replace('T', ' ');
-	this.maxDate=new Date().toISOString().substring(0, 21).replace('T', ' ');
+	this.maxDate="";
 	this.protocols = [1,2,3,4];
 	
 	var model = this;
@@ -27,7 +27,7 @@ function DataModel() {
 			}		
 		]};
 		model.requestCallback(true, data);
-	}, 2000);
+	}, 5000);
 };
 
 //Internal
@@ -40,6 +40,7 @@ DataModel.prototype.notify = function() {
 
 //Internal
 DataModel.prototype.requestCallback = function(result, data) {
+	this.minDate = this.maxDate;
 	if(result == true) {
 		this.setData(data);
 	}
@@ -55,28 +56,10 @@ DataModel.prototype.addListener = function(l) {
 	this.listeners.push(l);
 };
 
-DataModel.prototype.requestAllFromDB = function() {
-	console.log("DataModel.prototype.requestAllFromDB");
-	var model = this;
-	$.ajax({
-	    type: "GET",
-	    url: "test",
-	    contentType: "application/json; charset=utf-8",
-	    dataType: "json",
-	    success: function(data) {
-	    	model.requestCallback(true, data);
-	    },
-	    failure: function(errMsg) {
-	    	model.requestCallback(false, errMsg);
-	    }
-	});
-
-};
-
 DataModel.prototype.requestRangeFromDB = function() {
 	console.log("DataModel.prototype.requestRangeFromDB");
+	this.maxDate = new Date(new Date() - 10000+3600000).toISOString().substring(0, 21).replace('T', ' ');
 	var model = this;
-	this.maxDate = new Date(new Date() - 1500).toISOString().substring(0, 21).replace('T', ' ');
 	console.log("minDate: "+model.minDate+" maxDate: "+model.maxDate+" procotols: "+model.protocols);
 	
 	$.ajax({
@@ -91,7 +74,6 @@ DataModel.prototype.requestRangeFromDB = function() {
         },    
 	    success: function(data) {
 	    	model.requestCallback(true, data);
-			model.minDate = model.maxDate;
 	    },
 	    failure: function(errMsg) {
 	    	model.requestCallback(false, errMsg);
