@@ -1,4 +1,5 @@
 function DataModel() {
+	this.countries = {}
 	this.listeners = [];
 	this.data = {
 			info:"nothing",
@@ -81,3 +82,14 @@ DataModel.prototype.requestRangeFromDB = function() {
 	    }
 	});
 };
+
+DataModel.prototype.onDataPoint = function(location) {
+	var c = this.countries[location.country];
+	if(c === undefined) {
+		c = new CountryData();
+		c.isocode = location.country;
+		this.countries[location.country] = c; 
+	}
+	
+	c.handleDataPoint(location);
+}
