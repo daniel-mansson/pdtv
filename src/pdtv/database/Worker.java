@@ -77,9 +77,11 @@ public class Worker implements Runnable{
 
 					GeoData destGeo = database.getGeoLocator().getData(dest);
 					GeoData srcGeo = database.getGeoLocator().getData(sor);
-
-					if(destGeo == null || srcGeo == null)
+					
+					
+					if(destGeo == null || srcGeo == null) {
 						continue;
+					}
 					
 					fromlat = Double.toString(srcGeo.getLatitude());
 					fromlong = Double.toString(srcGeo.getLongitude());
@@ -101,10 +103,7 @@ public class Worker implements Runnable{
 					try {
 						Connection connection = database.getConnectionPool().getConnection();			
 						Statement s = connection.createStatement();
-						
-						if(working){
-							insertData(s);
-						}
+						insertData(s);
 						connection.close();
 						
 					} catch (SQLException e) {
@@ -208,7 +207,6 @@ public class Worker implements Runnable{
 //TODO: get country/city!!!
 			//create location
 			s.execute("INSERT INTO LOCATIONS (LOCATIONID, COUNTRY, CITY, LATITUDE, LONGITUDE) VALUES ("+ locmax + ",'SV', 'Stockholm','"+ lat +"', '" + longitude +"');");
-			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

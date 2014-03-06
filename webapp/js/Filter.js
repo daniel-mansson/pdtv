@@ -2,7 +2,7 @@ function Filter(model) {
 	this.model = model;
 	var model = this.model;
 	
-	this.filterContainer = $("#filterContainer");
+	/*this.filterContainer = $("#filterContainer");
 	this.filterContainer.width(150).height($(window).height()*0.5).position({
 		my:"right center",
 		at:"right-10 center",
@@ -14,7 +14,7 @@ function Filter(model) {
 	var icmp = $("<input checked>").attr("type","checkbox").attr("value","3");
 	this.filterForm = $("#filterForm");
 	this.filterForm.append(unknown,"Unknown </br>",tcp,"TCP </br>",udp,"UDP </br>",icmp,"ICMP </br>");
-		
+	*/	
 	
 	
 	// SLIDER
