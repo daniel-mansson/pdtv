@@ -38,7 +38,7 @@ var Map = function() {
 		m.update({
 			data:{data:[]}
 		});
-	}, 700);
+	}, 1300);
 
 	this.colors = d3.scale.category10();
 }
