@@ -47,7 +47,7 @@ DataModel.prototype.requestCallback = function(result, data) {
 };
 
 DataModel.prototype.setData = function(data) {
-	console.log("DataModel.prototype.setData");
+	//console.log("DataModel.prototype.setData");
 	this.data = data;
 	this.notify();
 };
@@ -57,10 +57,10 @@ DataModel.prototype.addListener = function(l) {
 };
 
 DataModel.prototype.requestRangeFromDB = function() {
-	console.log("DataModel.prototype.requestRangeFromDB");
+	//console.log("DataModel.prototype.requestRangeFromDB");
 	this.maxDate = new Date(new Date() - 2000+3600000).toISOString().substring(0, 21).replace('T', ' ');
 	var model = this;
-	console.log("minDate: "+model.minDate+" maxDate: "+model.maxDate+" procotols: "+model.protocols);
+	//console.log("minDate: "+model.minDate+" maxDate: "+model.maxDate+" procotols: "+model.protocols);
 	
 	$.ajax({
 	    type: "GET",

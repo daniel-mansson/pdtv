@@ -1,6 +1,9 @@
 var Map = function() {
 
 	this.countries = {};
+	var countries = this.countries;
+	this.period = 30000;
+	var period = this.period;
 	this.map = new Datamap({
 		element: document.getElementById('container'),
 		fills: {
@@ -9,22 +12,26 @@ var Map = function() {
 		geographyConfig: {
 			borderColor: "#000000",
 			highlightOnHover: true,
-			highlightFillColor: function() {
-				return "#ff0000";
+			highlightBorderColor: "#ffffff",
+			highlightFillColor: function(geography,data) {
+				if (countries[geography.id]) {
+					return countries[geography.id].color;
+				} else {
+					return "#1C1C34";
+				}
 			},
-			highlightBorderColor: "#ffffff"
-			
-		}/*,	
-		data: {
-			USA: { fillKey: "authorHasTraveledTo" },
-			JPN: { fillKey: "authorHasTraveledTo" },
-			ITA: { fillKey: "authorHasTraveledTo" },
-			CRI: { fillKey: "authorHasTraveledTo" },
-			KOR: { fillKey: "authorHasTraveledTo" },
-			DEU: { fillKey: "authorHasTraveledTo" },
-		}*/
+			popupTemplate: function(geography, data) { 
+				if (countries[geography.id]) {
+					var totalHits = countries[geography.id].totalHits;
+				}
+				else {
+					var totalHits = 0;
+				}
+					return '<div class="hoverinfo"><strong>' + geography.properties.name + '</br>Packets during the last '+period/1000+' seconds: '+totalHits+' </div>';
+		        }
+		}
 	});
-	this.period = 8000;
+	
 		
 	var m = this;
 	setInterval(function() {
@@ -32,17 +39,6 @@ var Map = function() {
 			data:{data:[]}
 		});
 	}, 700);
-
-	/*setInterval(function() {
-		map.map.updateChoropleth({
-	
-		USA: colors(Math.random() * 10),
-		RUS: colors(Math.random() * 100),
-		AUS: { fillKey: 'authorHasTraveledTo' },
-		BRA: colors(Math.random() * 50),
-	});
-	}, 2000);*/
-	
 
 	this.colors = d3.scale.category10();
 }
