@@ -26,7 +26,7 @@ MapOverlay.prototype.update = function(model) {
 		var location_to =	{	location: new google.maps.LatLng(entry.to.Latitude,entry.to.Longitude),
 		                		weight: 1*weightFactor_to//Math.pow(entry.HitCount+1,0.1)
 					};
-		console.log(entry.from.City);
+		console.log(entry.from.Country);
 		if (entry.from.Country!="__")                   
 			array.push(location_from);
 		if (entry.to.Country!="__") 
