@@ -27,7 +27,7 @@ public class Application implements WindowListener{
 	
 	public void start() {
 		database.start();
-		sniffer.start();
+		//sniffer.start();
 		webServer.start();
 	}
 
@@ -36,7 +36,7 @@ public class Application implements WindowListener{
 		window.close();
 		
 		webServer.stop();
-		sniffer.stop();
+		//sniffer.stop();
 		database.stop();
 	}
 
