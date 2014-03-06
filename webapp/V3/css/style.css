@@ -9,7 +9,25 @@ body {
 	background-color: #4a5b74;
 }
 
-h1, h2 {
+h1 {
+font-size:350%;
+	margin-left: auto;
+	margin-left: auto;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding: 50px;
+	text-align: center;
+	color:#517;
+    font-weight:bold;
+    text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+   1px 1px 0 #000;  
+   font-family:"Lucida Console", Lucida, monospace;
+}
+
+h2 {
 	margin-left: auto;
 	margin-left: auto;
 	text-align: center;
@@ -18,6 +36,16 @@ h1, h2 {
 
 #map-canvas {
 	height: 100%
+}
+
+#container {
+	position: relative;
+
+	width: 1000px;
+	height: 500px;
+
+	margin-left: auto;
+	margin-left: auto;
 }
 
 #sliderContainer {
