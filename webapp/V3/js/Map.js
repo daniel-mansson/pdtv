@@ -24,6 +24,7 @@ var Map = function() {
 			DEU: { fillKey: "authorHasTraveledTo" },
 		}*/
 	});
+	this.period = 8000;
 			
 	
 
@@ -54,12 +55,13 @@ Map.prototype.update = function(model) {
 	var params = {};
 	for(c in this.countries) {
 		var country = this.countries[c];
-		country.update(1,5000);
-		if(country.data.length > 0)
-			params[c] = d3.hsl(0, 1, 1).toString();
-			//params[c] = this.colors(country.totalHits);
+		country.update(1,this.period);
+		if(country.data.length > 0) {
+			var cv = country.getValue(this.period) * 255;
+			params[c] = d3.rgb(cv, cv, 0).toString();
+		}
 		else
-			params[c] = "#ABDDA4";
+			params[c] = "#1C1C34";
 	}
 	
 	this.map.updateChoropleth(params);
