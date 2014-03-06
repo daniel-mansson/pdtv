@@ -1,6 +1,7 @@
 var Map = function() {
 
 	this.countries = {};
+	var countries = this.countries;
 	this.map = new Datamap({
 		element: document.getElementById('container'),
 		fills: {
@@ -12,30 +13,20 @@ var Map = function() {
 			highlightFillColor: function() {
 				return "#ff0000";
 			},
+			popupTemplate: function(geography, data) { 
+				console.log(countries);
+				console.log(geography.id);
+				console.log(countries[geography.id]);
+              			return '<div class="hoverinfo"><strong>' + geography.properties.name + '</strong></div>';
+		        },
 			highlightBorderColor: "#ffffff"
 			
-		}/*,	
-		data: {
-			USA: { fillKey: "authorHasTraveledTo" },
-			JPN: { fillKey: "authorHasTraveledTo" },
-			ITA: { fillKey: "authorHasTraveledTo" },
-			CRI: { fillKey: "authorHasTraveledTo" },
-			KOR: { fillKey: "authorHasTraveledTo" },
-			DEU: { fillKey: "authorHasTraveledTo" },
-		}*/
+		}
 	});
 			
 	
 
-	/*setInterval(function() {
-		map.map.updateChoropleth({
-	
-		USA: colors(Math.random() * 10),
-		RUS: colors(Math.random() * 100),
-		AUS: { fillKey: 'authorHasTraveledTo' },
-		BRA: colors(Math.random() * 50),
-	});
-	}, 2000);*/
+
 	
 
 	this.colors = d3.scale.category10();
