@@ -78,7 +78,9 @@ public class Worker implements Runnable{
 					GeoData destGeo = database.getGeoLocator().getData(dest);
 					GeoData srcGeo = database.getGeoLocator().getData(sor);
 
-					if(destGeo == null || srcGeo == null)
+					if(destGeo.getCountry().equals("__") && srcGeo.getCountry().equals("__"))
+						continue;
+					if(!srcGeo.getCountry().equals("__"))
 						continue;
 					
 					fromlat = Double.toString(srcGeo.getLatitude());

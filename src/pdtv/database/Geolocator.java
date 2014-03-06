@@ -87,7 +87,7 @@ public class Geolocator {
 		} finally {
 		}
 
-		return null;
+		return new GeoData("__", "Unknown", 36.0728987,-38.3677648);
 	}
 
 }

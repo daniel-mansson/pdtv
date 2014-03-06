@@ -84,7 +84,15 @@ public class Database extends Service{
 			setMessage("Creating tables.");
 			Connection c = connectionPool.getConnection();
 			Statement s = c.createStatement();
+			s.addBatch("");
 
+			s.addBatch("DROP TABLE ADDRESSES");
+			s.addBatch("DROP TABLE CONNECTIONS");
+			s.addBatch("DROP TABLE LOCATIONS ");
+			s.addBatch("DROP TABLE PACKETS");
+			s.addBatch("DROP TABLE PROTOCOLS");
+			s.addBatch("DROP TABLE TYPES");
+			
 			s.addBatch("CREATE TABLE IF NOT EXISTS Packets(PacketId INT NOT NULL AUTO_INCREMENT, ConnectionID INT, Time TIMESTAMP, TimePeriod TIME, HitCount INT, ProtocolID INT, TypeID INT)");
 			s.addBatch("CREATE TABLE IF NOT EXISTS Addresses(AddrId INT NOT NULL AUTO_INCREMENT, Addr VARCHAR(48), LocationID INT)");
 			s.addBatch("CREATE TABLE IF NOT EXISTS Locations(LocationId INT NOT NULL AUTO_INCREMENT, Country VARCHAR(32), City VARCHAR(32), Latitude DOUBLE, Longitude DOUBLE)");
