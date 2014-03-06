@@ -1,13 +1,18 @@
 package pdtv.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import pdtv.database.Database;
@@ -23,6 +28,8 @@ public class Window {
 	Database database;
 	Sniffer sniffer;
 	WebServer webServer;
+	Boolean snifferstoped = true;
+	JButton snifferButton;
 	
 	public Window(Database database, Sniffer sniffer, WebServer webServer) {
 
@@ -54,6 +61,29 @@ public class Window {
 		
 		
 		ServiceView snifferView = new ServiceView(sniffer); 
+		snifferButton = (JButton) snifferView.getComponent(0);	
+		snifferButton.setMargin(new Insets(0, 0, 0, 0));
+		snifferButton.setText("Start");
+		JLabel snifferL = (JLabel) snifferView.getComponent(1);	
+		snifferL.setText("Start Sniffer by clicking Start");
+		snifferButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				if(snifferstoped){
+					System.out.println("Sniffer Start");
+					sniffer.start();
+					snifferButton.setText("Stop");
+					snifferstoped = false;
+				}
+				else{
+					System.out.println("Sniffer Stop");
+					sniffer.stop();
+					snifferstoped = true;
+				}
+				
+			}
+        });  
 		left.add(snifferView);
 
 		ServiceView dbView = new ServiceView(database); 	

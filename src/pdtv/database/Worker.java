@@ -31,6 +31,10 @@ public class Worker implements Runnable{
 	private String fromlong;
 	private String tolat;
 	private String tolong;
+	private String fromCity;
+	private String toCity;
+	private String fromCountry;
+	private String toCountry;
 	
 	public Worker(ArrayBlockingQueue<Packet> queue, Database datab) {
 		this.queue = queue;
@@ -77,17 +81,20 @@ public class Worker implements Runnable{
 
 					GeoData destGeo = database.getGeoLocator().getData(dest);
 					GeoData srcGeo = database.getGeoLocator().getData(sor);
-
+					//System.out.println("Dest: "+destGeo.getCountry()+" Src: "+srcGeo.getCountry());
 					if(destGeo.getCountry().equals("__") && srcGeo.getCountry().equals("__"))
 						continue;
-					if(!srcGeo.getCountry().equals("__"))
+					/*if(!srcGeo.getCountry().equals("__"))
 						continue;
-					
+					*/
 					fromlat = Double.toString(srcGeo.getLatitude());
 					fromlong = Double.toString(srcGeo.getLongitude());
 					tolat = Double.toString(destGeo.getLatitude());
 					tolong = Double.toString(destGeo.getLongitude());
-					
+					fromCity = srcGeo.getCity();
+					toCity = destGeo.getCity();
+					fromCountry = srcGeo.getCountry();
+					toCountry = destGeo.getCountry();
 
 					// random values	
 					/*Random r = new Random();
@@ -103,10 +110,7 @@ public class Worker implements Runnable{
 					try {
 						Connection connection = database.getConnectionPool().getConnection();			
 						Statement s = connection.createStatement();
-						
-						if(working){
-							insertData(s);
-						}
+						insertData(s);
 						connection.close();
 						
 					} catch (SQLException e) {
@@ -155,10 +159,10 @@ public class Worker implements Runnable{
 			//Create New connections values if connectid is not find
 			else{
 				//find fromaddr id
-				int fromaddrmax = getAddId(s, fromlat, fromlong);
+				int fromaddrmax = getAddId(s, fromlat, fromlong, fromCountry, fromCity);
 			
 				//find toaddr id
-				int toaddrmax = getAddId(s, tolat, tolong);
+				int toaddrmax = getAddId(s, tolat, tolong, toCountry, toCity);
 			
 				resultconnectid = s.executeQuery("SELECT MAX(CONNECTIONID) AS MAX FROM Connections;");
 				resultconnectid.next();
@@ -174,7 +178,7 @@ public class Worker implements Runnable{
 	
 	
 	//Find corresponding addrid
-	private synchronized int getAddId(Statement s, String lat, String longitude){
+	private synchronized int getAddId(Statement s, String lat, String longitude, String country, String city){
 		int addrmax = 0;
 		try {	
 			ResultSet resultaddtid = s.executeQuery("SELECT ADDRID FROM Addresses AS Addr INNER JOIN Locations AS Loc ON Loc.LocationId = Addr.LocationId WHERE Loc.LATITUDE = '"+ lat +"' AND Loc.LONGITUDE = '" + longitude +"';");
@@ -182,7 +186,7 @@ public class Worker implements Runnable{
 				addrmax = resultaddtid.getInt("ADDRID");
 			}
 			else {
-				int locid = createLoc(s, lat, longitude);
+				int locid = createLoc(s, lat, longitude,country, city);
 				resultaddtid = s.executeQuery("SELECT MAX(ADDRID) AS MAX FROM Addresses;");
 				resultaddtid.next();
 				addrmax = resultaddtid.getInt("MAX")+1;
@@ -200,7 +204,7 @@ public class Worker implements Runnable{
 	
 	//Create location
 //TODO: get country/city!!!
-	private synchronized int createLoc(Statement s, String lat, String longitude){
+	private synchronized int createLoc(Statement s, String lat, String longitude,String country, String city){
 		int locmax = 0;
 		try {	
 			ResultSet resultloctid = s.executeQuery("SELECT MAX(LOCATIONID) AS MAX FROM Locations;");
@@ -209,8 +213,7 @@ public class Worker implements Runnable{
 
 //TODO: get country/city!!!
 			//create location
-			s.execute("INSERT INTO LOCATIONS (LOCATIONID, COUNTRY, CITY, LATITUDE, LONGITUDE) VALUES ("+ locmax + ",'SV', 'Stockholm','"+ lat +"', '" + longitude +"');");
-			
+			s.execute("INSERT INTO LOCATIONS (LOCATIONID, COUNTRY, CITY, LATITUDE, LONGITUDE) VALUES ("+ locmax + ",'"+country+"', '"+city+"','"+ lat +"', '" + longitude +"');");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
