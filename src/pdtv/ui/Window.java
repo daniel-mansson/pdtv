@@ -78,6 +78,7 @@ public class Window {
 				}
 				else{
 					System.out.println("Sniffer Stop");
+					snifferButton.setText("Start");
 					sniffer.stop();
 					snifferstoped = true;
 				}
