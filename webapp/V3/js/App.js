@@ -1,0 +1,1 @@
+var App = function() {		this.model = new DataModel();		this.map = new Map();	this.model.addListener(this.map);	};
