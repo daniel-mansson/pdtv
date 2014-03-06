@@ -58,14 +58,14 @@ public class Sniffer extends Service{
 			return false;
 		}
 
-		/*System.out.println("Network devices found:");
+		System.out.println("Network devices found:");
 		int i = 0;
 		for (PcapIf device : alldevs) {
 			String description = (device.getDescription() != null) ? device
 					.getDescription() : "No description available";
 			System.out.printf("#%d: %s [%s]\n", i++, device.getName(),
 					description);
-		}*/
+		}
 
 		PcapIf device = alldevs.get(deviceId); 
 
