@@ -133,7 +133,7 @@ public class Worker implements Runnable{
 		int packid = getMaxPackId(s)+1;
 		
 		//Insert to database
-		s.execute("INSERT INTO PACKETS (PACKETID, CONNECTIONID, TIME, TIMEPERIOD, HITCOUNT, PROTOCOLID, TYPEID) VALUES ("+ packid +", " + conectid + ", '"+ time +"' , '"+ timeP+ "', 17," + protocolid + ","+ typeid+");");			
+		s.execute("INSERT INTO PACKETS (PACKETID, CONNECTIONID, TIME, TIMEPERIOD, HITCOUNT, PROTOCOLID, TYPEID) VALUES ("+ packid +", " + conectid + ", '"+ time +"' , '"+ timeP+ "'," + hits +"," + protocolid + ","+ typeid+");");			
 		
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
