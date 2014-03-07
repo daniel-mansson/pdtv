@@ -30,15 +30,17 @@ CountryData.prototype.update = function(time, period) {
 	
 	this.minDiff = period;
 	var newData = [];
+	this.totalHits = 0;
 	for(var i = 0; i < this.data.length; ++i) {
 		var diff = current - this.data[i].time;
 		
 		if(diff < this.minDiff)
 			this.minDiff = diff;
-		if(diff <= period)
+		if(diff <= period){
+			this.totalHits += this.data[i].packet.hits;	
 			newData.push(this.data[i]);
+		}
 	}
 	this.data = newData;
-	this.totalHits = this.data.length;
 	
 };

@@ -2,7 +2,7 @@ var Map = function() {
 
 	this.countries = {};
 	var countries = this.countries;
-	this.period = 30000;
+	this.period = 20000;
 	var period = this.period;
 	this.map = new Datamap({
 		element: document.getElementById('container'),
@@ -21,11 +21,12 @@ var Map = function() {
 				}
 			},
 			popupTemplate: function(geography, data) { 
+				var totalHits;
 				if (countries[geography.id]) {
-					var totalHits = countries[geography.id].totalHits;
+					totalHits = countries[geography.id].totalHits;
 				}
 				else {
-					var totalHits = 0;
+					totalHits = 0;
 				}
 					return '<div class="hoverinfo"><strong>' + geography.properties.name + '</br>Packets during the last '+period/1000+' seconds: '+totalHits+' </div>';
 		        }
@@ -41,16 +42,22 @@ var Map = function() {
 	}, 1300);
 
 	this.colors = d3.scale.category10();
-}
+};
 
 Map.prototype.update = function(model) {
 	var app = this;
 	console.log("Packets: " + model.data.data.length);
 	model.data.data.forEach(function(packet){
-		if(packet.from.Country != "__")
-			app.onDataPoint(packet.from);
-		if(packet.to.Country != "__")
-			app.onDataPoint(packet.to);
+		if(packet.from.Country != "__") {
+			var p = packet.from;
+			p.hits = packet.HitCount;
+			app.onDataPoint(p);
+		}
+		if(packet.to.Country != "__"){
+			var p = packet.to;
+			p.hits = packet.HitCount;
+			app.onDataPoint(p);
+		}
 	});
 	
 	var params = {};
@@ -59,8 +66,9 @@ Map.prototype.update = function(model) {
 		country.update(1,this.period);
 		
 		if(country.data.length > 0) {
-			var cv = country.getValue(this.period)
-			country.color = d3.interpolateRgb("#1C1C34", "#00ffff")(cv)
+			var cv = country.getValue(this.period);
+			cv = Math.pow(cv, 2);
+			country.color = d3.interpolateRgb("#1C1C34", "#00ffff")(cv);
 		}
 		else
 			country.color = "#1C1C34";
@@ -80,4 +88,4 @@ Map.prototype.onDataPoint = function(location) {
 	}
 	
 	c.handleDataPoint(location);
-}
+};
