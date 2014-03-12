@@ -2,19 +2,22 @@ var Kaka = function(model){
 
 	this.model = model;
 	this.model.addListener(this);
-	
+            
+    data = [{"label":"undefined", "value":40}, 
+    		{"label":"displayed", "value":60}];
+    		
+    makePie(data);
+}
+
+var makePie = function(data){
  	var w = 300,                        //width
     h = 300,                            //height
     r = 100,                            //radius
-    color = d3.scale.category20c();     //builtin range of colors 
- 
-    data = [{"label":"one", "value":20}, 
-    		{"label":"onee", "value":21},
-            {"label":"two", "value":50}, 
-            {"label":"three", "value":30}];
-    
-    var vis = d3.select("body")
+    color = d3.scale.category20c();     //builtin range of colors   
+
+    var vis = d3.select("div")
         .append("svg:svg")              //create the SVG element inside the <body>
+        .attr("id","pie")
         .data([data])                   //associate our data with the document
             .attr("width", w)           //set the width and height of our visualization (these will be attributes of the <svg> tag
             .attr("height", h)
@@ -30,21 +33,48 @@ var Kaka = function(model){
     var arcs = vis.selectAll("g.slice")     //this selects all <g> elements with class slice (there aren't any yet)
         .data(pie)                          //associate the generated pie data (an array of arcs, each having startAngle, endAngle and value properties) 
         .enter()                            //this will create <g> elements for every "extra" data element that should be associated with a selection. The result is creating a <g> for every object in the data array
-            .append("svg:g")                //create a group to hold each slice (we will have a <path> and a <text> element associated with each slice)
-                .attr("class", "slice");    //allow us to style things in the slices (like text)
+        .append("svg:g")                //create a group to hold each slice (we will have a <path> and a <text> element associated with each slice)
+        .attr("class", "slice");    //allow us to style things in the slices (like text)
  
-        arcs.append("svg:path")
-                .attr("fill", function(d, i) { return color(i); } ) //set the color for each slice to be chosen from the color function defined above
-                .attr("d", arc);                                    //this creates the actual SVG path using the associated data (pie) with the arc drawing function
+    arcs.append("svg:path")
+        .attr("fill", function(d, i) { return color(i); } ) //set the color for each slice to be chosen from the color function defined above
+        .attr("d", arc);                                    //this creates the actual SVG path using the associated data (pie) with the arc drawing function
  
-        arcs.append("svg:text")                                     //add a label to each slice
-                .attr("transform", function(d) {                    //set the label's origin to the center of the arc
-                //we have to make sure to set these before calling arc.centroid
-                d.innerRadius = 0;
-                d.outerRadius = r;
-                return "translate(" + arc.centroid(d) + ")";        //this gives us a pair of coordinates like [50, 50]
-            })
-            .attr("text-anchor", "middle")                          //center the text on it's origin
-            .text(function(d, i) { return data[i].label; });        //get the label from our original data array
+  //add a label to each slice
+    arcs.append("svg:text")                                   
+         .attr("transform", function(d) {                 
+         //we have to make sure to set these before calling arc.centroid
+         	d.innerRadius = 0;
+         	d.outerRadius = r;
+         	return "translate(" + arc.centroid(d) + ")";
+          })
+         .attr("text-anchor", "middle")                         
+         .text(function(d, i) { return data[i].label; });        //get the label from our original data array
+
 }
+
+Kaka.update = function(array) {
+	console.log("Update kake");
+	var d = d3.select("#pie");
+	d.remove();
+	/*var array = [];
+	model.data.data.forEach(function(entry) {
+		//TODO: make some sort of count here....
+		var map = {};
+		map.put("label","undefined");
+		map.put("value",70); 
+		array.push(map);
+		var map2 = {};
+		map2.put("label","displayed");
+		map2.put("value",60);
+		array.push(map2);
+		if (entry.from.Country!="__")                   
+			array.push(location_from);
+		if (entry.to.Country!="__") 
+			array.push(location_to);
+	});
+	console.log("Packets: "+array.length);*/
+	makePie(array);
+};
+
 
