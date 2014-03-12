@@ -69,10 +69,17 @@ h2 {
 	z-index:9;
 	border-radius:10px;
 }
+
+.chart {
+	z-index:11;
+	position: absolute;
+	right: 20px;
+	top: 20px;
+}
+
 .chart rect {
 	fill: steelblue;
-	stroke: white;
-	z-index:11;
+	stroke: white;	
 }
 
 .ui-slider { position: relative; text-align: left; }
