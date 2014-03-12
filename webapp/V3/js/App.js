@@ -1,1 +1,1 @@
-var App = function() {		this.model = new DataModel();		this.map = new Map();	this.model.addListener(this.map);	};
+var App = function() {		this.model = new DataModel();		this.map = new Map();	this.model.addListener(this.map);	this.barChart = new BarChart();	};

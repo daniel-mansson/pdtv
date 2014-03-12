@@ -9,6 +9,7 @@ function DataModel() {
 	this.minDate=new Date().toISOString().substring(0, 21).replace('T', ' ');
 	this.maxDate="";
 	this.protocols = [1,2,3,4];
+	this.nrOfPackets = [0,0,0,0,0,0,0,0,0,0];
 	
 	var model = this;
 	setInterval(function(){

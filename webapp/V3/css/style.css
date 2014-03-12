@@ -41,6 +41,11 @@ h1, h2 {
 	z-index:9;
 	border-radius:10px;
 }
+.chart rect {
+	fill: steelblue;
+	stroke: white;
+	z-index:11;
+}
 
 .ui-slider { position: relative; text-align: left; }
 .ui-slider .ui-slider-handle {  cursor: default;
