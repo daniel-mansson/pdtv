@@ -46,7 +46,7 @@ var Map = function() {
 
 Map.prototype.update = function(model) {
 	var app = this;
-	console.log("Packets: " + model.data.data.length);
+	//console.log("Packets: " + model.data.data.length);
 	model.data.data.forEach(function(packet){
 		if(packet.from.Country != "__") {
 			var p = packet.from;
