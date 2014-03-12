@@ -2,6 +2,7 @@ package pdtv.sniffer;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -14,6 +15,7 @@ import org.jnetpcap.PcapIf;
 import org.jnetpcap.nio.JBuffer;
 import org.jnetpcap.nio.JMemory;
 import org.jnetpcap.packet.PcapPacket;
+import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.lan.Ethernet;
 import org.jnetpcap.protocol.network.Ip4;
 import org.jnetpcap.protocol.network.Ip6;
@@ -97,7 +99,10 @@ public class Sniffer extends Service{
 				
 				packet.peerAndScan(Ethernet.ID, header, buffer);
 				if (packet.hasHeader(ipv4)) {
-					handlePacket(ipv4.source(), ipv4.destination());
+					if(!isInLocalIPv4Range(ipv4.source()) || !isInLocalIPv4Range(ipv4.destination()))
+						handlePacket(ipv4.source(), ipv4.destination());
+					else 
+						System.out.println("megalocal");
 				}
 				if (packet.hasHeader(ipv6)) {
 					if(isGlobalUnicast(ipv6.destination()) && isGlobalUnicast(ipv6.source()))
@@ -125,11 +130,26 @@ public class Sniffer extends Service{
 				}
 			}
 			
-			private boolean isGlobalUnicast(byte[] addr) {
-				return (addr[0] & 0xe0) == 0x20;
+			private boolean isGlobalUnicast(byte[] addr6) {
+				return (addr6[0] & 0xe0) == 0x20;
+			}
+			
+			private boolean isInLocalIPv4Range(byte[] addr4) {
+				if(addr4[0] == 10)
+					return true;
+				if(addr4[0] == 172 && addr4[1] >= 16 && addr4[1] <= 31) 
+					return true;
+				if(addr4[0] == 192 && addr4[1] == 168) 
+					return true;
+					
+				return false;
 			}
 			
 			private void handlePacket(byte[] src, byte[] dst) {
+				if(Arrays.equals(src, dst)) {
+					return;
+				}
+				
 				PacketKey key = new PacketKey(src, dst);
 				
 				Packet packet = packets.get(key);

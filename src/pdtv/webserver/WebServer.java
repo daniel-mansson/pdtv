@@ -11,6 +11,8 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 
+import com.google.gson.JsonObject;
+
 import pdtv.database.Database;
 import pdtv.main.Service;
 import pdtv.main.Status;
@@ -23,9 +25,12 @@ public class WebServer extends Service {
 	String queryFile;
 	String webappDir;
 	Database database;
+	RealtimePacketQueue packetQueue;
 
 	public WebServer(Properties properties, Database database) {
 		this.database = database;
+		packetQueue = new RealtimePacketQueue();
+		RealtimeSocket.queue = packetQueue;
 		
 		port = Integer.parseInt(properties.getProperty("webserver_port", "8080").trim());
 		queryFile = properties.getProperty("query_file", "config/query.sql").trim();
@@ -55,6 +60,8 @@ public class WebServer extends Service {
 			return false;
 		}
 
+		webappcontext.addServlet(new ServletHolder("ws-events", RealtimeServlet.class) , "/realtime");
+        
 		handlers.setHandlers(new Handler[] { webappcontext, new DefaultHandler() });
 		server.setHandler(handlers);
 		
@@ -82,5 +89,9 @@ public class WebServer extends Service {
 			}
 			server = null;
 		}
+	}
+	
+	public void sendRealtimePacket(JsonObject packet) {
+		packetQueue.addPacket(packet);
 	}
 }

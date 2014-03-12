@@ -1,5 +1,6 @@
 function DataModel() {
 	this.listeners = [];
+	this.realtimeListeners = [];
 	this.data = {
 			info:"nothing",
 			data:[
@@ -11,10 +12,10 @@ function DataModel() {
 	this.protocols = [1,2,3,4];
 	this.nrOfPackets = [0,0,0,0,0,0,0,0,0,0];
 	
-	var model = this;
+	/*var model = this;
 	setInterval(function(){
 		model.requestRangeFromDB();
-	}, 2000);
+	}, 2000);*/
 	/*
 	setInterval(function(){
 		var data = {data:[
@@ -40,6 +41,13 @@ DataModel.prototype.notify = function() {
 };
 
 //Internal
+DataModel.prototype.notifyRealtime = function(data) {
+	this.realtimeListeners.forEach(function(l) {
+		l.onRealtimeUpdate(data);
+	});
+};
+
+//Internal
 DataModel.prototype.requestCallback = function(result, data) {
 	this.minDate = this.maxDate;
 	if(result == true) {
@@ -48,20 +56,27 @@ DataModel.prototype.requestCallback = function(result, data) {
 };
 
 DataModel.prototype.setData = function(data) {
-	//console.log("DataModel.prototype.setData");
 	this.data = data;
 	this.notify();
+};
+
+DataModel.prototype.onRealtimeData = function(data) {
+	var parsedData = JSON.parse(data);
+	if(parsedData !== undefined)
+		this.notifyRealtime(parsedData);
 };
 
 DataModel.prototype.addListener = function(l) {
 	this.listeners.push(l);
 };
 
+DataModel.prototype.addRealtimeListener = function(l) {
+	this.realtimeListeners.push(l);
+};
+
 DataModel.prototype.requestRangeFromDB = function() {
-	//console.log("DataModel.prototype.requestRangeFromDB");
 	this.maxDate = new Date(new Date() - 3000+3600000).toISOString().substring(0, 21).replace('T', ' ');
 	var model = this;
-	//console.log("minDate: "+model.minDate+" maxDate: "+model.maxDate+" procotols: "+model.protocols);
 	
 	$.ajax({
 	    type: "GET",

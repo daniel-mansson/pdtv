@@ -16,6 +16,7 @@ import com.jolbox.bonecp.BoneCPConfig;
 import pdtv.main.Service;
 import pdtv.main.Status;
 import pdtv.sniffer.Packet;
+import pdtv.webserver.WebServer;
 
 public class Database extends Service{
 	Server server;
@@ -24,24 +25,27 @@ public class Database extends Service{
 	BoneCP connectionPool;
 	private Geolocator geolocator;
 	private String geoLocQueryFile;
+	private int num_workers;
 
 	public Database(Properties properties) {
 		server = null;
 
 		int queue_length = Integer.parseInt(properties.getProperty("queue_length", "10000").trim());
-		int num_workers = Integer.parseInt(properties.getProperty("num_workers", "2").trim());
+		num_workers = Integer.parseInt(properties.getProperty("num_workers", "2").trim());
 		geoLocQueryFile = properties.getProperty("geoloc_query", "config/create_geoloc.sql").trim();
 		
 		queue = new ArrayBlockingQueue<Packet>(queue_length);
 		
+		setMessage("Database information text.");
+	}
+	
+	public void createWorkers(WebServer webServer) {
 		workers = new ArrayList<Worker>();
 		for(int i = 0; i < num_workers; ++i) {
-			Worker w = new Worker(queue, this);
+			Worker w = new Worker(queue, this, webServer);
 			new Thread(w).start();
 			workers.add(w);
 		}
-		
-		setMessage("Database information text.");
 	}
 
 	@Override
