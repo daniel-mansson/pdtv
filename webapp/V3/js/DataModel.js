@@ -11,10 +11,10 @@ function DataModel() {
 	this.maxDate="";
 	this.protocols = [1,2,3,4];
 	
-	var model = this;
+	/*var model = this;
 	setInterval(function(){
 		model.requestRangeFromDB();
-	}, 2000);
+	}, 2000);*/
 	/*
 	setInterval(function(){
 		var data = {data:[
@@ -60,11 +60,17 @@ DataModel.prototype.setData = function(data) {
 };
 
 DataModel.prototype.onRealtimeData = function(data) {
-	this.notifyRealtime(data);
+	var parsedData = JSON.parse(data);
+	if(parsedData !== undefined)
+		this.notifyRealtime(parsedData);
 };
 
 DataModel.prototype.addListener = function(l) {
 	this.listeners.push(l);
+};
+
+DataModel.prototype.addRealtimeListener = function(l) {
+	this.realtimeListeners.push(l);
 };
 
 DataModel.prototype.requestRangeFromDB = function() {
