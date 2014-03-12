@@ -6,15 +6,36 @@
 	
 		<script type="text/javascript" src="V3/js/jquery-1.11.0.min.js"></script>
 
-		<script type="text/javascript" src="js/DataModel.js"></script>
+		<script type="text/javascript" src="V3/js/DataModel.js"></script>
        
 	   <script type="text/javascript" src="Pie.js"></script>
    </head>
    <body>	
-
+		<button type="button" id="pieButton" value="hidden"> Show Pie!! </button>
+		<div id="pieDiv" hidden></div>
        <script type="text/javascript"> 
  		var model = new DataModel();
 		new Kaka(model);
+		
+		$('#pieButton').click(function(){
+			console.log("click");
+			if ($(this).val() == "hidden"){
+				$(this).text("Hide Piechart");
+				$(this).val("shown");
+				$('#pieDiv').show();
+				
+			}
+			else{
+				$(this).text("Show Piechart");
+				$(this).val("hidden");
+				$('#pieDiv').hide();
+			}
+		});
+		
+		    data = [{"label":"undefined", "value":70}, 
+    		{"label":"displayed", "value":60}];
+    		
+		Kaka.update(data)
 		</script>
 
    </body>

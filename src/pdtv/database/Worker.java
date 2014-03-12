@@ -44,6 +44,8 @@ public class Worker implements Runnable{
 	private String fromCountry;
 	private String toCountry;
 	
+	private String locationQueryStr = "INSERT INTO LOCATIONS (COUNTRY, CITY, LATITUDE, LONGITUDE) VALUES (?, ?, ?, ?)";
+	
 	public Worker(ArrayBlockingQueue<Packet> queue, Database datab, WebServer webServer) {
 		this.queue = queue;
 		isAlive = true;
@@ -242,7 +244,8 @@ public class Worker implements Runnable{
 			locmax = resultloctid.getInt("MAX")+1;*/
 
 			//create location
-			s.execute("INSERT INTO LOCATIONS (COUNTRY, CITY, LATITUDE, LONGITUDE) VALUES ('"+country+"', '"+city+"','"+ lat +"', '" + longitude +"');");
+			//TODO: lägg int riktig stad med PreparedStatement
+			s.execute("INSERT INTO LOCATIONS (COUNTRY, CITY, LATITUDE, LONGITUDE) VALUES ('"+country+"', '"+"TODO"+"','"+ lat +"', '" + longitude +"');");
 			ResultSet resultloctid = s.executeQuery("SELECT LOCATIONID FROM Locations WHERE LATITUDE = '"+ lat +"' AND LONGITUDE = '" + longitude +"';");
 			resultloctid.next();
 			locmax = resultloctid.getInt("LOCATIONID");	
