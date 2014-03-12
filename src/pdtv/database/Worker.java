@@ -9,7 +9,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 
+import org.jnetpcap.packet.format.FormatUtils;
+
+import com.google.gson.JsonObject;
+
 import pdtv.sniffer.Packet;
+import pdtv.webserver.WebServer;
 
 public class Worker implements Runnable{
 	
@@ -20,6 +25,7 @@ public class Worker implements Runnable{
 	private ArrayBlockingQueue<Packet> queue;
 	private volatile boolean isAlive;
 	private Database database;
+	private WebServer webServer;
 	
 	private String time;
 	private String type;
@@ -27,6 +33,8 @@ public class Worker implements Runnable{
 	private int hits;
 	private String timeP;
 	//to be done: real latitudes and longitudes
+	private String fromAddr;
+	private String toAddr;
 	private String fromlat;
 	private String fromlong;
 	private String tolat;
@@ -36,11 +44,12 @@ public class Worker implements Runnable{
 	private String fromCountry;
 	private String toCountry;
 	
-	public Worker(ArrayBlockingQueue<Packet> queue, Database datab) {
+	public Worker(ArrayBlockingQueue<Packet> queue, Database datab, WebServer webServer) {
 		this.queue = queue;
 		isAlive = true;
 		id = test_id++;
 		database = datab;
+		this.webServer = webServer;
 	}
 
 	@Override
@@ -87,6 +96,17 @@ public class Worker implements Runnable{
 					/*if(!srcGeo.getCountry().equals("__"))
 						continue;
 					*/
+					
+					if(sor.length == 4)
+						fromAddr = FormatUtils.ip(sor);
+					else
+						fromAddr = FormatUtils.asString(sor);
+					
+					if(dest.length == 4)
+						toAddr = FormatUtils.ip(dest);
+					else
+						toAddr = FormatUtils.asString(dest);
+					
 					fromlat = Double.toString(srcGeo.getLatitude());
 					fromlong = Double.toString(srcGeo.getLongitude());
 					tolat = Double.toString(destGeo.getLatitude());
@@ -96,6 +116,7 @@ public class Worker implements Runnable{
 					fromCountry = srcGeo.getCountry();
 					toCountry = destGeo.getCountry();
 
+					sendRealtimePacket();
 					// random values	
 					/*Random r = new Random();
 					//double rlong = ((double) r.nextInt(36001) - 18000)/100;
@@ -159,10 +180,10 @@ public class Worker implements Runnable{
 			//Create New connections values if connectid is not find
 			else{
 				//find fromaddr id
-				int fromaddrmax = getAddId(s, fromlat, fromlong, fromCountry, fromCity);
+				int fromaddrmax = getAddId(s, fromAddr, fromlat, fromlong, fromCountry, fromCity);
 			
 				//find toaddr id
-				int toaddrmax = getAddId(s, tolat, tolong, toCountry, toCity);
+				int toaddrmax = getAddId(s, toAddr, tolat, tolong, toCountry, toCity);
 			
 				/*resultconnectid = s.executeQuery("SELECT MAX(CONNECTIONID) AS MAX FROM Connections;");
 				resultconnectid.next();
@@ -181,7 +202,7 @@ public class Worker implements Runnable{
 	
 	
 	//Find corresponding addrid
-	private synchronized int getAddId(Statement s, String lat, String longitude, String country, String city){
+	private synchronized int getAddId(Statement s, String addr, String lat, String longitude, String country, String city){
 		int addrmax = 0;
 		try {	
 			ResultSet resultaddtid = s.executeQuery("SELECT ADDRID FROM Addresses AS Addr INNER JOIN Locations AS Loc ON Loc.LocationId = Addr.LocationId WHERE Loc.LATITUDE = '"+ lat +"' AND Loc.LONGITUDE = '" + longitude +"';");
@@ -196,7 +217,7 @@ public class Worker implements Runnable{
 
 				//create address
 //TODO: get addr!!!
-				s.execute("INSERT INTO ADDRESSES (ADDR, LOCATIONID) VALUES ('23.34.213.82', " + locid +")");
+				s.execute("INSERT INTO ADDRESSES (ADDR, LOCATIONID) VALUES ('"+ addr +"', " + locid +")");
 				resultaddtid = s.executeQuery("SELECT ADDRID FROM Addresses AS Addr INNER JOIN Locations AS Loc ON Loc.LocationId = Addr.LocationId WHERE Loc.LATITUDE = '"+ lat +"' AND Loc.LONGITUDE = '" + longitude +"';");
 				resultaddtid.next();
 				addrmax = resultaddtid.getInt("ADDRID");
@@ -209,7 +230,6 @@ public class Worker implements Runnable{
 	}
 	
 	//Create location
-//TODO: get country/city!!!
 	private synchronized int createLoc(Statement s, String lat, String longitude,String country, String city){
 		int locmax = 0;
 		try {	
@@ -283,6 +303,34 @@ public class Worker implements Runnable{
 			e.printStackTrace();
 		}
 		return typeid;
+	}
+	
+	private void sendRealtimePacket() {
+		JsonObject entry = new JsonObject();
+		
+		entry.addProperty("Time", time.toString());
+		entry.addProperty("TimePeriod", timeP.toString());
+		entry.addProperty("HitCount", hits);
+		entry.addProperty("Protocol", protocol);
+		entry.addProperty("Type", type);
+
+		JsonObject from = new JsonObject();
+		from.addProperty("Addr", fromAddr);
+		from.addProperty("Country", fromCountry);
+		from.addProperty("City", fromCity);
+		from.addProperty("Latitude", fromlat);
+		from.addProperty("Longitude", fromlong);
+		entry.add("from", from);
+
+		JsonObject to = new JsonObject();
+		to.addProperty("Addr", toAddr);
+		to.addProperty("Country", toCountry);
+		to.addProperty("City", toCity);
+		to.addProperty("Latitude", tolat);
+		to.addProperty("Longitude", tolong);
+		entry.add("to", to);
+		
+		webServer.sendRealtimePacket(entry);
 	}
 	
 	//Get current max packetid

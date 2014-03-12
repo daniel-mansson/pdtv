@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+</body>
+
+
+<script>
+
+    var socket = new WebSocket("ws://localhost:8080/realtime");
+
+    socket.onmessage = function(event) {
+		document.body.innerHTML += event.data + "<br/>";
+    }
+
+    socket.onopen = function(event) {
+		document.body.innerHTML += "Connection opened!" + "<br/>";
+    };
+
+    socket.onclose = function(event) {
+		document.body.innerHTML += "Connection closed!" + "<br/>";
+    };
+
+</script>
+</html>
