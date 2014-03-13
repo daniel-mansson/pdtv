@@ -101,8 +101,8 @@ public class Sniffer extends Service{
 				if (packet.hasHeader(ipv4)) {
 					if(!isInLocalIPv4Range(ipv4.source()) || !isInLocalIPv4Range(ipv4.destination()))
 						handlePacket(ipv4.source(), ipv4.destination());
-					else 
-						System.out.println("megalocal");
+					/*else 
+						System.out.println("megalocal");*/
 				}
 				if (packet.hasHeader(ipv6)) {
 					if(isGlobalUnicast(ipv6.destination()) && isGlobalUnicast(ipv6.source()))
