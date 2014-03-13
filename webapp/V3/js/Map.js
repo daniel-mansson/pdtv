@@ -77,7 +77,7 @@ Map.prototype.update = function(model) {
 	this.map.updateChoropleth(params);
 };
 
-Map.prototype.onDataPoint = function(location) {
+Map.prototype.onDataPoint = function(location, dir) {
 	var c = this.countries[location.Country];
 	if(c === undefined) {
 		c = new CountryData();
@@ -88,8 +88,10 @@ Map.prototype.onDataPoint = function(location) {
 	c.handleDataPoint(location);
 	
 
+	var color = d3.interpolateRgb("#1C1C34", dir == 0 ? "#ff0000" : "#00ffff")(location.hits / 10);
+	
     this.map.svg.selectAll('.' + location.Country)
-		.style('fill', "#00ffff");
+		.style('fill', color);
     
     this.map.svg.selectAll('.' + location.Country)
       	.transition()
@@ -107,14 +109,14 @@ Map.prototype.onRealtimeUpdate = function(data) {
 		if(packet.from.Country != "__") {
 			var p = packet.from;
 			p.hits = packet.HitCount;
-			self.onDataPoint(p);
-			params[p.Country] = self.colors(Math.random() * self.colors.length);
+			self.onDataPoint(p, 0);
+			//params[p.Country] = self.colors(Math.random() * self.colors.length);
 		}
 		if(packet.to.Country != "__"){
 			var p = packet.to;
 			p.hits = packet.HitCount;
-			self.onDataPoint(p);
-			params[p.Country] = self.colors(Math.random() * self.colors.length);		
+			self.onDataPoint(p, 1);
+			//params[p.Country] = self.colors(Math.random() * self.colors.length);		
 		}
 		
 		
