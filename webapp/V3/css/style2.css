@@ -71,6 +71,7 @@ h2 {
 }
 
 #mapContainer {
+	position: absolute;
 	background-color: #4a5b74;
 
 	width: 600px;
@@ -81,6 +82,8 @@ h2 {
 #outerMapContainer {
 	border: solid 2px;
 
+	width: 600px;
+	height: 400px;
 }
 
 #sliderContainer {

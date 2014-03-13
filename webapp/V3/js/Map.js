@@ -34,6 +34,7 @@ var Map = function() {
 		,projection: 'mercator'
 	});
 	
+	this.ballManager = null;
 		
 	var self = this;
 	/*setInterval(function() {
@@ -110,14 +111,23 @@ Map.prototype.onRealtimeUpdate = function(data) {
 			p.hits = packet.HitCount;
 			self.onDataPoint(p);
 			params[p.Country] = self.colors(Math.random() * self.colors.length);
+
+			if(self.ballManager != null) {
+				for(var i = 0; i < p.hits; ++i)
+					self.ballManager.newBall(packet.from.Country, "SWE", 1, 1);
+			}
 		}
 		if(packet.to.Country != "__"){
 			var p = packet.to;
 			p.hits = packet.HitCount;
 			self.onDataPoint(p);
-			params[p.Country] = self.colors(Math.random() * self.colors.length);		
+			params[p.Country] = self.colors(Math.random() * self.colors.length);	
+
+			if(self.ballManager != null) {
+				for(var i = 0; i < p.hits; ++i)
+					self.ballManager.newBall("SWE", packet.to.Country, 0, 1);
+			}
 		}
-		
 		
 	});
 

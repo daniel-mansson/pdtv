@@ -55,7 +55,7 @@ BarChart.prototype.onRealtimeUpdate = function(packets) {
 
 
 BarChart.prototype.redraw = function(data,x,y,w,h) {
-	console.log(JSON.stringify(data));
+	//console.log(JSON.stringify(data));
 	var rect = this.chart.selectAll("rect")
 		.data(data, function(d) { return data.indexOf(d); });
 	
