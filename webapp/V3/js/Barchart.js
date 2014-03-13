@@ -11,6 +11,7 @@ var BarChart = function(model) {
 			return function() {
 				hitCounts.shift();
 				hitCounts.push({value: self.hitCount});
+				self.hitCount=0;
 				self.redraw(hitCounts,x,y,w,h);
 			}
 		})(this), 1500);
@@ -42,12 +43,12 @@ BarChart.prototype.onRealtimeUpdate = function(packets) {
 	var hitCount = 0;
 	$.each(packets.data, function(element,index,array)
 		{hitCount += element;});
-	this.hitCount = hitCount;
+	this.hitCount += hitCount;
 }
 
 
 BarChart.prototype.redraw = function(data,x,y,w,h) {
-	//console.log(data);
+	console.log(JSON.stringify(data));
 	var rect = this.chart.selectAll("rect")
 		.data(data, function(d) { return data.indexOf(d); });
 	
