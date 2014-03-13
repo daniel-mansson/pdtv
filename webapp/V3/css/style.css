@@ -38,7 +38,7 @@ h2 {
 	height: 100%
 }
 
-#container {
+#mapContainer {
 	position: relative;
 
 	width: 1000px;
@@ -70,17 +70,20 @@ h2 {
 	border-radius:10px;
 }
 
-.chart {
+#chartContainer {
 	z-index:11;
 	position: absolute;
 	right: 20px;
 	top: 20px;
+	height:300px;
+	width:300px;
 }
 
 .chart rect {
 	fill: steelblue;
 	stroke: white;	
 }
+
 
 .ui-slider { position: relative; text-align: left; }
 .ui-slider .ui-slider-handle {  cursor: default;

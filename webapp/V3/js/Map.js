@@ -5,7 +5,7 @@ var Map = function() {
 	this.period = 8000;
 	var period = this.period;
 	this.map = new Datamap({
-		element: document.getElementById('container'),
+		element: document.getElementById('mapContainer'),
 		fills: {
 			defaultFill: "#1C1C34"
 		},
