@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+	<script src="http://d3js.org/topojson.v1.min.js"></script>
+	
+	<script type="text/javascript" src="js/datamaps.world.js"></script>
+	<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+	<link rel="stylesheet" type=text/css" href="css/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" href="css/style2.css">
+
+	<script type="text/javascript" src="js/Country.js"></script>
+	<script type="text/javascript" src="js/App.js"></script>
+	<script type="text/javascript" src="js/DataModel.js"></script>
+	<script type="text/javascript" src="js/Init.js"></script>
+	<script type="text/javascript" src="js/Map.js"></script>
+	<script type="text/javascript" src="js/Barchart.js"></script>
+	<script type="text/javascript" src="js/Connection.js"></script>
+	<!--<script type="text/javascript" src="js/Filter.js"></script>-->
+
+	<script>
+		$(document).ready(function() {
+			initialize();
+		});
+		
+		$(window).resize(function(){
+			
+		});
+	</script>
+</head>
+<body>
+	<div id="siteContainer">
+		<div id="top">
+			<div id="titlebox">
+				<div class="titletext">PACKATRACK</div>
+				<div class="subtitletext">Subtitle blahlb alablah lab lalhbal alhblah<br/>
+				inte så vackert just nu</div>
+			</div>
+			<div id="righttop">
+				<div class="subtitletext">Info och grejer<br/>
+				hej och hallå, hur får <br/>jag den alignad till botten</div>
+			
+			</div>
+		</div>
+		
+		<div id="outerMapContainer">
+		<div id="mapContainer"></div>
+		</div>
+		
+		<div id="charts">
+			<div id="pieChartContainer"> TODO: piechart här :D</div>
+			<div id="chartContainer"></div>
+		</div>
+	</div>
+</body>
+</html>

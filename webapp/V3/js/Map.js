@@ -31,6 +31,7 @@ var Map = function() {
 					return '<div class="hoverinfo"><strong>' + geography.properties.name + '</br>Packets during the last '+period/1000+' seconds: '+totalHits+' </div>';
 		        }
 		}
+		,projection: 'mercator'
 	});
 	
 		
