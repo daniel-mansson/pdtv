@@ -88,7 +88,7 @@ Map.prototype.onDataPoint = function(location, dir) {
 	c.handleDataPoint(location);
 	
 
-	var color = d3.interpolateRgb("#1C1C34", dir == 0 ? "#ff0000" : "#00ffff")(location.hits / 10);
+	var color = dir == 0 ? "#ff0000" : "#00ffff";
 	
     this.map.svg.selectAll('.' + location.Country)
 		.style('fill', color);

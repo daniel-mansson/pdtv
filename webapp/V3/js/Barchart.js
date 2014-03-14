@@ -21,7 +21,7 @@ var BarChart = function(model) {
 			.append("svg").append("g")
 			.attr("class", "chart")
 			.attr("width", w * hitCounts.length - 1).attr("height", h)
-			.attr("transform","translate(50,50)");
+			.attr("transform","translate(0,50)");
 
 		this.chart.append("line")
 			.attr("x1", 0)
