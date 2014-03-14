@@ -21,6 +21,13 @@ var BallManager = function(rendererContainer) {
 		
 		this.countryPos[countryISO] = cp;
 	}
+
+	var cp = new CountryPos(null, "__");
+	cp.center = new PIXI.Point(0, 0);
+	this.countryPos[cp.country] = cp;
+	var cp = new CountryPos(null, "Unknown");
+	cp.center = new PIXI.Point(600, 0);
+	this.countryPos[cp.country] = cp;
 };
 
 BallManager.prototype.onFrameRender = function(timeStep) { 
@@ -82,7 +89,7 @@ BallManager.prototype.newBall = function(fromCountry, toCountry, type, duration)
 	var shadow = new PIXI.Sprite(this.textureShadow);
 	shadow.position.x = 0.5;
 	shadow.position.y = 0.5;
-	shadow.alpha = 0.6;
+	shadow.alpha = 0.3;
 	
 	ball.shadow = shadow;
 	

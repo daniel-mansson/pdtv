@@ -114,22 +114,28 @@ Map.prototype.onRealtimeUpdate = function(data) {
 			self.onDataPoint(p, 0);
 			//params[p.Country] = self.colors(Math.random() * self.colors.length);
 
+			
+		}
+		else {
 			if(self.ballManager != null) {
-				for(var i = 0; i < p.hits; ++i)
-					self.ballManager.newBall(packet.from.Country, "SWE", 1, 1);
+				for(var i = 0; i < packet.HitCount; ++i)
+					self.ballManager.newBall("SWE", packet.to.Country, 0, 1);
 			}
 		}
+		
 		if(packet.to.Country != "__"){
 			var p = packet.to;
 			p.hits = packet.HitCount;
 			self.onDataPoint(p, 1);
 			//params[p.Country] = self.colors(Math.random() * self.colors.length);		
+
+		}
+		else {
 			if(self.ballManager != null) {
-				for(var i = 0; i < p.hits; ++i)
-					self.ballManager.newBall("SWE", packet.to.Country, 0, 1);
+				for(var i = 0; i < packet.HitCount; ++i)
+					self.ballManager.newBall(packet.from.Country, "SWE", 1, 1);
 			}
 		}
-		
 	});
 
 	//this.map.updateChoropleth(params);
