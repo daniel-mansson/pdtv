@@ -1,9 +1,9 @@
 var BarChart = function(model) {
 		this.hitCount = 0;
-		var hitCounts = [{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0}];	
+		var hitCounts = [{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0}];	
 
 		var w = 20;
-		var h = 100;
+		var h = 80;
 		var x = d3.scale.linear().domain([0, 1]).range([0, w]);
 		var y = d3.scale.linear().domain([0, 500]).rangeRound([0, h]);
 
@@ -21,7 +21,7 @@ var BarChart = function(model) {
 			.append("svg").append("g")
 			.attr("class", "chart")
 			.attr("width", w * hitCounts.length - 1).attr("height", h)
-			.attr("transform","translate(0,50)");
+			.attr("transform","translate(150,10)");
 
 		this.chart.append("line")
 			.attr("x1", 0)
@@ -30,13 +30,20 @@ var BarChart = function(model) {
 			.attr("y2", h - .5)
 			.style("stroke", "#000");
 
-		d3.select("#chartContainer svg").append("g")
-			.attr("class", "grid")
-			.style("stroke-width",0)
-			.call(d3.svg.axis()
+		var xAxis = d3.svg.axis()
 			.scale(d3.scale.linear().domain([500, 0]).rangeRound([0, h]))
-			.orient("left").ticks(5))
-			.attr("transform","translate(50,50)");
+			.orient("right").ticks(5);
+
+		var yAxis = d3.svg.axis()
+			.scale(y).orient("bottom").ticks(20);
+			
+		var axis = d3.select("#chartContainer svg").append("g");
+		
+		axis.attr("class", "grid")
+			.call(xAxis)
+			.attr("transform","translate(550,10)");
+		//axis.attr("class","grid").call(yAxis);	
+		
 }
 			
 BarChart.prototype.onRealtimeUpdate = function(packets) {	
@@ -48,7 +55,7 @@ BarChart.prototype.onRealtimeUpdate = function(packets) {
 
 
 BarChart.prototype.redraw = function(data,x,y,w,h) {
-	console.log(JSON.stringify(data));
+	//console.log(JSON.stringify(data));
 	var rect = this.chart.selectAll("rect")
 		.data(data, function(d) { return data.indexOf(d); });
 	

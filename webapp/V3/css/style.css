@@ -6,19 +6,39 @@ body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
-	background-color: #4a5b74;
 }
 
+#header {
+	
+	height:80px;
+	position:fixed;
+	top:0px;
+	width:600px;
+}
+
+#header > #upper {
+	background-color:#000000;
+	height: 60px;
+	width:600px;
+	position:fixed;
+	top:0px;
+}
+
+#header > #lower {
+	background-color:#FFFFFF;
+	height: 20px;
+	width:600px;
+	position:fixed;
+	top:60px;
+	text-align:center;
+}
+
+
 h1 {
-font-size:350%;
-	margin-left: auto;
-	margin-left: auto;
-	margin-top: 0px;
-	margin-bottom: 0px;
-	padding: 50px;
 	text-align: center;
-	color:#224;
+	color:#FFFFFF;
     font-weight:bold;
+    font-style: italic;
     text-shadow:
     -1px -1px 0 #000,
     1px -1px 0 #000,
@@ -34,18 +54,27 @@ h2 {
 	color:#F0F0F0;
 }
 
+#content {
+	position:absolute;
+	top:80px;
+	background-color: #000000;
+}
+
 #map-canvas {
 	height: 100%
 }
 
 #mapContainer {
-	position: relative;
+	position: absolute;
+	top:0px;
+	width: 590px;
+	height: 290px;
+	border:5px solid black;
+}
 
-	width: 1000px;
-	height: 500px;
-
-	margin-left: auto;
-	margin-left: auto;
+#mapContainer > .datamap {
+	width: 590px;
+	height:290px;
 }
 
 #sliderContainer {
@@ -73,10 +102,9 @@ h2 {
 #chartContainer {
 	z-index:11;
 	position: absolute;
-	right: 20px;
-	top: 20px;
-	height:300px;
-	width:200px;
+	top: 300px;
+	height:100px;
+	width:600px;
 }
 
 .chart rect {

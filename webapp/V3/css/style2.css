@@ -1,0 +1,131 @@
+html {
+	height: 100%
+}
+
+body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	background-color: #fff;
+}
+
+#siteContainer {
+	margin-left: auto;
+	margin-right: auto;
+	width: 604px;
+	background-color: #31a;
+	
+	/*width: 600 + outerMapContainer border * 2 */
+}
+
+#top {
+	background-color: #1f7;
+	height: 80px;
+}
+
+#charts {
+	background-color: #70c;
+}
+
+#titlebox {
+	float: left;
+	background-color: #f99;
+    width: 200 px;
+}
+
+#righttop {
+	float: right;
+	background-color: #99f;
+    width: 200 px;
+}
+
+.titletext {
+	font-size:250%;
+	/*text-align: center;*/
+	color:#224;
+    font-weight:bold;
+    text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+   	1px 1px 0 #000;  
+   	font-family:"Lucida Console", Lucida, monospace;
+}
+
+.subtitletext {
+	font-size:100%;
+	/*text-align: center;*/
+	color:#224;
+    font-weight:bold;
+}
+
+h2 {
+	margin-left: auto;
+	margin-left: auto;
+	text-align: center;
+	color:#F0F0F0;
+}
+
+#map-canvas {
+	height: 100%
+}
+
+#mapContainer {
+	position: absolute;
+	background-color: #4a5b74;
+
+	width: 600px;
+	height: 400px;
+	
+}
+
+#outerMapContainer {
+	border: solid 2px;
+
+	width: 600px;
+	height: 400px;
+}
+
+#sliderContainer {
+	background-color:#DDDDDD;
+	z-index:9;
+	border-radius:10px;
+}
+
+#slider {
+	z-index: 10;
+	font-size:8px;
+}
+#min, #max {
+    width: 55px;
+    text-align: center;
+    font-size:10px;
+}
+
+#filterContainer {
+	background-color:rgba(255,255,255,0.7);
+	z-index:9;
+	border-radius:10px;
+}
+
+#chartContainer {
+	background-color:#f0f;
+	z-index:11;
+	height:200px;
+	width:400px;
+	float: right;
+}
+
+#pieChartContainer {
+	float: left;
+	background-color:#1af;
+	z-index:11;
+	height:200px;
+	width:200px;
+}
+
+.chart rect {
+	fill: steelblue;
+	stroke: white;	
+}
+

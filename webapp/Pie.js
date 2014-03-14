@@ -53,27 +53,30 @@ var makePie = function(data){
 
 }
 
-Kaka.update = function(array) {
+Kaka.update = function() {
 	console.log("Update kake");
+	var array = [];
+	var uvalue = 0;
+	var dvalue = 0;
+	
+	/*model.data.data.forEach(function(entry) {
+		//TODO: make some sort of count here....
+	});*/
+	
+	dvalue += 50;
+	uvalue += 70;
+	dvalue += 40;
+	var map = {};
+	map["label"] = "undefined";
+	map["value"] = uvalue; 
+	array.push(map);
+	var map2 = {};
+	map2["label"] = "displayed";
+	map2["value"] = dvalue;
+	array.push(map2);
+	
 	var d = d3.select("#pie");
 	d.remove();
-	/*var array = [];
-	model.data.data.forEach(function(entry) {
-		//TODO: make some sort of count here....
-		var map = {};
-		map.put("label","undefined");
-		map.put("value",70); 
-		array.push(map);
-		var map2 = {};
-		map2.put("label","displayed");
-		map2.put("value",60);
-		array.push(map2);
-		if (entry.from.Country!="__")                   
-			array.push(location_from);
-		if (entry.to.Country!="__") 
-			array.push(location_to);
-	});
-	console.log("Packets: "+array.length);*/
 	makePie(array);
 };
 
