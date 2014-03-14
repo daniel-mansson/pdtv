@@ -1,10 +1,13 @@
 var BallManager = function(rendererContainer) {
 	this.rendererContainer = rendererContainer;
 	this.container = new PIXI.SpriteBatch();
+	this.shadowContainer = new PIXI.SpriteBatch();
 	this.textureTo = new PIXI.Texture.fromImage("images/small_blue.png");
 	this.textureFrom = new PIXI.Texture.fromImage("images/small_red.png");
+	this.textureShadow = new PIXI.Texture.fromImage("images/shadow.png");
 	this.countryPos = {};
-	
+
+	rendererContainer.stage.addChild(this.shadowContainer);
 	rendererContainer.stage.addChild(this.container);
 	rendererContainer.addFrameListener(this);
 	
@@ -21,7 +24,8 @@ var BallManager = function(rendererContainer) {
 };
 
 BallManager.prototype.onFrameRender = function(timeStep) { 
-	//this.newBall("SWE", "CAN", 0, 1);
+	/*if(Math.random() > 0.9)
+		this.newBall("SWE", "ARG", 0, 1);*/
 	
 	var self = this;
 	this.container.children.forEach(function(ball) {
@@ -29,11 +33,21 @@ BallManager.prototype.onFrameRender = function(timeStep) {
 		
 		var t = ball.time / ball.duration;
 
+		var v0 = 30*4;
+		var z = v0 * t - v0 * t * t;
+
 		ball.position.x = ball.from.x * (1 - t) + ball.to.x * t;
 		ball.position.y = ball.from.y * (1 - t) + ball.to.y * t;
+
+		ball.shadow.position.x = ball.position.x;
+		ball.shadow.position.y = ball.position.y;
 		
-		if(ball.time > ball.duration)
+		ball.position.y -= z;
+		
+		if(ball.time > ball.duration) {
+			self.shadowContainer.removeChild(ball.shadow);
 			self.container.removeChild(ball);
+		}
 	});
 };
 
@@ -64,6 +78,15 @@ BallManager.prototype.newBall = function(fromCountry, toCountry, type, duration)
 	
 	ball.alpha = 0.7;
 	
+
+	var shadow = new PIXI.Sprite(this.textureShadow);
+	shadow.position.x = 0.5;
+	shadow.position.y = 0.5;
+	shadow.alpha = 0.6;
+	
+	ball.shadow = shadow;
+	
+	this.shadowContainer.addChild(shadow);
 	this.container.addChild(ball);
 };
 
