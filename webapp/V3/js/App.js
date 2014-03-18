@@ -11,6 +11,9 @@ var App = function() {
 
 	this.ballManager = new BallManager(this.renderer);
 	this.map.ballManager = this.ballManager;
+	
+	this.pieChart = new Pie();
+	this.model.addRealtimeListener(this.pieChart);
 
 	this.barChart = new BarChart();
 	this.model.addRealtimeListener(this.barChart);

@@ -15,6 +15,7 @@
 	<script type="text/javascript" src="js/Init.js"></script>
 	<script type="text/javascript" src="js/Map.js"></script>
 	<script type="text/javascript" src="js/Barchart.js"></script>
+	<script type="text/javascript" src="js/Pie.js"></script>
 	<script type="text/javascript" src="js/Connection.js"></script>
 	<script type="text/javascript" src="js/Renderer.js"></script>
 	<script type="text/javascript" src="js/BallManager.js"></script>
@@ -55,7 +56,17 @@
 		</div>
 		
 		<div id="charts">
-			<div id="pieChartContainer"> TODO: piechart här :D</div>
+			<div id="pieChartContainer"> 
+					<button type="button" id="pieButton" value="hidden"> Show Piechart </button>
+					<p class="text-center"> FROM/TO </p>
+					<div class="rectangel unknownRectangel"></div>
+					<p class="float-left"> Unknown</p>	
+					<p class="float-right"> Known</p>
+					<div class="rectangel knownRectangel"></div>
+					
+					<div id="pieDiv" hidden>
+					</div>
+			</div>
 			<div id="chartContainer"></div>
 		</div>
 	</div>

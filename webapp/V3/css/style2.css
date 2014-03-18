@@ -30,13 +30,13 @@ body {
 #titlebox {
 	float: left;
 	background-color: #f99;
-    width: 200 px;
+    width: 300px;
 }
 
 #righttop {
 	float: right;
 	background-color: #99f;
-    width: 200 px;
+    width: 200px;
 }
 
 .titletext {
@@ -111,7 +111,7 @@ h2 {
 #chartContainer {
 	background-color:#f0f;
 	z-index:11;
-	height:200px;
+	height:245px;
 	width:400px;
 	float: right;
 }
@@ -120,8 +120,51 @@ h2 {
 	float: left;
 	background-color:#1af;
 	z-index:11;
-	height:200px;
+	height:245px;
 	width:200px;
+}
+
+#pie {
+	padding-top: 5px;
+	padding-left: 15px;
+}
+
+p{
+	margin-top: 0;
+	margin-bottom: 0;
+	margin-left: 3px;
+	margin-right: 10px;
+}
+
+.float-left{
+	float: left;
+}
+
+.float-right{
+	float: right;
+}
+
+.text-center{
+	text-align:center;
+}
+#pieButton{
+	margin-left:48px;
+}
+.rectangel{
+	width:20px;
+	height:20px;
+	border:1px solid black;
+	margin-left: 10px;
+}
+
+.unknownRectangel{
+	background-color:#18689C;
+	float: left;
+}
+
+.knownRectangel{
+	background-color:#15438A; 
+	float: right;
 }
 
 .chart rect {
