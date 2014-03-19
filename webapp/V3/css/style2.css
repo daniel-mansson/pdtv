@@ -17,6 +17,10 @@ body {
 	/*width: 600 + outerMapContainer border * 2 */
 }
 
+#top {
+	background-color: #1f7;
+	height: 120px;
+}
 #header {
 	background-color:#000000;
 	height:80px;
