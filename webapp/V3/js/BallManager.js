@@ -1,4 +1,4 @@
-var BallManager = function(rendererContainer) {
+var BallManager = function(rendererContainer, map) {
 	this.rendererContainer = rendererContainer;
 	this.container = new PIXI.SpriteBatch();
 	this.shadowContainer = new PIXI.SpriteBatch();
@@ -23,16 +23,56 @@ var BallManager = function(rendererContainer) {
 	}
 
 	var cp = new CountryPos(null, "__");
-	cp.center = new PIXI.Point(0, 0);
+	cp.center = new PIXI.Point(390, 50);
 	this.countryPos[cp.country] = cp;
 	var cp = new CountryPos(null, "Unknown");
-	cp.center = new PIXI.Point(600, 0);
+	cp.center = new PIXI.Point(390, 50);
 	this.countryPos[cp.country] = cp;
+	
+	this.delayContainer = [];
+	this.delayTime = 1;
+	
+	this.map = map;
+	this.flashList = [];
 };
 
 BallManager.prototype.onFrameRender = function(timeStep) { 
-	/*if(Math.random() > 0.9)
-		this.newBall("SWE", "ARG", 0, 1);*/
+	/*if(Math.random() > 0.9) {
+		for(var i = 0; i < 40; ++i) {
+			this.newBall("SWE", "ARG", 0, 1);
+			this.newBall("SWE", "CAN", 0, 1);
+			this.newBall("SWE", "AUS", 0, 1);
+			this.newBall("SWE", "RUS", 0, 1);
+		}
+	}*/
+	
+	var self = this;
+	var remainingFlash = [];
+	this.flashList.forEach(function(v) {
+		v.time -= timeStep;
+		
+		if(v.time <= 0) {
+			self.map.flashCountry(v.country);
+		}
+		else {
+			remainingFlash.push(v);
+		}
+	});
+	this.flashList = remainingFlash;
+	
+	var remainingDelay = [];
+	this.delayContainer.forEach(function(v) {
+		v.time += timeStep;
+		
+		if(v.time > self.delayTime) {
+			self.shadowContainer.addChild(v.shadow);
+			self.container.addChild(v.ball);
+		}
+		else {
+			remainingDelay.push(v);
+		}
+	});
+	this.delayContainer = remainingDelay;
 	
 	var self = this;
 	this.container.children.forEach(function(ball) {
@@ -69,6 +109,9 @@ BallManager.prototype.newBall = function(fromCountry, toCountry, type, duration)
 	var to = toC.getCenter();
 	
 	var texture = type == 0 ? this.textureTo : this.textureFrom;
+	if(fromCountry === "__" || toCountry === "__")
+		texture = this.textureShadow;
+	
 	var ball = new PIXI.Sprite(texture);
 
 	ball.position.x = from.x + Math.random() * 20 - 10;
@@ -82,9 +125,7 @@ BallManager.prototype.newBall = function(fromCountry, toCountry, type, duration)
 	ball.from = new PIXI.Point(ball.position.x, ball.position.y);
 	ball.to = new PIXI.Point(to.x + Math.random() * 20 - 10, to.y + Math.random() * 20 - 10);
 	
-	
 	ball.alpha = 0.7;
-	
 
 	var shadow = new PIXI.Sprite(this.textureShadow);
 	shadow.position.x = 0.5;
@@ -93,7 +134,16 @@ BallManager.prototype.newBall = function(fromCountry, toCountry, type, duration)
 	
 	ball.shadow = shadow;
 	
-	this.shadowContainer.addChild(shadow);
-	this.container.addChild(ball);
+	if(type == 0) {
+		this.shadowContainer.addChild(shadow);
+		this.container.addChild(ball);
+		this.flashList.push({time: duration, country: toCountry});
+	}
+	else {
+		this.delayContainer.push({time: 0, ball: ball, shadow: shadow});
+		this.flashList.push({time: duration, country: fromCountry});
+	}
+	
+	
 };
 

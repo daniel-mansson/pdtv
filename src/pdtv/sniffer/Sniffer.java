@@ -71,9 +71,9 @@ public class Sniffer extends Service{
 
 		PcapIf device = alldevs.get(deviceId); 
 
-		int snaplen = 64 * 1024; // Capture all packets, no trucation
-		int flags = Pcap.MODE_PROMISCUOUS; // capture all packets
-		int timeout = 10 * 1000; // 10 seconds in millis
+		int snaplen = 64 * 8; 
+		int flags = Pcap.MODE_NON_PROMISCUOUS;
+		int timeout = 10 * 1000; 
 		
 		pcap = Pcap.openLive(device.getName(), snaplen, flags, timeout, errbuf);
 

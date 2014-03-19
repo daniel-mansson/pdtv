@@ -9,7 +9,7 @@ var App = function() {
 	this.model.addListener(this.map);
 	this.model.addRealtimeListener(this.map);
 
-	this.ballManager = new BallManager(this.renderer);
+	this.ballManager = new BallManager(this.renderer, this.map);
 	this.map.ballManager = this.ballManager;
 	
 	this.pieChart = new Pie();

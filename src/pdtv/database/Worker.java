@@ -123,6 +123,7 @@ public class Worker implements Runnable{
 					toCountry = destGeo.getCountry();
 
 					sendRealtimePacket();
+					
 					// random values	
 					/*Random r = new Random();
 					//double rlong = ((double) r.nextInt(36001) - 18000)/100;
@@ -134,7 +135,7 @@ public class Worker implements Runnable{
 					
 					
 					//insert into database				
-					try {
+					/*try {
 						Connection connection = database.getConnectionPool().getConnection();			
 						Statement s = connection.createStatement();
 						insertData(s);
@@ -143,7 +144,7 @@ public class Worker implements Runnable{
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
+					}*/
 					
 				}
 			}

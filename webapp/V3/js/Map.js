@@ -79,8 +79,19 @@ Map.prototype.update = function(model) {
 	this.map.updateChoropleth(params);
 };
 
+Map.prototype.flashCountry = function(country, color) {
+
+    var elements = this.map.svg.selectAll('.' + country);
+    
+    elements
+		.style('fill', this.colors(Math.random() * this.colors.length)) 
+      	.transition()
+      	.duration(300)
+      	.style('fill', "#1C1C34");
+};
+
 Map.prototype.onDataPoint = function(location, dir) {
-	var c = this.countries[location.Country];
+	/*var c = this.countries[location.Country];
 	if(c === undefined) {
 		c = new CountryData();
 		c.isocode = location.Country;
@@ -98,7 +109,7 @@ Map.prototype.onDataPoint = function(location, dir) {
     this.map.svg.selectAll('.' + location.Country)
       	.transition()
       	.duration(2000)
-      	.style('fill', "#1C1C34");
+      	.style('fill', "#1C1C34");*/
 };
 
 
@@ -107,14 +118,15 @@ Map.prototype.onRealtimeUpdate = function(data) {
 	var self = this;
 	params = {};
 	
+	var homeCountry = "SWE";
+	
 	data.data.forEach(function(packet){
-		if(packet.from.Country != "__") {
+		
+		if(packet.from.Country != homeCountry) {
 			var p = packet.from;
 			p.hits = packet.HitCount;
 			self.onDataPoint(p, 0);
 			//params[p.Country] = self.colors(Math.random() * self.colors.length);
-
-			
 		}
 		else {
 			if(self.ballManager != null) {
@@ -123,12 +135,11 @@ Map.prototype.onRealtimeUpdate = function(data) {
 			}
 		}
 		
-		if(packet.to.Country != "__"){
+		if(packet.to.Country != homeCountry){
 			var p = packet.to;
 			p.hits = packet.HitCount;
 			self.onDataPoint(p, 1);
-			//params[p.Country] = self.colors(Math.random() * self.colors.length);		
-
+			//params[p.Country] = self.colors(Math.random() * self.colors.length);	
 		}
 		else {
 			if(self.ballManager != null) {

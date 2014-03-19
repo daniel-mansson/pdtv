@@ -65,7 +65,7 @@ Pie.prototype.onRealtimeUpdate = function(data) {
 		if(packet.from.Country != "__" && packet.to.Country != "__") {
 			dvalue += packet.HitCount;		
 		}
-		else if(packet.from.Country != "Unknown" || packets.to.Country = "Unknown"){
+		else if(packet.from.Country != "Unknown" || packets.to.Country != "Unknown"){
 			dvalue += packet.HitCount;	
 		}
 		else {
