@@ -61,15 +61,12 @@ Pie.prototype.onRealtimeUpdate = function(data) {
 	var dvalue = 0;
 	
 	data.data.forEach(function(packet){
-		if(packet.from.Country != "__") {
+	/*packet.from.country __ och to.country __*/
+		if(packet.from.Country != "__" && packet.to.Country != "__") {
 			dvalue += packet.HitCount;		
 		}
-		else {
-			uvalue += packet.HitCount;
-		}
-		
-		if(packet.to.Country != "__"){
-			dvalue += packet.HitCount;
+		else if(packet.from.Country != "Unknown" || packets.to.Country != "Unknown"){
+			dvalue += packet.HitCount;	
 		}
 		else {
 			uvalue += packet.HitCount;
@@ -87,7 +84,7 @@ Pie.prototype.onRealtimeUpdate = function(data) {
 	vis.data([array]);
 	arcs.data(pie);
 	arcs.select("path").attr("d", arc);
-	arcs.select("path").transition().duration(200).attrTween("d", arcTween); // redraw the arcs		(fast 100 - 750 slower)
+	arcs.select("path").transition().duration(500).attrTween("d", arcTween); // redraw the arcs		(fast 100 - 750 slower)
 };
 
 function arcTween(a) {
