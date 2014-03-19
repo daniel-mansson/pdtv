@@ -91,7 +91,7 @@ Map.prototype.flashCountry = function(country, color) {
 };
 
 Map.prototype.onDataPoint = function(location, dir) {
-	/*var c = this.countries[location.Country];
+	var c = this.countries[location.Country];
 	if(c === undefined) {
 		c = new CountryData();
 		c.isocode = location.Country;
@@ -99,17 +99,6 @@ Map.prototype.onDataPoint = function(location, dir) {
 	}
 	
 	c.handleDataPoint(location);
-	
-
-	var color = dir == 0 ? "#ff0000" : "#00ffff";
-	
-    this.map.svg.selectAll('.' + location.Country)
-		.style('fill', color);
-    
-    this.map.svg.selectAll('.' + location.Country)
-      	.transition()
-      	.duration(2000)
-      	.style('fill', "#1C1C34");*/
 };
 
 
