@@ -37,9 +37,9 @@ var Map = function() {
 	this.ballManager = null;
 		
 	var self = this;
-	/*setInterval(function() {
-		self.fadeUpdate(1000.0 / 100.0);
-	}, 100);*/
+	setInterval(function() {
+		self.fadeUpdate(1000.0 / 1000.0);
+	}, 1000);
 
 	this.colors = d3.scale.category10();
 };
@@ -149,7 +149,7 @@ Map.prototype.fadeUpdate = function(timeStep) {
 	for(c in this.countries) {
 		var country = this.countries[c];
 		country.update(1,this.period);
-		
+		/*
 		if(country.data.length > 0) {
 			var cv = country.getValue(this.period);
 			cv = Math.pow(cv, 2);
@@ -157,7 +157,7 @@ Map.prototype.fadeUpdate = function(timeStep) {
 		}
 		
 		params[c] = country.color;
-
+		*/
 	}
 
 

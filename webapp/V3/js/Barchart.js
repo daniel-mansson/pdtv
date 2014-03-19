@@ -1,11 +1,11 @@
 var BarChart = function(model) {
 		this.hitCount = 0;
-		var hitCounts = [{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0}];	
+		var hitCounts = [{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0},{value:0}];	
 
-		var w = 20;
+		var w = 10;
 		var h = 80;
 		var x = d3.scale.linear().domain([0, 1]).range([0, w]);
-		var y = d3.scale.linear().domain([0, 500]).rangeRound([0, h]);
+		var y = d3.scale.linear().domain([0, 200]).rangeRound([0, h]);
 
 		this.interval = setInterval((function(self) {
 			return function() {
@@ -14,14 +14,14 @@ var BarChart = function(model) {
 				self.hitCount=0;
 				self.redraw(hitCounts,x,y,w,h);
 			}
-		})(this), 1500);
+		})(this), 500);
 
 
 		this.chart = d3.select("#chartContainer")
 			.append("svg").append("g")
 			.attr("class", "chart")
 			.attr("width", w * hitCounts.length - 1).attr("height", h)
-			.attr("transform","translate(150,10)");
+			.attr("transform","translate(0,10)");
 
 		this.chart.append("line")
 			.attr("x1", 0)
@@ -31,7 +31,7 @@ var BarChart = function(model) {
 			.style("stroke", "#000");
 
 		var xAxis = d3.svg.axis()
-			.scale(d3.scale.linear().domain([500, 0]).rangeRound([0, h]))
+			.scale(d3.scale.linear().domain([200, 0]).rangeRound([0, h]))
 			.orient("right").ticks(5);
 
 		var yAxis = d3.svg.axis()
@@ -41,15 +41,19 @@ var BarChart = function(model) {
 		
 		axis.attr("class", "grid")
 			.call(xAxis)
-			.attr("transform","translate(550,10)");
+			.attr("transform","translate(0,10)");
 		//axis.attr("class","grid").call(yAxis);	
 		
 }
 			
 BarChart.prototype.onRealtimeUpdate = function(packets) {	
 	var hitCount = 0;
-	$.each(packets.data, function(element,index,array)
-		{hitCount += element;});
+	console.log(packets.data);
+	$.each(packets.data, function(index,element)
+		{
+			hitCount += element.HitCount;		
+		});
+	console.log(hitCount);
 	this.hitCount += hitCount;
 }
 
@@ -65,17 +69,15 @@ BarChart.prototype.redraw = function(data,x,y,w,h) {
 	  .attr("width", w)
 	  .attr("height", function(d) { return y(d.value); })
 	  .transition()
-	  .duration(1000)
+	  .duration(400)
 	  .attr("x", function(d, i) { return x(i) - .5; });
 
 	rect.transition()
-	      .duration(1000)
+	      .duration(400)
 	      .attr("x", function(d, i) { return x(i) - .5; });
 	
 	rect.exit().transition()
-		.duration(1000)
+		.duration(400)
 		.attr("x", function(d, i) { return x(i - 1) - .5; })
 		.remove();
-
-
 }
