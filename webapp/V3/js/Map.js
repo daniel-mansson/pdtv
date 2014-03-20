@@ -83,11 +83,13 @@ Map.prototype.flashCountry = function(country, color) {
 
     var elements = this.map.svg.selectAll('.' + country);
     
+    var c = this.colors(Math.random() * this.colors.length);
+    console.log(c);
     elements
-		.style('fill', this.colors(Math.random() * this.colors.length)) 
-      	.transition()
+		.style('fill', c) ;
+      /*	.transition()
       	.duration(300)
-      	.style('fill', "#1C1C34");
+      	.style('fill', "#1C1C34");*/
 };
 
 Map.prototype.onDataPoint = function(location, dir) {
