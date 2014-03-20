@@ -46,6 +46,38 @@ var Map = function() {
 	this.fadeCountries = {};
 	this.activeFadeCountries = {};
 	this.frameCount = 0;
+	
+	// LEGEND
+	var color_domain = [50, 150, 350, 750, 1500, 3000];
+	var color = d3.scale.threshold()
+		.domain(color_domain)
+		.range(["#adfcad", "#ffcb40", "#ffba00", "#ff7d73", "#ff4e40", "#ff1300", "#ffffff"]);
+	var ext_color_domain = [0, 50, 150, 350, 750, 1500, 3000];
+	var legend_labels = ["< 50", "50+", "150+", "350+", "750+", "> 1500","LOL"];
+	var ls_w = 20, ls_h = 20;
+	
+	console.log(color(966));
+	
+	var svg = d3.select("svg");
+	var legend = svg.selectAll("g.legend")
+		.data(ext_color_domain)
+		.enter().append("g")
+		.attr("class", "legend");
+	
+	legend.append("rect")
+		.attr("x", 20)
+		.attr("y", function(d, i){ return 400 - (i*ls_h) - 2*ls_h;})
+		.attr("width", ls_w)
+		.attr("height", ls_h)
+		.style("fill", function(d, i) { return color(d); })
+		.style("opacity", 0.8);
+
+	legend.append("text")
+		.attr("x", 50)
+		.attr("y", function(d, i){ return 400 - (i*ls_h) - ls_h - 4;})
+		.text(function(d, i){ return legend_labels[i]; });
+		
+	
 };
 
 Map.prototype.onFrameRender = function(timeStep) {
