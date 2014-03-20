@@ -82,6 +82,12 @@ h3 {
 	height: 400px;
 }
 
+#resetButton {
+	top: 5px;
+	left: 5px;
+	position: absolute;
+}
+
 #sliderContainer {
 	background-color:#DDDDDD;
 	z-index:9;
