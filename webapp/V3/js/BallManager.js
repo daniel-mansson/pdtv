@@ -21,30 +21,52 @@ var BallManager = function(rendererContainer, map) {
 		
 		this.countryPos[countryISO] = cp;
 	}
-
+/*
 	var cp = new CountryPos(null, "__");
 	cp.center = new PIXI.Point(390, 50);
 	this.countryPos[cp.country] = cp;
 	var cp = new CountryPos(null, "Unknown");
 	cp.center = new PIXI.Point(390, 50);
-	this.countryPos[cp.country] = cp;
+	this.countryPos[cp.country] = cp;*/
 	
 	this.delayContainer = [];
 	this.delayTime = 1;
 	
 	this.map = map;
 	this.flashList = [];
+	
+	this.t = 0;
+	this.adsf = 0;
 };
 
 BallManager.prototype.onFrameRender = function(timeStep) { 
 	/*if(Math.random() > 0.9) {
-		for(var i = 0; i < 40; ++i) {
+		for(var i = 0; i < 4; ++i) {
 			this.newBall("SWE", "ARG", 0, 1);
 			this.newBall("SWE", "CAN", 0, 1);
 			this.newBall("SWE", "AUS", 0, 1);
-			this.newBall("SWE", "RUS", 0, 1);
+			this.newBall("SWE", "CHN", 0, 1);
 		}
-	}*/
+	}
+	this.t += timeStep;
+	++this.adsf;
+	if(this.adsf % 5 == 0) {
+	var c = d3.interpolateRgb("#1C1C34", "#00ffff")((Math.cos(this.t * 2) + 1) * 0.5);
+    var elements = this.map.map.svg.selectAll('.' + "RUS");
+    elements
+		.style('fill', c) ;
+
+    var elements = this.map.map.svg.selectAll('.' + "NOR");
+    elements
+		.style('fill', c) ;
+    var elements = this.map.map.svg.selectAll('.' + "FIN");
+    elements
+		.style('fill', c) ;
+    var elements = this.map.map.svg.selectAll('.' + "VNZ");
+    elements
+		.style('fill', c) ;
+	};*/
+	
 	
 	var self = this;
 	var remainingFlash = [];

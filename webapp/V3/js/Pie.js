@@ -1,13 +1,13 @@
 //make and update a pie-chart with calculated values from the packets
 var Pie = function(){
-    this.dvalue = 1;
+    this.dvalue = 0;
     this.uvalue = 0;
     
 	this.homeCountry = "__";
 	
     //some starting values to draw the pie for the first time
-    data = [{"label":"undefined", "value":0}, 
-    		{"label":"displayed", "value":1}];
+    data = [{"label":"undefined", "value":1}, 
+    		{"label":"displayed", "value":0}];
     		
     makePie(data);
 	
@@ -15,7 +15,7 @@ var Pie = function(){
 	this.interval = setInterval((function(self) {
 		return function() {			
 			//don't redraw pie if both values are 0
-			if(self.dvalue != 0 && self.uvlue != 0){
+			if(self.dvalue != 0 || self.uvalue != 0){
 				array = [];
 				var map = {};
 				map["label"] = "undefined";
@@ -29,11 +29,11 @@ var Pie = function(){
 				vis.data([array]);
 				arcs.data(pie);
 				arcs.select("path").attr("d", arc);
-				arcs.select("path").transition().duration(200).attrTween("d", arcTween); // redraw the arcs		(fast 100 - 750 slower)
+				arcs.select("path").transition().duration(400).attrTween("d", arcTween); // redraw the arcs		(fast 100 - 750 slower)
 			}
 		    self.dvalue = 0;
 		    self.uvalue = 0;
-		}
+		};
 	})(this), 500);
 };
 
@@ -81,13 +81,16 @@ Pie.prototype.onRealtimeUpdate = function(data) {
 	
 	//count the number of packets that are unknown and known
 	data.data.forEach(function(packet){
+		var from = packet.from.Country;
+		var to = packet.to.Country;
 		/* undefined values == '__' or 'Unknown'*/
-		if(packet.from.Country != this.homeCountry && packet.to.Country != "__") {
+		if(from != this.homeCountry && to != "__") {
 			dvalue += packet.HitCount;		
 		}
-		else if(packet.from.Country != "Unknown" || packets.to.Country != "Unknown"){
+		
+	/*	else if(packet.to.Country != "Unknown" || packet.from.Country != "Unknown"){
 			dvalue += packet.HitCount;	
-		}
+		}*/
 		else {
 			uvalue += packet.HitCount;
 		}
