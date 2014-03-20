@@ -41,7 +41,6 @@ var Map = function() {
 		self.fadeUpdate(1000.0 / 1000.0);
 	}, 1000);
 
-	this.colors = d3.scale.category10();
 	
 	this.fadeCountries = {};
 	this.activeFadeCountries = {};
@@ -57,6 +56,7 @@ var Map = function() {
 	var ls_w = 20, ls_h = 20;
 	
 	console.log(color(966));
+	this.color = color;
 	
 	var svg = d3.select("svg");
 	var legend = svg.selectAll("g.legend")
@@ -142,7 +142,7 @@ Map.prototype.flashCountry = function(country, color) {
 		this.fadeCountries[country] = c;
 	}
 	
-	c.startFade();
+	c.startFade(this.color);
 	this.activeFadeCountries[country] = c;
 };
 
@@ -170,7 +170,16 @@ Map.prototype.onRealtimeUpdate = function(data) {
 		if(packet.from.Country != homeCountry) {
 			var p = packet.from;
 			p.hits = packet.HitCount;
-			self.onDataPoint(p, 0);
+			
+			var country = packet.from.Country;
+			var c = self.fadeCountries[country];
+			if(c === undefined) {
+				c = new CountryColorFade(country, self);
+				self.fadeCountries[country] = c;
+			}
+			
+			c.addHits(packet.HitCount, 0);
+			//self.onDataPoint(p, 0);
 			//params[p.Country] = self.colors(Math.random() * self.colors.length);
 		}
 		else {
@@ -183,7 +192,17 @@ Map.prototype.onRealtimeUpdate = function(data) {
 		if(packet.to.Country != homeCountry){
 			var p = packet.to;
 			p.hits = packet.HitCount;
-			self.onDataPoint(p, 1);
+
+			var country = packet.to.Country;
+			var c = self.fadeCountries[country];
+			if(c === undefined) {
+				c = new CountryColorFade(country, self);
+				self.fadeCountries[country] = c;
+			}
+			
+			c.addHits(0, packet.HitCount);
+			
+			//self.onDataPoint(p, 1);
 			//params[p.Country] = self.colors(Math.random() * self.colors.length);	
 		}
 		else {
