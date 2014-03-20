@@ -30,10 +30,11 @@ CountryColorFade.prototype.startFade = function(colors){
 	this.updateBaseColor(colors);
 };
 
-CountryColorFade.prototype.reset = function(){
+CountryColorFade.prototype.reset = function(colors){
+	console.log("reset");
 	this.hitsReceived = 0;
 	this.hitsSent = 0;
-	this.updateBaseColor();
+	this.updateBaseColor(colors);
 	this.svg.style({fill: this.baseColor});
 };
 
@@ -43,5 +44,6 @@ CountryColorFade.prototype.addHits = function(from, to){
 };
 
 CountryColorFade.prototype.updateBaseColor = function(colors){
+	console.log(colors(this.hitsReceived + this.hitsSent));
 	this.baseColor = colors(this.hitsReceived + this.hitsSent);
 };

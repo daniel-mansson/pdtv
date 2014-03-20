@@ -45,17 +45,19 @@ var Map = function() {
 	this.fadeCountries = {};
 	this.activeFadeCountries = {};
 	this.frameCount = 0;
+	var fadeCountries = this.fadeCountries;
 	
 	// LEGEND
-	var color_domain = [50, 150, 350, 750, 1500, 3000];
+	var color_domain = [1,50, 150, 350, 750, 1500, 3000];
 	var color = d3.scale.threshold()
 		.domain(color_domain)
-		.range(["#adfcad", "#ffcb40", "#ffba00", "#ff7d73", "#ff4e40", "#ff1300", "#ffffff"]);
-	var ext_color_domain = [0, 50, 150, 350, 750, 1500, 3000];
-	var legend_labels = ["< 50", "50+", "150+", "350+", "750+", "> 1500","LOL"];
+		.range(["#1C1C34","#adfcad", "#ffcb40", "#ffba00", "#ff7d73", "#ff4e40", "#ff1300", "#ffffff"]);
+	var ext_color_domain = [0,1,10, 50, 150, 350, 750, 1500, 3000];
+	var legend_labels = ["LOL","< 50", "50+", "150+", "350+", "750+", "> 1500","LOL"];
 	var ls_w = 20, ls_h = 20;
 
-	console.log(color(966));
+	console.log(color(0));
+	
 	this.color = color;
 	
 	var svg = d3.select("svg");
@@ -76,8 +78,16 @@ var Map = function() {
 		.attr("x", 50)
 		.attr("y", function(d, i){ return 400 - (i*ls_h) - ls_h - 4;})
 		.text(function(d, i){ return legend_labels[i]; });
-		
 	
+	$("button").on("click",
+		function()
+		{
+			for ( var c in fadeCountries) {
+				console.log(fadeCountries[c]);
+				fadeCountries[c].reset(color);
+			}
+		});
+		
 };
 
 Map.prototype.onFrameRender = function(timeStep) {
