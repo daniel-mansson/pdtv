@@ -57,9 +57,7 @@ h1 {
    font-family:"Lucida Console", Lucida, monospace;
 }
 
-h2 {
-	margin-left: auto;
-	margin-left: auto;
+h3 {
 	text-align: center;
 	color:#F0F0F0;
 }
@@ -107,9 +105,9 @@ h2 {
 }
 
 #chartContainer {
-	background-color:#3AE8A7;
+	background-color:#025DA6;
 	z-index:11;
-	height:245px;
+	height:250px;
 	width:400px;
 	float: right;
 }
@@ -118,13 +116,13 @@ h2 {
 	float: left;
 	background-color:#1af;
 	z-index:11;
-	height:245px;
+	height:250px;
 	width:200px;
 }
 
 #pie {
-	padding-top: 5px;
-	padding-left: 15px;
+	padding-top: 9px;
+	padding-left: 16px;
 }
 
 p{
@@ -132,6 +130,12 @@ p{
 	margin-bottom: 0;
 	margin-left: 3px;
 	margin-right: 10px;
+}
+
+p.right{
+	text-align: right;
+	color:#F0F0F0;
+	margin-right: 75px;
 }
 
 .float-left{
@@ -143,11 +147,11 @@ p{
 }
 
 .text-center{
+	margin-top: 5px;
+	margin-bottom: 2px;
 	text-align:center;
 }
-#pieButton{
-	margin-left:48px;
-}
+
 .rectangel{
 	width:20px;
 	height:20px;
@@ -169,4 +173,3 @@ p{
 	fill: steelblue;
 	stroke: white;	
 }
-
