@@ -15,11 +15,7 @@ var Pie = function(){
 	this.interval = setInterval((function(self) {
 		return function() {			
 			//don't redraw pie if both values are 0
-			console.log("Interval");
-			console.log(self.dvalue);
-			console.log(self.uvalue);
 			if(self.dvalue != 0 || self.uvalue != 0){
-				console.log("redraw");
 				array = [];
 				var map = {};
 				map["label"] = "undefined";
@@ -87,11 +83,9 @@ Pie.prototype.onRealtimeUpdate = function(data) {
 	data.data.forEach(function(packet){
 		var from = packet.from.Country;
 		var to = packet.to.Country;
-		console.log(packet.HitCount +" From:" + from + "   To: "+ to);
 		/* undefined values == '__' or 'Unknown'*/
 		if(from != this.homeCountry && to != "__") {
 			dvalue += packet.HitCount;		
-			console.log("D: " + dvalue);
 		}
 		
 	/*	else if(packet.to.Country != "Unknown" || packet.from.Country != "Unknown"){
@@ -99,10 +93,7 @@ Pie.prototype.onRealtimeUpdate = function(data) {
 		}*/
 		else {
 			uvalue += packet.HitCount;
-			console.log("U: " + uvalue);
 		}
-		console.log(from == "Unknown");
-		console.log(packet.to.Country == "Unknown" || packet.from.Country == "Unknown");
 	});
 	
 	//store the calculated values until updated in interval
