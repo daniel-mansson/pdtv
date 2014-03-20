@@ -48,9 +48,11 @@ var Map = function() {
 	var color = d3.scale.threshold()
 		.domain(color_domain)
 		.range(["#adfcad", "#ffcb40", "#ffba00", "#ff7d73", "#ff4e40", "#ff1300", "#ffffff"]);
-	var ext_color_domain = [0, 50, 150, 350, 750, 1500,3000]
-	var legend_labels = ["< 50", "50+", "150+", "350+", "750+", "> 1500","LOL"]  
+	var ext_color_domain = [0, 50, 150, 350, 750, 1500, 3000];
+	var legend_labels = ["< 50", "50+", "150+", "350+", "750+", "> 1500","LOL"];
 	var ls_w = 20, ls_h = 20;
+	
+	console.log(color(966));
 	
 	var svg = d3.select("svg");
 	var legend = svg.selectAll("g.legend")
