@@ -42,6 +42,24 @@ var Map = function() {
 	}, 1000);
 
 	this.colors = d3.scale.category10();
+	
+	this.fadeCountries = {};
+	this.activeFadeCountries = {};
+	this.frameCount = 0;
+};
+
+Map.prototype.onFrameRender = function(timeStep) {
+	if (this.frameCount % 4 == 0) {
+		for ( var c in this.activeFadeCountries) {
+			var fade = this.activeFadeCountries[c];
+			fade.update(timeStep * 4);
+			
+			if(!fade.isFading()) {
+				delete this.activeFadeCountries[c];
+			}
+		}
+	}
+	++this.frameCount;
 };
 
 Map.prototype.update = function(model) {
@@ -80,16 +98,20 @@ Map.prototype.update = function(model) {
 };
 
 Map.prototype.flashCountry = function(country, color) {
-
+/*
     var elements = this.map.svg.selectAll('.' + country);
-    
     var c = this.colors(Math.random() * this.colors.length);
-    console.log(c);
     elements
-		.style('fill', c) ;
-      /*	.transition()
-      	.duration(300)
-      	.style('fill', "#1C1C34");*/
+		.style('fill', c) ;*/
+	
+	var c = this.fadeCountries[country];
+	if(c === undefined) {
+		c = new CountryColorFade(country, this);
+		this.fadeCountries[country] = c;
+	}
+	
+	c.startFade();
+	this.activeFadeCountries[country] = c;
 };
 
 Map.prototype.onDataPoint = function(location, dir) {

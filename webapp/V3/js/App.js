@@ -8,6 +8,7 @@ var App = function() {
 	this.map = new Map();
 	this.model.addListener(this.map);
 	this.model.addRealtimeListener(this.map);
+	this.renderer.addFrameListener(this.map);
 
 	this.ballManager = new BallManager(this.renderer, this.map);
 	this.map.ballManager = this.ballManager;
