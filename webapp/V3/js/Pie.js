@@ -1,10 +1,15 @@
+//make and update a pie-chart with calculated values from the packets
 var Pie = function(){
-            
+    this.dvalue = 1;
+    this.uvalue = 0;
+    
+    //some starting values to draw the pie for the first time
     data = [{"label":"undefined", "value":1}, 
     		{"label":"displayed", "value":0}];
     		
     makePie(data);
     
+    //hide and show the pie
 	$('#pieButton').click(function(){
 		if ($(this).val() == "hidden"){
 			$(this).text("Hide Piechart!");
@@ -17,13 +22,40 @@ var Pie = function(){
 			$('#pieDiv').hide();
 		}
 	});
+	
+	//update the pie in this interval
+	this.interval = setInterval((function(self) {
+		return function() {			
+			//don't redraw pie if both values are 0
+			if(self.dvalue != 0 && self.uvlue != 0){
+				array = [];
+				var map = {};
+				map["label"] = "undefined";
+				map["value"] = self.uvalue; 
+				array.push(map);
+				var map2 = {};
+				map2["label"] = "displayed";
+				map2["value"] = self.dvalue;
+				array.push(map2);
+				
+				vis.data([array]);
+				arcs.data(pie);
+				arcs.select("path").attr("d", arc);
+				arcs.select("path").transition().duration(500).attrTween("d", arcTween); // redraw the arcs		(fast 100 - 750 slower)
+			}
+		    self.dvalue = 0;
+		    self.uvalue = 0;
+		}
+	})(this), 500);
 };
+
 /*__*/
+/*create the pie*/
 var makePie = function(data){
  	w = 165;                       
     h = 165;                          
     r = Math.min(w, h) / 2;                         
-    //color = d3.scale.category20c();     //builtin range of colors   
+ 
     color = d3.scale.ordinal().range(["#18689C", "#15438A"]);
 
     vis = d3.select("#pieDiv")
@@ -56,12 +88,12 @@ var makePie = function(data){
 
 Pie.prototype.onRealtimeUpdate = function(data) {
 	
-	var array = [];
 	var uvalue = 0;
 	var dvalue = 0;
 	
+	//count the number of packets that are unknown and known
 	data.data.forEach(function(packet){
-	/*packet.from.country __ och to.country __*/
+		/* undefined values == '__' or 'Unknown'*/
 		if(packet.from.Country != "__" && packet.to.Country != "__") {
 			dvalue += packet.HitCount;		
 		}
@@ -72,21 +104,13 @@ Pie.prototype.onRealtimeUpdate = function(data) {
 			uvalue += packet.HitCount;
 		}
 	});
-	var map = {};
-	map["label"] = "undefined";
-	map["value"] = uvalue; 
-	array.push(map);
-	var map2 = {};
-	map2["label"] = "displayed";
-	map2["value"] = dvalue;
-	array.push(map2);
-
-	vis.data([array]);
-	arcs.data(pie);
-	arcs.select("path").attr("d", arc);
-	arcs.select("path").transition().duration(500).attrTween("d", arcTween); // redraw the arcs		(fast 100 - 750 slower)
+	
+	//store the calculated values until updated in interval
+	this.uvalue += uvalue;
+	this.dvalue += dvalue;
 };
 
+//some "animation" from the old value to the new in the pie
 function arcTween(a) {
 	  var i = d3.interpolate(this._current, a);
 	  this._current = i(0);
