@@ -173,3 +173,10 @@ p.right{
 	fill: steelblue;
 	stroke: white;	
 }
+
+	/* tell the SVG path to be a thin blue line without any area fill */
+path {
+stroke: black;
+stroke-width: 1;
+fill: none;
+}

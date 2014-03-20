@@ -14,7 +14,7 @@ var Map = function() {
 			highlightOnHover: true,
 			highlightBorderColor: "#ffffff",
 			highlightFillColor: function(geography,data) {
-				if (countries[geography.id]) {
+				if (countries[geography.id]) {		
 					return countries[geography.id].color;
 				} else {
 					return "#1C1C34";
@@ -51,9 +51,7 @@ var Map = function() {
 	var ext_color_domain = [0, 50, 150, 350, 750, 1500, 3000];
 	var legend_labels = ["< 50", "50+", "150+", "350+", "750+", "> 1500","LOL"];
 	var ls_w = 20, ls_h = 20;
-	
-	console.log(color(966));
-	
+		
 	var svg = d3.select("svg");
 	var legend = svg.selectAll("g.legend")
 		.data(ext_color_domain)
