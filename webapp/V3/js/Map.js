@@ -183,49 +183,47 @@ Map.prototype.onRealtimeUpdate = function(data) {
 	var self = this;
 	params = {};
 	
-	var homeCountry = "__";
+	var homeCountry = "SWE";
 	
 	data.data.forEach(function(packet){
 		
-		if(packet.from.Country != homeCountry) {
-			var p = packet.from;
-			p.hits = packet.HitCount;
-			
-			var country = packet.from.Country;
-			var c = self.fadeCountries[country];
-			if(c === undefined) {
-				c = new CountryColorFade(country, self);
-				self.fadeCountries[country] = c;
-			}
-			
-			c.addHits(packet.HitCount, 0);
-			//self.onDataPoint(p, 0);
-			//params[p.Country] = self.colors(Math.random() * self.colors.length);
-		}
-		else {
-			if(self.ballManager != null) {
-				for(var i = 0; i < packet.HitCount; ++i)
-					self.ballManager.newBall("SWE", packet.to.Country, 0, 1);
-			}
-		}
-		
-		if(packet.to.Country != homeCountry){
-			var p = packet.to;
-			p.hits = packet.HitCount;
-
+		if(packet.from.Country == homeCountry) {
 			var country = packet.to.Country;
 			var c = self.fadeCountries[country];
 			if(c === undefined) {
 				c = new CountryColorFade(country, self);
 				self.fadeCountries[country] = c;
 			}
+
+			var hits = packet.HitCount;
+
+			if(packet.from.Country == homeCountry)
+				hits = Math.floor(hits * 0.5 + 0.5);
 			
-			c.addHits(0, packet.HitCount);
+			c.addHits(hits, 0);
 			
-			//self.onDataPoint(p, 1);
-			//params[p.Country] = self.colors(Math.random() * self.colors.length);	
+
+			if(self.ballManager != null) {
+				for(var i = 0; i < packet.HitCount; ++i)
+					self.ballManager.newBall("SWE", packet.to.Country, 0, 1);
+			}
 		}
-		else {
+		
+		if(packet.to.Country == homeCountry){
+			var country = packet.from.Country;
+				
+			var c = self.fadeCountries[country];
+			if(c === undefined) {
+				c = new CountryColorFade(country, self);
+				self.fadeCountries[country] = c;
+			}
+			var hits = packet.HitCount;
+
+			if(packet.from.Country == homeCountry)
+				hits = Math.floor(hits * 0.5 + 0.5);
+			
+			c.addHits(0, hits);
+			
 			if(self.ballManager != null) {
 				for(var i = 0; i < packet.HitCount; ++i)
 					self.ballManager.newBall(packet.from.Country, "SWE", 1, 1);
