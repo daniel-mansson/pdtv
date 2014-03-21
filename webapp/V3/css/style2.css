@@ -1,3 +1,4 @@
+
 html {
 	height: 100%
 }
@@ -92,9 +93,21 @@ h3 {
 }
 
 #resetButton {
-	/*top: 5px;
+	top: 5px;
 	left: 5px;
-	position: absolute;*/
+	position: absolute;
+	border:solid 2px;
+	background-color: #4C5C74;
+	font-weight: bold;
+	color: black;
+	border-color: black;
+}
+
+#resetButton:hover {
+	color: white;
+}
+#resetButton:active {
+	background-color: #FC5900;
 }
 
 
@@ -162,10 +175,11 @@ p.right{
 
 #descriptionContainer {
 	text-align: center;
+
 	margin-left:100px;
 	width:400px;
-	
+	/*font-family: "Inconsolata";*/
+	font-size: small;
+	color: #337297;
 }
-
-
 
