@@ -16,7 +16,7 @@ var App = function() {
 	this.pieChart = new Pie();
 	this.model.addRealtimeListener(this.pieChart);
 
-	this.barChart = new BarChart();
+	this.barChart = new BarChart(this.map.color);
 	this.model.addRealtimeListener(this.barChart);
 	
 	this.connection = new Connection("ws://localhost:8080/realtime", this.model);
