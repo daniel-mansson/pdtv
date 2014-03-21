@@ -65,7 +65,7 @@ var Map = function() {
 		.domain(color_domain)
 		.range(["#4C5C74", "#337297","#69D2E7", "#A7DBD8", "#E0E4CC", "#f4B57E",  "#F38630", "#FC5900"]);
 	var ext_color_domain = [0,1,10, 50, 150, 350, 750, 1500];
-	var legend_labels = ["0","< 10", "10+", "50+", "150+", "350+", "750+", "1500+"];
+	var legend_labels = ["0","1+", "10+", "50+", "150+", "350+", "750+", "1500+"];
 	var ls_w = 20, ls_h = 20;
 	
 	this.color = color;
