@@ -6,7 +6,7 @@ var BarChart = function(color) {
 		var w = 12;
 		var h = 80;
 		var x = d3.scale.linear().domain([0, 1]).range([0, w]);
-		var y = d3.scale.log().domain([1, 1500]).rangeRound([0, h]);
+		var y = d3.scale.log().domain([1, 20000]).rangeRound([0, h]);
 
 		var numBars = divWidth / w;
 		console.log(numBars);

@@ -17,7 +17,7 @@ var Map = function() {
 		geographyConfig: {
 			borderColor: "#000000",
 			highlightOnHover: true,
-			highlightBorderColor: "#ffffff",
+			highlightBorderColor: "#8af",
 			/*highlightFillColor: function(geography,data) {
 				if (countries[geography.id]) {		
 					return countries[geography.id].color;
@@ -77,7 +77,7 @@ var Map = function() {
 		.attr("class", "legend");
 	
 	legend.append("rect")
-		.attr("x", 20)
+		.attr("x", 10)
 		.attr("y", function(d, i){ return 400 - (i*ls_h) - 2*ls_h;})
 		.attr("width", ls_w)
 		.attr("height", ls_h)
@@ -85,7 +85,7 @@ var Map = function() {
 		.style("stroke", "black");
 
 	legend.append("text")
-		.attr("x", 42)
+		.attr("x", 35)
 		.attr("y", function(d, i){ return 400 - (i*ls_h) - ls_h - 4;})
 		.text(function(d, i){ return legend_labels[i]; });
 	

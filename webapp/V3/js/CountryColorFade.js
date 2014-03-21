@@ -13,6 +13,12 @@ var CountryColorFade = function(country, map) {
 
 CountryColorFade.prototype.update = function(timeStep) {
 	this.fadeTime -= timeStep;
+	/*if(this.fadeTime > 0) {
+		this.svg.style({stroke: d3.interpolateRgb("#000", "#f00")(this.fadeTime / this.fadeDuration)});
+	} else {
+		this.svg.style({stroke: "#000"});
+	}*/
+	
 	
 	if(this.fadeTime > 0) {
 		this.svg.style({fill: d3.interpolateRgb(this.baseColor, this.fadeColor)(this.fadeTime / this.fadeDuration)});
@@ -46,4 +52,5 @@ CountryColorFade.prototype.addHits = function(from, to){
 CountryColorFade.prototype.updateBaseColor = function(colors){
 	//console.log(colors(this.hitsReceived + this.hitsSent));
 	this.baseColor = colors(this.hitsReceived + this.hitsSent);
+//	this.svg.style({fill: this.baseColor});
 };
