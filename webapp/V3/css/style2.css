@@ -22,30 +22,36 @@ body {
 	height: 120px;
 }
 #header {
-	background-color:#000000;
-	height:80px;
 	width:604px;
+	margin: auto;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+#outerHeader {
+	background-color:#000000;
+	margin-bottom: 20px;
+	width:100%;
+	border-bottom: solid;
+	border-color: red;
 }
 
 #upper {
-	padding-top: 20px;
-	background-color:#000000;
-	height: 45px;
 	width:604px;
 }
 
 #lower {
-	background-color:#FFFFFF;
 	height: 15px;
 	width:604px;
-	text-align:center;
+	text-align:left;
+	color:#FFFFFF;
 }
 
 
 h1 {
 	margin-top: 0px;
 	margin-bottom: 0px;
-	text-align: center;
+	text-align: left;
 	color:#FFFFFF;
     font-weight:bold;
     font-style: italic;
@@ -68,7 +74,7 @@ h3 {
 
 #mapContainer {
 	position: absolute;
-	background-color: #4a5b74;
+	background-color: #fff;
 
 	width: 600px;
 	height: 400px;

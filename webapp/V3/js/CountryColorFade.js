@@ -1,6 +1,6 @@
 var CountryColorFade = function(country, map) {
 	this.country = country;
-	this.baseColor = "#1C1C34";
+	this.baseColor = "#4C5C74";
 	this.fadeColor = "#ffffff";
     this.svg = map.map.svg.selectAll('.' + country);
 	
@@ -31,7 +31,7 @@ CountryColorFade.prototype.startFade = function(colors){
 };
 
 CountryColorFade.prototype.reset = function(colors){
-	console.log("reset");
+	//console.log("reset");
 	this.hitsReceived = 0;
 	this.hitsSent = 0;
 	this.updateBaseColor(colors);
@@ -44,6 +44,6 @@ CountryColorFade.prototype.addHits = function(from, to){
 };
 
 CountryColorFade.prototype.updateBaseColor = function(colors){
-	console.log(colors(this.hitsReceived + this.hitsSent));
+	//console.log(colors(this.hitsReceived + this.hitsSent));
 	this.baseColor = colors(this.hitsReceived + this.hitsSent);
 };
