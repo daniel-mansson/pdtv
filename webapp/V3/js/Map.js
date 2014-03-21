@@ -183,7 +183,7 @@ Map.prototype.onRealtimeUpdate = function(data) {
 	var self = this;
 	params = {};
 	
-	var homeCountry = "SWE";
+	var homeCountry = "__";
 	
 	data.data.forEach(function(packet){
 		

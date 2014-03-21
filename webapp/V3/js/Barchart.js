@@ -38,18 +38,7 @@ var BarChart = function(color) {
 			.attr("x2", divWidth)
 			.attr("y1", h - .5)
 			.attr("y2", h - .5)
-			.style("stroke", "#000");
-
-		var yAxis = d3.svg.axis()
-			.scale(d3.scale.log().domain([500, 1]).rangeRound([0, h]))
-			.orient("right").ticks(3);
-		
-		var axis = d3.select("#chartAxisContainer")
-			.append("svg").append("g");
-		
-		axis.attr("class","grid").call(yAxis);	
-		
-		
+			.style("stroke", "#000");		
 }
 			
 BarChart.prototype.onRealtimeUpdate = function(packets) {	
