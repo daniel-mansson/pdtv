@@ -99,12 +99,13 @@ h3 {
 	border:solid 2px;
 	background-color: #4C5C74;
 	font-weight: bold;
-	color: black;
+	color: white;
 	border-color: black;
 }
 
 #resetButton:hover {
 	color: white;
+	background-color: #5C6C84;
 }
 #resetButton:active {
 	background-color: #FC5900;
