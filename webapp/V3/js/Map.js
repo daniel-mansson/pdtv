@@ -1,7 +1,12 @@
 var Map = function() {
 
 	this.countries = {};
-	var countries = this.countries;
+
+	
+	this.fadeCountries = {};
+	this.activeFadeCountries = {};
+	this.frameCount = 0;
+	var countries = this.fadeCountries;
 	this.period = 8000;
 	var period = this.period;
 	this.map = new Datamap({
@@ -13,22 +18,31 @@ var Map = function() {
 			borderColor: "#000000",
 			highlightOnHover: true,
 			highlightBorderColor: "#ffffff",
-			highlightFillColor: function(geography,data) {
+			/*highlightFillColor: function(geography,data) {
 				if (countries[geography.id]) {		
 					return countries[geography.id].color;
 				} else {
 					return "#1C1C34";
 				}
-			},
+			},*/
 			popupTemplate: function(geography, data) { 
 				var totalHits;
-				if (countries[geography.id]) {
-					totalHits = countries[geography.id].totalHits;
+				var rec = 0;
+				var sent = 0;
+				var c = countries[geography.id]; 
+				if (c !== undefined) {
+					totalHits = c.hitsReceived + c.hitsSent;
+					sent = c.hitsSent;
+					rec = c.hitsReceived;
 				}
 				else {
 					totalHits = 0;
 				}
-					return '<div class="hoverinfo"><strong>' + geography.properties.name + '</br>Packets during the last '+period/1000+' seconds: '+totalHits+' </div>';
+					return '<div class="hoverinfo"><strong>' + geography.properties.name + "</strong>"
+					+ '</br>Packets received: '+ rec 
+					+ '</br>Packets sent: '+ sent 
+					+ '</br>Packets total: '+ totalHits
+					+' </div>';
 		        }
 		}
 		,projection: 'mercator'
@@ -42,9 +56,7 @@ var Map = function() {
 	}, 1000);
 
 	
-	this.fadeCountries = {};
-	this.activeFadeCountries = {};
-	this.frameCount = 0;
+	
 	var fadeCountries = this.fadeCountries;
 	
 	// LEGEND

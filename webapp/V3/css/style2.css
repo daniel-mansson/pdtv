@@ -82,6 +82,12 @@ h3 {
 	height: 400px;
 }
 
+#resetButton {
+	top: 5px;
+	left: 5px;
+	position: absolute;
+}
+
 #sliderContainer {
 	background-color:#DDDDDD;
 	z-index:9;
@@ -108,7 +114,7 @@ h3 {
 	background-color:#025DA6;
 	z-index:11;
 	height:250px;
-	width:400px;
+	width:604px;
 	float: right;
 }
 
@@ -172,6 +178,10 @@ p.right{
 .chart rect {
 	fill: steelblue;
 	stroke: white;	
+}
+
+#Barchart{
+	margin-left: 50px;
 }
 
 	/* tell the SVG path to be a thin blue line without any area fill */

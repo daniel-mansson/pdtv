@@ -127,17 +127,17 @@ BallManager.prototype.newBall = function(fromCountry, toCountry, type, duration)
 	if(fromC === undefined || toC === undefined)
 		return;
 	
-	var from = fromC.getCenter();
-	var to = toC.getCenter();
+	var from = fromC.getRandom();
+	var to = toC.getRandom();
 	
 	var texture = type == 0 ? this.textureTo : this.textureFrom;
 	if(fromCountry === "__" || toCountry === "__")
 		texture = this.textureShadow;
 	
 	var ball = new PIXI.Sprite(texture);
-
-	ball.position.x = from.x + Math.random() * 20 - 10;
-	ball.position.y = from.y + Math.random() * 20 - 10;
+	
+	ball.position.x = from.x;
+	ball.position.y = from.y;
 
 	ball.anchor.x = 0.5;
 	ball.anchor.y = 0.5;
@@ -145,7 +145,7 @@ BallManager.prototype.newBall = function(fromCountry, toCountry, type, duration)
 	ball.time = 0;
 	ball.duration = duration;
 	ball.from = new PIXI.Point(ball.position.x, ball.position.y);
-	ball.to = new PIXI.Point(to.x + Math.random() * 20 - 10, to.y + Math.random() * 20 - 10);
+	ball.to = new PIXI.Point(to.x, to.y);
 	
 	ball.alpha = 0.7;
 

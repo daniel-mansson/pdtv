@@ -18,7 +18,7 @@
         },
         popupOnHover: true,
         highlightOnHover: true,
-        highlightFillColor: '#FC8D59',
+   //     highlightFillColor: '#FC8D59',
         highlightBorderColor: 'rgba(250, 15, 160, 0.2)',
         highlightBorderWidth: 2
     },
@@ -141,14 +141,14 @@
 
           if ( options.highlightOnHover ) {
             var previousAttributes = {
-              'fill':  $this.style('fill'),
+              //'fill':  $this.style('fill'),
               'stroke': $this.style('stroke'),
               'stroke-width': $this.style('stroke-width'),
               'fill-opacity': $this.style('fill-opacity')
             };
 
             $this
-              .style('fill', options.highlightFillColor)
+             // .style('fill', options.highlightFillColor)
               .style('stroke', options.highlightBorderColor)
               .style('stroke-width', options.highlightBorderWidth)
               .style('fill-opacity', options.highlightFillOpacity)
