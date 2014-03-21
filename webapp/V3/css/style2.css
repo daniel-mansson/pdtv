@@ -1,3 +1,4 @@
+
 html {
 	height: 100%
 }
@@ -162,7 +163,10 @@ p.right{
 
 #descriptionContainer {
 	text-align: center;
+	font-family: 'Inconsolata';
+	margin-left: 45px;
+	margin-right: 45px;
+	color: gray;
+	font-size: small;
 }
-
-
 
