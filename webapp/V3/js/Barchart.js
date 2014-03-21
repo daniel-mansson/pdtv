@@ -25,7 +25,7 @@ var BarChart = function(model) {
 
 
 		this.chart = d3.select("#chartContainer")
-			.append("svg").append("g")
+			.append("svg").attr("id","Barchart").append("g")
 			.attr("class", "chart")
 			.attr("width", w * hitCounts.length - 1).attr("height", h)
 			.attr("transform","translate(0,10)");
