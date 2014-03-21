@@ -58,7 +58,7 @@ var makePie = function(data){
     arc = d3.svg.arc()              //this will create <path> elements for us using arc data
         .outerRadius(r);
  
-    pie = d3.layout.pie()           //this will create arc data for us given a list of values
+    pie = d3.layout.pie().sort(null)           //this will create arc data for us given a list of values
         .value(function(d) { return d.value; });    //we must tell it out to access the value of each element in our data array
  
     arcs = vis.selectAll("g.slice")     //this selects all <g> elements with class slice (there aren't any yet)
