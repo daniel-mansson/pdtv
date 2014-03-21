@@ -92,22 +92,18 @@ h3 {
 }
 
 #resetButton {
-	top: 5px;
+	/*top: 5px;
 	left: 5px;
-	position: absolute;
+	position: absolute;*/
 }
 
 
-#outerChartContainer {
+#chartContainer {
 	z-index:11;
-	height:250px;
+	height:100px;
 	width:600px;
 }
 
-#innerChartContainer {
-	width:480px;
-	/*margin-left:60px;*/
-}
 
 #chartAxisContainer {
 	width:40px;
@@ -162,6 +158,10 @@ p.right{
 .chart rect {
 	fill: steelblue;
 	stroke: black;	
+}
+
+#descriptionContainer {
+	text-align: center;
 }
 
 

@@ -23,11 +23,11 @@ var BarChart = function(color) {
 				self.hitCount=0;
 				self.redraw(hitCounts,x,y,w,h,color);
 			}
-		})(this), 500);
+		})(this), 1000);
 		
-		$("#innerChartContainer").width(divWidth);
+		$("#chartContainer").width(divWidth);
 
-		this.chart = d3.select("#innerChartContainer")
+		this.chart = d3.select("#chartContainer")
 			.append("svg").append("g")
 			.attr("class", "chart")
 			.attr("width", w * hitCounts.length)
@@ -39,6 +39,8 @@ var BarChart = function(color) {
 			.attr("y1", h - .5)
 			.attr("y2", h - .5)
 			.style("stroke", "#000");		
+		
+		//this.chart.append("text").text("BESKRIVNING").attr("transform","translate(100, 100)").attr("fill","black");
 }
 			
 BarChart.prototype.onRealtimeUpdate = function(packets) {	
@@ -62,15 +64,15 @@ BarChart.prototype.redraw = function(data,x,y,w,h,color) {
 	  .attr("height", function(d) { return y(d.value+1); })
 	  .style("fill", function(d) { return color(d.value);})
 	  .transition()
-	  .duration(400)
+	  .duration(800)
 	  .attr("x", function(d, i) { return x(i) - .5; });
 
 	rect.transition()
-	      .duration(400)
+	      .duration(800)
 	      .attr("x", function(d, i) { return x(i) - .5; });
 	
 	rect.exit().transition()	
-		.duration(400)
+		.duration(800)
 		.attr("x", function(d, i) { return x(i - 1) - .5; })
 		.remove();
 }
