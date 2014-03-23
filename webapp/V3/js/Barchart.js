@@ -4,9 +4,9 @@ var BarChart = function(color) {
 		
 		var divWidth = 600;
 		var w = 12;
-		var h = 80;
+		var h = 100;
 		var x = d3.scale.linear().domain([0, 1]).range([0, w]);
-		var y = d3.scale.log().domain([1, 20000]).rangeRound([0, h]);
+		var y = d3.scale.log().base(0.1).domain([1, 20000]).rangeRound([0, h]);
 
 		var numBars = divWidth / w;
 		console.log(numBars);
@@ -29,18 +29,18 @@ var BarChart = function(color) {
 
 		this.chart = d3.select("#chartContainer")
 			.append("svg").append("g")
+			.attr("transform","translate(0,1)")
 			.attr("class", "chart")
 			.attr("width", w * hitCounts.length)
 			.attr("height", h);
 
-		this.chart.append("line")
+		/*this.chart.append("line")
 			.attr("x1", 0)
 			.attr("x2", divWidth)
 			.attr("y1", h - .5)
 			.attr("y2", h - .5)
 			.style("stroke", "#000");		
-		
-		//this.chart.append("text").text("BESKRIVNING").attr("transform","translate(100, 100)").attr("fill","black");
+		*/
 }
 			
 BarChart.prototype.onRealtimeUpdate = function(packets) {	

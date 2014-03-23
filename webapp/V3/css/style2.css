@@ -23,7 +23,7 @@ body {
 	height: 120px;
 }
 #header {
-	width:604px;
+	width:590px;
 	margin: auto;
 	padding-top: 10px;
 	padding-bottom: 10px;
@@ -38,12 +38,12 @@ body {
 }
 
 #upper {
-	width:604px;
+	width:590px;
 }
 
 #lower {
 	height: 15px;
-	width:604px;
+	width:590px;
 	text-align:left;
 	color:#FFFFFF;
 	font-size: small;
@@ -52,6 +52,8 @@ body {
 #topright {
 	color: #FC5900;
 	font-size: small;
+	padding-left:10px;
+	padding-bottom:3px;
 }
 
 
