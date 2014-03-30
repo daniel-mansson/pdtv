@@ -6,8 +6,9 @@
 	
 	<script type="text/javascript" src="js/datamaps.world.js"></script>
 	<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type=text/css" href="css/jquery-ui.css">
-	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/style2.css">
 
 	<script type="text/javascript" src="js/Country.js"></script>
 	<script type="text/javascript" src="js/App.js"></script>
@@ -15,12 +16,19 @@
 	<script type="text/javascript" src="js/Init.js"></script>
 	<script type="text/javascript" src="js/Map.js"></script>
 	<script type="text/javascript" src="js/Barchart.js"></script>
+	<script type="text/javascript" src="js/Pie.js"></script>
 	<script type="text/javascript" src="js/Connection.js"></script>
+	<script type="text/javascript" src="js/Renderer.js"></script>
+	<script type="text/javascript" src="js/BallManager.js"></script>
+	<script type="text/javascript" src="js/CountryPos.js"></script>
+	<script type="text/javascript" src="js/CountryColorFade.js"></script>
+	<script type="text/javascript" src="js/pixi.dev.js"></script>
 	<!--<script type="text/javascript" src="js/Filter.js"></script>-->
 
 	<script>
 		$(document).ready(function() {
 			initialize();
+			 
 		});
 		
 		$(window).resize(function(){
@@ -29,16 +37,26 @@
 	</script>
 </head>
 <body>
-	<div id="header">
-		<div id="upper"><h1>packatrack</h1></div>
-		<div id="lower">about | help </div>
-	</div>
 	
-	<div id="content">
-		<div id="mapContainer"></div>
-		<div id="chartContainer"></div>
+	<div id="outerHeader">
+			<div id="header">
+				<div id="topright" class="float-right">Jussi Svensson<br/>Daniel Månsson<br/>Terese Nothnagel</div>
+				<div id="upper"><h1>packatrack</h1></div>
+				<div id="lower"> - visualizing your internet traffic</div>
+			</div>
 	</div>
-	
-	<div id="footer"></div>
+	<div id="siteContainer">
+		<div id="outerMapContainer">
+			<div id="mapContainer">
+				<button id="resetButton">Reset</button>
+			</div>
+		</div>
+		<div id="chartContainer">
+		</div>
+		<div id="descriptionContainer">
+			<!--One flying dot, one packet. <br/>
+			Colors and bars show total number of packets/sec.-->
+		</div>
+	</div>
 </body>
 </html>
