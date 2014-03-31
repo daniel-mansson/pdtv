@@ -28,7 +28,6 @@ var BarChart = function(color) {
 		var self = this;
 		this.interval = setInterval(function() {
 			hitCounts.shift();
-			console.log(self.hitCount);
 			hitCounts.push({value: self.hitCount});
 			self.hitCount=0;
 			self.redraw(hitCounts,x,y,w,h,color);
