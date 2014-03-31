@@ -30,10 +30,6 @@
 			initialize();
 			 
 		});
-		
-		$(window).resize(function(){
-			
-		});
 	</script>
 </head>
 <body>
@@ -45,10 +41,10 @@
 				<div id="lower"> - visualizing your internet traffic</div>
 			</div>
 	</div>
-	<div id="siteContainer">
-		<div id="outerMapContainer">
-			<div id="mapContainer">
-				<button id="resetButton">Reset</button>
+	<div id="siteContainer" class="resizeWidth">
+		<div id="outerMapContainer" class="resizeWidth resizeHeight">
+			<div id="mapContainer" class="resizeWidth resizeHeight">
+				<!-- <button id="resetButton">Reset</button>-->
 			</div>
 		</div>
 		<div id="chartContainer">

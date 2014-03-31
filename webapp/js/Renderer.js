@@ -27,3 +27,9 @@ var Renderer = function() {
 Renderer.prototype.addFrameListener = function(listener) {
 	this.frameListeners.push(listener);
 };
+
+Renderer.prototype.resize = function(width, height) {
+    this.renderer.view.style.width = width + "px";
+    this.renderer.view.style.height = height + "px";
+    this.renderer.resize(width, height);
+};

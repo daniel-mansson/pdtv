@@ -73,4 +73,11 @@ public class RealtimePacketQueue {
 			packets = new JsonArray();
 		}
 	}
+	
+	public void sendInstant(JsonObject packet) {
+		String message = gson.toJson(packet);
+		for (RealtimeSocket socket : listeners) {
+			socket.send(message);
+		}
+	}
 }

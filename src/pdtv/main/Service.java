@@ -6,11 +6,13 @@ public abstract class Service extends Observable{
 	private Status status;
 	private String message;
 	private String error;
+	private String name;
 	
-	public Service() {
+	public Service(String name) {
 		status = Status.Stopped;
 		message = "";
 		error = "";
+		this.name = name;
 	}
 	
 	public Status getStatus() {
@@ -25,6 +27,10 @@ public abstract class Service extends Observable{
 	
 	public String getMessage() {
 		return message;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	public void setMessage(String message) {

@@ -2,6 +2,8 @@ package pdtv.webserver;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Properties;
 
 import org.eclipse.jetty.server.Handler;
@@ -26,8 +28,10 @@ public class WebServer extends Service {
 	String webappDir;
 	Database database;
 	RealtimePacketQueue packetQueue;
+	URI uri;
 
 	public WebServer(Properties properties, Database database) {
+		super("Web server");
 		this.database = database;
 		packetQueue = new RealtimePacketQueue();
 		RealtimeSocket.queue = packetQueue;
@@ -36,7 +40,12 @@ public class WebServer extends Service {
 		queryFile = properties.getProperty("query_file", "config/query.sql").trim();
 				
 		server = new Server(port);
-		webappDir = properties.getProperty("webapp_dir", "webapp").trim();		
+		webappDir = properties.getProperty("webapp_dir", "webapp").trim();	
+		
+		try {
+			uri = new URI("http://localhost:" + port);
+		} catch (URISyntaxException e) {
+		}
 	}
 	
 	@Override
@@ -89,9 +98,22 @@ public class WebServer extends Service {
 			}
 			server = null;
 		}
+		
+		if(packetQueue != null) {
+			packetQueue.shutdown();
+			packetQueue = null;
+		}
 	}
 	
 	public void sendRealtimePacket(JsonObject packet) {
 		packetQueue.addPacket(packet);
+	}
+	
+	public URI getUri() {
+		return uri;
+	}
+
+	public void sendInstantPacket(JsonObject packet) {
+		packetQueue.sendInstant(packet);
 	}
 }

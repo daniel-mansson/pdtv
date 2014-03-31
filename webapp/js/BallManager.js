@@ -11,18 +11,8 @@ var BallManager = function(rendererContainer, map) {
 	rendererContainer.stage.addChild(this.container);
 	rendererContainer.addFrameListener(this);
 	
-	var countries = $("path.datamaps-subunit");
 	
-	for(var i = 0; i < countries.length; ++i) {
-		var c = countries[i];
-		
-		var countryISO = c.classList[1];
-		var cp = new CountryPos(c.pathSegList, countryISO);
-		
-		this.countryPos[countryISO] = cp;
-	}
-/*
-	var cp = new CountryPos(null, "__");
+	/*var cp = new CountryPos(null, "__");
 	cp.center = new PIXI.Point(390, 50);
 	this.countryPos[cp.country] = cp;
 	var cp = new CountryPos(null, "Unknown");
@@ -37,37 +27,47 @@ var BallManager = function(rendererContainer, map) {
 	
 	this.t = 0;
 	this.adsf = 0;
+
+	this.resize();
+	
+	this.ballV0 = 50 * 4;
+};
+
+BallManager.prototype.resize = function() {
+	this.countryPos = {};
+	
+	var countries = $("path.datamaps-subunit");	
+	for(var i = 0; i < countries.length; ++i) {
+		var c = countries[i];
+		
+		var countryISO = c.classList[1];
+		var cp = new CountryPos(c.pathSegList, countryISO);
+		
+		this.countryPos[countryISO] = cp;
+	}
+
+	this.delayContainer = [];
+	for (var i = this.container.children.length - 1; i >= 0; i--) {
+		this.container.removeChild(this.container.children[i]);
+	};
+	for (var i = this.shadowContainer.children.length - 1; i >= 0; i--) {
+		this.shadowContainer.removeChild(this.shadowContainer.children[i]);
+	};
+	
+	this.ballV0 = 4 * $("#mapContainer").height() / 10;
+
 };
 
 BallManager.prototype.onFrameRender = function(timeStep) { 
-	/*if(Math.random() > 0.9) {
+/*	if(Math.random() > 0.96) {
 		for(var i = 0; i < 4; ++i) {
 			this.newBall("SWE", "ARG", 0, 1);
-			this.newBall("SWE", "CAN", 0, 1);
-			this.newBall("SWE", "AUS", 0, 1);
-			this.newBall("SWE", "CHN", 0, 1);
+			this.newBall("SWE", "NAM", 0, 1);
+			this.newBall("SWE", "MEX", 1, 1);
+			this.newBall("SWE", "JPN", 0, 1);
 		}
 	}
-	this.t += timeStep;
-	++this.adsf;
-	if(this.adsf % 5 == 0) {
-	var c = d3.interpolateRgb("#1C1C34", "#00ffff")((Math.cos(this.t * 2) + 1) * 0.5);
-    var elements = this.map.map.svg.selectAll('.' + "RUS");
-    elements
-		.style('fill', c) ;
-
-    var elements = this.map.map.svg.selectAll('.' + "NOR");
-    elements
-		.style('fill', c) ;
-    var elements = this.map.map.svg.selectAll('.' + "FIN");
-    elements
-		.style('fill', c) ;
-    var elements = this.map.map.svg.selectAll('.' + "VNZ");
-    elements
-		.style('fill', c) ;
-	};*/
-	
-	
+*/
 	var self = this;
 	var remainingFlash = [];
 	this.flashList.forEach(function(v) {
@@ -102,7 +102,7 @@ BallManager.prototype.onFrameRender = function(timeStep) {
 		
 		var t = ball.time / ball.duration;
 
-		var v0 = 30*4;
+		var v0 = self.ballV0;
 		var z = v0 * t - v0 * t * t;
 
 		ball.position.x = ball.from.x * (1 - t) + ball.to.x * t;

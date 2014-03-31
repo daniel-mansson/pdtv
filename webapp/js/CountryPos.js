@@ -1,6 +1,7 @@
 var CountryPos = function(pathList, countryISO) {
 	this.country = countryISO;
 	this.radius = 10;
+	
 
 	if (pathList != null) {
 		var avg = new PIXI.Point();

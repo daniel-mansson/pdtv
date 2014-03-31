@@ -8,7 +8,19 @@ var Connection = function(host, model) {
 	var self = this;
 	
     this.socket.onmessage = function(event) {
-    	self.model.onRealtimeData(event.data);
+    	
+    	var data = JSON.parse(event.data);
+    	
+    	if(data === undefined) {
+    		return;
+    	}
+    	
+    	if(data.localIP !== undefined) {
+    		self.model.localIP = data.localIP;
+    	}
+    	else {
+    	   	self.model.onRealtimeData(data);
+    	}
     };
 
     this.socket.onopen = function(event) {

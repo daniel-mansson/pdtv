@@ -1,5 +1,6 @@
 package pdtv.sniffer;
 
+import java.net.Inet4Address;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,14 +16,17 @@ import org.jnetpcap.PcapIf;
 import org.jnetpcap.nio.JBuffer;
 import org.jnetpcap.nio.JMemory;
 import org.jnetpcap.packet.PcapPacket;
-import org.jnetpcap.packet.format.FormatUtils;
 import org.jnetpcap.protocol.lan.Ethernet;
 import org.jnetpcap.protocol.network.Ip4;
 import org.jnetpcap.protocol.network.Ip6;
 
+import com.google.common.net.InetAddresses;
+import com.google.gson.JsonObject;
+
 import pdtv.database.Database;
 import pdtv.main.Service;
 import pdtv.main.Status;
+import pdtv.webserver.WebServer;
 
 public class Sniffer extends Service{
 
@@ -30,22 +34,30 @@ public class Sniffer extends Service{
 	int deviceId;
 	volatile boolean done;
 	Database database;
+	WebServer webServer;
 	TreeMap<PacketKey, Packet> packets;
 	long timePeriod;
+	String localIP;
 	
-	public Sniffer(Properties properties, Database database) {
+	byte[] localAddr;
+	
+	public Sniffer(Properties properties, Database database, WebServer webServer) {
+		super("Sniffer");
 		pcap = null;
 		deviceId = Integer.parseInt(properties.getProperty("sniffer_device", "0").trim());
 		timePeriod = Long.parseLong(properties.getProperty("sniffer_timeperiod", "1000").trim());
 		done = true;
 		this.database = database;
+		this.webServer = webServer;
 		packets = new TreeMap<>();
+		localAddr = new byte[] {0, 0, 0, 0};
+		localIP = "0.0.0.0";
 	}
 	
 	@Override
 	public boolean start() {
 		setStatus(Status.Starting);
-		setMessage("Sniffer");
+		setMessage("");
 		done = true;
 		
 		List<PcapIf> alldevs = new ArrayList<PcapIf>();
@@ -60,14 +72,14 @@ public class Sniffer extends Service{
 			return false;
 		}
 
-		System.out.println("Network devices found:");
+		/*System.out.println("Network devices found:");
 		int i = 0;
 		for (PcapIf device : alldevs) {
 			String description = (device.getDescription() != null) ? device
 					.getDescription() : "No description available";
 			System.out.printf("#%d: %s [%s]\n", i++, device.getName(),
 					description);
-		}
+		}*/
 
 		PcapIf device = alldevs.get(deviceId); 
 
@@ -134,15 +146,23 @@ public class Sniffer extends Service{
 				return (addr6[0] & 0xe0) == 0x20;
 			}
 			
+			private int ub(int b) {
+				return b & 0xFF;
+			}
+			
 			private boolean isInLocalIPv4Range(byte[] addr4) {
-				if(addr4[0] == 10)
+				if(ub(addr4[0]) == 10)
 					return true;
-				if(addr4[0] == 172 && addr4[1] >= 16 && addr4[1] <= 31) 
+				if(ub(addr4[0]) == 172 && ub(addr4[1]) >= 16 && ub(addr4[1]) <= 31) 
 					return true;
-				if(addr4[0] == 192 && addr4[1] == 168) 
+				if(ub(addr4[0]) == 192 && ub(addr4[1]) == 168) 
 					return true;
-					
-				return false;
+				for(int i = 0; i < 4; ++i) {
+					if(localAddr[i] != addr4[i])
+						return false;
+				}
+				
+				return true;
 			}
 			
 			private void handlePacket(byte[] src, byte[] dst) {
@@ -175,7 +195,7 @@ public class Sniffer extends Service{
 				
 				++count;
 				if(count%10 == 0){
-					setMessage("Sniffer: " + count + " (" + rawCount + ")");
+					setMessage("Packets: " + count + " (" + rawCount + ")");
 				}
 			}
 		};
@@ -194,7 +214,62 @@ public class Sniffer extends Service{
 	
 	@Override
 	public void stop() {
-		pcap.breakloop();
+		setStatus(Status.Stopping);
+		if(pcap != null)
+			pcap.breakloop();
 		pcap = null;
+		setStatus(Status.Stopped);
+	}
+	
+	public String[] getDevices() {
+
+		List<PcapIf> alldevs = new ArrayList<PcapIf>();
+		StringBuilder errbuf = new StringBuilder(); 
+		
+		int r = Pcap.findAllDevs(alldevs, errbuf);
+		if (r == Pcap.NOT_OK || alldevs.isEmpty()) {	
+			return null;
+		}
+
+		String[] result = new String[alldevs.size()];
+		
+		int i = 0;
+		for (PcapIf device : alldevs) {
+			result[i] = i + ": " + (device.getDescription() != null ? device.getDescription() : "Unknown");
+			++i;
+		}
+
+		return result;
+	}
+	
+	public int getDeviceId() {
+		return deviceId;
+	}
+	
+	public void setDeviceId(int deviceId) {
+		this.deviceId = deviceId;
+		setChanged();
+		notifyObservers();
+	}
+	
+	public boolean trySetLocalAddr(String addrStr) {
+		if(!InetAddresses.isInetAddress(addrStr))
+			return false;
+		
+		try {
+			Inet4Address addr = (Inet4Address) Inet4Address.getByName(addrStr);
+			localAddr = addr.getAddress();
+			localIP = addr.getHostAddress();
+			JsonObject packet = new JsonObject();
+			packet.addProperty("localIP", localIP);
+			webServer.sendInstantPacket(packet);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
+	public String getLocalIP() {
+		return localIP;
 	}
 }

@@ -3,9 +3,16 @@ package pdtv.webserver;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import pdtv.sniffer.Sniffer;
+
 public class RealtimeSocket extends WebSocketAdapter implements
 		Comparable<RealtimeSocket> {
 	public static RealtimePacketQueue queue;
+	public static Sniffer sniffer = null;
 	private static int nextUniqueId = 0;
 
 	private final int id;
@@ -34,6 +41,17 @@ public class RealtimeSocket extends WebSocketAdapter implements
 
 		queue.addListener(this);
 		System.out.println("WS connect: " + session.toString());
+		
+		if(sniffer != null) {
+			if (isConnected()) {
+				JsonObject welcome = new JsonObject();
+				welcome.addProperty("localIP", sniffer.getLocalIP());
+			
+				Gson gson = new Gson();
+				String message = gson.toJson(welcome);
+				getRemote().sendStringByFuture(message);
+			}
+		}
 	}
 
 	@Override

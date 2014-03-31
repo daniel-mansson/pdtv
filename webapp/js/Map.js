@@ -1,14 +1,49 @@
-var Map = function() {
+var Map = function(model) {
 
 	this.countries = {};
-
+	this.model = model;
 	
 	this.fadeCountries = {};
 	this.activeFadeCountries = {};
 	this.frameCount = 0;
-	var countries = this.fadeCountries;
 	this.period = 8000;
 	var period = this.period;
+	
+	this.ballManager = null;
+		
+	var self = this;
+	setInterval(function() {
+		self.fadeUpdate(1000.0 / 1000.0);
+	}, 1000);
+
+	
+	
+	
+	// LEGEND
+	var color_domain = [1,10, 50, 150, 350, 750, 1500];
+	var color = d3.scale.threshold()
+		.domain(color_domain)
+		.range(["#4C5C74", "#337297","#69D2E7", "#A7DBD8", "#E0E4CC", "#f4B57E",  "#F38630", "#FC5900"]);
+
+	this.color = color;
+	
+
+	this.recreateMap();
+};
+
+Map.prototype.recreateMap = function() {
+	 $("#mapContainer").empty();
+
+	var countries = this.fadeCountries;
+	
+	var ext_color_domain = [0,1,10, 50, 150, 350, 750, 1500];
+	var legend_labels = ["0","1+", "10+", "50+", "150+", "350+", "750+", "1500+"];
+	var ls_w = 20, ls_h = 20;
+	var color = this.color;
+	
+
+	$("#mapContainer").append("<button id=\"resetButton\">Reset</button>");
+	
 	this.map = new Datamap({
 		element: document.getElementById('mapContainer'),
 		fills: {
@@ -18,13 +53,6 @@ var Map = function() {
 			borderColor: "#000000",
 			highlightOnHover: true,
 			highlightBorderColor: "#8af",
-			/*highlightFillColor: function(geography,data) {
-				if (countries[geography.id]) {		
-					return countries[geography.id].color;
-				} else {
-					return "#1C1C34";
-				}
-			},*/
 			popupTemplate: function(geography, data) { 
 				var totalHits;
 				var rec = 0;
@@ -45,30 +73,8 @@ var Map = function() {
 					+' </div>';
 		        }
 		}
-		,projection: 'mercator'
+		//,projection: 'mercator'
 	});
-	
-	this.ballManager = null;
-		
-	var self = this;
-	setInterval(function() {
-		self.fadeUpdate(1000.0 / 1000.0);
-	}, 1000);
-
-	
-	
-	var fadeCountries = this.fadeCountries;
-	
-	// LEGEND
-	var color_domain = [1,10, 50, 150, 350, 750, 1500];
-	var color = d3.scale.threshold()
-		.domain(color_domain)
-		.range(["#4C5C74", "#337297","#69D2E7", "#A7DBD8", "#E0E4CC", "#f4B57E",  "#F38630", "#FC5900"]);
-	var ext_color_domain = [0,1,10, 50, 150, 350, 750, 1500];
-	var legend_labels = ["0","1+", "10+", "50+", "150+", "350+", "750+", "1500+"];
-	var ls_w = 20, ls_h = 20;
-	
-	this.color = color;
 	
 	var svg = d3.select("svg");
 	var legend = svg.selectAll("g.legend")
@@ -76,9 +82,11 @@ var Map = function() {
 		.enter().append("g")
 		.attr("class", "legend");
 	
+	var bottomPos = $("#mapContainer").height();
+	
 	legend.append("rect")
 		.attr("x", 10)
-		.attr("y", function(d, i){ return 400 - (i*ls_h) - 2*ls_h;})
+		.attr("y", function(d, i){ return bottomPos - (i*ls_h) - 2*ls_h;})
 		.attr("width", ls_w)
 		.attr("height", ls_h)
 		.style("fill", function(d, i) { return color(d); })
@@ -86,18 +94,23 @@ var Map = function() {
 
 	legend.append("text")
 		.attr("x", 35)
-		.attr("y", function(d, i){ return 400 - (i*ls_h) - ls_h - 4;})
+		.attr("y", function(d, i){ return bottomPos - (i*ls_h) - ls_h - 4;})
 		.text(function(d, i){ return legend_labels[i]; });
 	
-	$("button").on("click",
-		function()
-		{
-			for ( var c in fadeCountries) {
-				console.log(fadeCountries[c]);
-				fadeCountries[c].reset(color);
-			}
-		});
-		
+	
+	var fadeCountries = this.fadeCountries;
+	$("button").on("click",	function() {
+		for ( var c in fadeCountries) {
+		//	console.log(fadeCountries[c]);
+			fadeCountries[c].reset(color);
+		}
+	});
+	
+	for(var c in this.fadeCountries) {
+		var country = this.fadeCountries[c];
+		country.onRecreate(this);
+		country.update(0);
+	}
 };
 
 Map.prototype.onFrameRender = function(timeStep) {
@@ -181,13 +194,12 @@ Map.prototype.onDataPoint = function(location, dir) {
 Map.prototype.onRealtimeUpdate = function(data) {
 	
 	var self = this;
+	var local = this.model.localIP;
 	params = {};
-	
-	var homeCountry = "__";
 	
 	data.data.forEach(function(packet){
 		
-		if(packet.from.Country == homeCountry) {
+		if(packet.from.Addr == local) {
 			var country = packet.to.Country;
 			var c = self.fadeCountries[country];
 			if(c === undefined) {
@@ -196,10 +208,6 @@ Map.prototype.onRealtimeUpdate = function(data) {
 			}
 
 			var hits = packet.HitCount;
-
-			if(packet.from.Country == homeCountry)
-				hits = Math.floor(hits * 0.5 + 0.5);
-			
 			c.addHits(hits, 0);
 			
 
@@ -209,7 +217,7 @@ Map.prototype.onRealtimeUpdate = function(data) {
 			}
 		}
 		
-		if(packet.to.Country == homeCountry){
+		if(packet.to.Addr == local){
 			var country = packet.from.Country;
 				
 			var c = self.fadeCountries[country];
@@ -218,10 +226,6 @@ Map.prototype.onRealtimeUpdate = function(data) {
 				self.fadeCountries[country] = c;
 			}
 			var hits = packet.HitCount;
-
-			if(packet.from.Country == homeCountry)
-				hits = Math.floor(hits * 0.5 + 0.5);
-			
 			c.addHits(0, hits);
 			
 			if(self.ballManager != null) {

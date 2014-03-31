@@ -13,9 +13,21 @@ body {
 #siteContainer {
 	margin-left: auto;
 	margin-right: auto;
-	width: 600px;
+	width: 1600px;
 	border: solid 2px;
 	/*width: 600 + outerMapContainer border * 2 */
+}
+
+#mapContainer {
+	position: absolute;
+	background-color: #fff;
+	width: 1600px;
+	height: 700px;	
+}
+
+#outerMapContainer {
+	width: 1600px;
+	height: 700px;
 }
 
 #top {
@@ -81,18 +93,6 @@ h3 {
 	height: 100%
 }
 
-#mapContainer {
-	position: absolute;
-	background-color: #fff;
-	width: 600px;
-	height: 400px;	
-}
-
-#outerMapContainer {
-
-	width: 600px;
-	height: 400px;
-}
 
 #resetButton {
 	top: 5px;

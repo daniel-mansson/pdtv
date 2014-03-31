@@ -11,6 +11,7 @@ function DataModel() {
 	this.maxDate="";
 	this.protocols = [1,2,3,4];
 	this.nrOfPackets = [0,0,0,0,0,0,0,0,0,0];
+	this.localIP = "127.0.0.1";
 	
 	/*var model = this;
 	setInterval(function(){
@@ -61,9 +62,8 @@ DataModel.prototype.setData = function(data) {
 };
 
 DataModel.prototype.onRealtimeData = function(data) {
-	var parsedData = JSON.parse(data);
-	if(parsedData !== undefined)
-		this.notifyRealtime(parsedData);
+	if(data !== undefined)
+		this.notifyRealtime(data);
 };
 
 DataModel.prototype.addListener = function(l) {
@@ -72,6 +72,13 @@ DataModel.prototype.addListener = function(l) {
 
 DataModel.prototype.addRealtimeListener = function(l) {
 	this.realtimeListeners.push(l);
+};
+
+DataModel.prototype.removeRealtimeListener = function(listener) {
+	var index = this.realtimeListeners.indexOf(listener);
+	if (index > -1) {
+		this.realtimeListeners.splice(index, 1);
+	}
 };
 
 DataModel.prototype.requestRangeFromDB = function() {

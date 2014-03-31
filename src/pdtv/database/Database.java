@@ -28,6 +28,7 @@ public class Database extends Service{
 	private int num_workers;
 
 	public Database(Properties properties) {
+		super("Database");
 		server = null;
 
 		int queue_length = Integer.parseInt(properties.getProperty("queue_length", "10000").trim());
@@ -136,9 +137,6 @@ public class Database extends Service{
 
 	@Override
 	public void stop() {
-		if(connectionPool != null) {
-			connectionPool = null;
-		}
 		
 		for(Worker w : workers) {
 			w.shutdown();
@@ -147,6 +145,10 @@ public class Database extends Service{
 		if(server != null) {
 			server.stop();
 			server = null;
+		}
+
+		if(connectionPool != null) {
+			connectionPool = null;
 		}
 		
 		setStatus(Status.Stopped);

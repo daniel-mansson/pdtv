@@ -11,6 +11,10 @@ var CountryColorFade = function(country, map) {
 	this.hitsSent = 0;
 };
 
+CountryColorFade.prototype.onRecreate = function(map) {
+    this.svg = map.map.svg.selectAll('.' + this.country);	
+};
+
 CountryColorFade.prototype.update = function(timeStep) {
 	this.fadeTime -= timeStep;
 	/*if(this.fadeTime > 0) {
