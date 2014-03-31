@@ -94,6 +94,26 @@ h3 {
 }
 
 
+#connectButton {
+	left: 45%;
+	position: absolute;
+	border:solid 2px;
+	background-color: #1c1c34;
+	font-weight: bold;
+	color: white;
+	border-color: black;
+}
+
+#connectButton:hover {
+	color: white;
+	background-color: #5C6C84;
+}
+
+#connectButton:active {
+	background-color: #FC5900;
+}
+
+
 #resetButton {
 	top: 5px;
 	left: 5px;
@@ -109,6 +129,7 @@ h3 {
 	color: white;
 	background-color: #5C6C84;
 }
+
 #resetButton:active {
 	background-color: #FC5900;
 }

@@ -99,7 +99,7 @@ Map.prototype.recreateMap = function() {
 	
 	
 	var fadeCountries = this.fadeCountries;
-	$("button").on("click",	function() {
+	$("#resetButton").on("click",	function() {
 		for ( var c in fadeCountries) {
 		//	console.log(fadeCountries[c]);
 			fadeCountries[c].reset(color);

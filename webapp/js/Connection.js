@@ -34,3 +34,13 @@ var Connection = function(host, model) {
     };
 
 };
+
+Connection.prototype.isOpen = function() {
+
+	return this.status != "Closed";
+};
+
+Connection.prototype.close = function() {
+	if(this.isOpen())
+		this.socket.close(1000, "Restart");
+};

@@ -40,7 +40,7 @@ public class RealtimeSocket extends WebSocketAdapter implements
 		super.onWebSocketConnect(session);
 
 		queue.addListener(this);
-		System.out.println("WS connect: " + session.toString());
+		//System.out.println("WS connect: " + session.toString());
 		
 		if(sniffer != null) {
 			if (isConnected()) {

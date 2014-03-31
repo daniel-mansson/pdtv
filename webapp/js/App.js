@@ -21,17 +21,27 @@ var App = function() {
 	this.connection = new Connection("ws://localhost:8080/realtime", this.model);
 
 	this.resize();
-	
+
 	var self = this;
 	$(window).resize(function() {
 		self.resize();
 	});
+
+	$("#connectButton").on("click", function() {
+
+			self.connection.close();
+			var host = prompt("Enter host: ", "localhost:8080");
+			if (host != null) {
+				self.connection = new Connection("ws://" + host + "/realtime", self.model);
+			}
+		
+	});
 };
 
 App.prototype.resize = function() {
-	var width = $(window).width() - 50;	
+	var width = $(window).width() - 50;
 	var height = width * 350 / 850;
-	
+
 	$(".resizeWidth").width(width);
 	$(".resizeHeight").height(height);
 	// resize.css("height", "700px");
@@ -44,7 +54,7 @@ App.prototype.resize = function() {
 	this.renderer.resize(width, height);
 	this.ballManager.resize();
 
-	if(width < 360)
+	if (width < 360)
 		width = 360;
 	$("#header").width(width);
 };
